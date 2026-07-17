@@ -931,7 +931,16 @@ function cloudSaveIndex(url, weeks){
 var h = React.createElement;
 var useState = React.useState, useMemo = React.useMemo, useEffect = React.useEffect, useRef = React.useRef;
 var MON = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-var NM = 7; // active months
+// 데이터가 실제로 존재하는 마지막 월 (엑셀이 갱신되면 자동 확장)
+var NM = 7;
+function calcNM(rows){
+  var last=0;
+  for(var i=0;i<rows.length;i++){
+    var m=rows[i].m||[];
+    for(var j=0;j<m.length;j++){ if(m[j]>0 && j+1>last) last=j+1; }
+  }
+  return Math.max(1, last);
+}
 var SYS = ['AO','AR','ST','BD','ARi'];   // 메가젠 시스템
 var NS = 5;
 var LS_KEY = 'hnCrmDash_v4';   // v4: SEED 버전 스탬프 도입
@@ -952,6 +961,29 @@ function uniq(a){ var s={},o=[]; a.forEach(function(x){ if(x!==null&&x!==undefin
 function sum(a){ var t=0; for(var i=0;i<a.length;i++) t+=(a[i]||0); return t; }
 function today(){ var d=new Date(); return d.toISOString().slice(0,10); }
 
+// 저장본에 옛 형식("Sun Mar 01" 등)이 섞여 있는지 검사합니다.
+// 연도가 없는 값은 복구가 불가능하므로 저장본을 폐기하고 엑셀 재업로드를 안내합니다.
+function rowsStale(rows){
+  if(!rows || !rows.length) return false;
+  for(var i=0;i<rows.length;i++){
+    var v=rows[i].since;
+    if(!v) continue;
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(String(v))) return true;
+  }
+  return false;
+}
+function fixRows(rows){
+  if(!rows || !rows.length) return rows;
+  return rows.map(function(r){
+    var v=r.since;
+    if(!v) return r;
+    var t=String(v);
+    if(/^\d{4}-\d{2}-\d{2}$/.test(t)) return r;
+    var m=t.match(/(\d{4})\D+(\d{1,2})/);
+    if(m) return Object.assign({},r,{since:m[1]+'-'+('0'+m[2]).slice(-2)+'-01'});
+    return Object.assign({},r,{since:null});
+  });
+}
 function store(){
   var seed = (typeof SEED_SNAPS!=='undefined' && SEED_SNAPS) ? SEED_SNAPS : [];
   try{
@@ -962,7 +994,9 @@ function store(){
     // SEED가 갱신됐으면 저장된 rows·액션을 버리고 새 데이터를 씁니다.
     var fresh = (o.stamp!==seedStamp());
     return {notes:o.notes||{}, snaps:(o.snaps&&o.snaps.length)?o.snaps:seed.slice(),
-      hidden:o.hidden||{}, rows: fresh? null : (o.rows||null),
+      hidden:o.hidden||{},
+      rows: (fresh || rowsStale(o.rows))? null : (o.rows||null),
+      staleDropped: (!fresh && rowsStale(o.rows))? true : false,
       acts: fresh? null : (o.acts||null),
       iss: fresh? {hq:null,mgr:{},deal:{}} : (o.iss||{hq:null,mgr:{},deal:{}}),
       staff: o.staff||{}, plans: fresh? {} : (o.plans||{}), stamp:seedStamp()};
@@ -994,24 +1028,37 @@ function syncM(r){
 }
 // upto: 1~NM 이면 그 달까지의 누계만 집계 (엑셀 데이터 기준). 0/없으면 전체.
 function aggUpto(rows, upto){
-  var n=upto|0; if(!n||n>=NM) return agg(rows);
-  var cut=rows.map(function(r){
-    var s2=(r.s||[]).slice(0,n);
-    var m2=s2.map(function(q){ return sum(q); });
-    while(m2.length<NM) m2.push(0);
-    var s3=s2.slice(); while(s3.length<NM){ var z=[]; for(var i=0;i<NS;i++) z.push(0); s3.push(z); }
-    return Object.assign({},r,{m:m2,s:s3});
-  });
-  return agg(cut);
+  var n=upto|0; if(!n) return agg(rows);
+  return agg(rowsUpto(rows, n));
+}
+// 그 달까지 등록된 고객만 남깁니다.
+// since(新增合作时间)가 있으면 그 시점 기준, 없으면 기존 고객으로 봅니다.
+function existsBy(r, upto, year){
+  // 판매가 이미 있으면 등록일과 무관하게 존재하는 고객입니다.
+  // (원본에 등록일보다 판매가 앞서는 경우가 있어 데이터 유실을 막습니다)
+  for(var i=0;i<upto;i++){ if((r.m && r.m[i])>0) return true; }
+  if(!r.since) return true;               // 미입력 = 기존 고객으로 간주
+  var y=parseInt(String(r.since).slice(0,4),10);
+  var mo=parseInt(String(r.since).slice(5,7),10);
+  if(isNaN(y)||isNaN(mo)) return true;
+  var Y = year || 2026;
+  if(y < Y) return true;                  // 작년 이전 등록 = 이미 존재
+  if(y > Y) return false;                 // 미래 등록
+  return mo <= upto;                      // 올해면 그 달까지 등록된 것만
 }
 function rowsUpto(rows, upto){
-  var n=upto|0; if(!n||n>=NM) return rows;
-  return rows.map(function(r){
+  var n=upto|0; if(!n) return rows;
+  var out=[];
+  for(var i=0;i<rows.length;i++){
+    var r=rows[i];
+    if(!existsBy(r, n)) continue;         // 아직 등록 전인 고객 제외
+    if(n>=NM){ out.push(r); continue; }
     var s2=(r.s||[]).slice(0,n).map(function(q){ return q.slice(); });
-    while(s2.length<NM){ var z=[]; for(var i=0;i<NS;i++) z.push(0); s2.push(z); }
-    var m2=[]; for(var i=0;i<NM;i++) m2.push(sum(s2[i]));
-    return Object.assign({},r,{m:m2,s:s2});
-  });
+    while(s2.length<NM){ var z=[]; for(var j=0;j<NS;j++) z.push(0); s2.push(z); }
+    var m2=[]; for(var j=0;j<NM;j++) m2.push(sum(s2[j]));
+    out.push(Object.assign({},r,{m:m2,s:s2}));
+  }
+  return out;
 }
 // 최근 3개월 미구매/실구매 (기준달 base 기준)
 function recent3(rows, base){
@@ -1191,12 +1238,38 @@ function parseCrm(aoa){
     out.push({
       prov:prov, mgr: iM>=0? norm(row[iM]):'', name:nm,
       dealer: iD>=0 && norm(row[iD]) ? norm(row[iD]) : null,
-      type: iT>=0 && norm(row[iT]) ? norm(row[iT]) : null,
+      type: (function(){
+        var v = iT>=0 ? norm(row[iT]) : '';
+        // 원본에 대리상명 등이 잘못 들어가는 경우가 있어 정해진 값만 인정합니다.
+        var OK=['DSO门店','个体诊所','医院机构'];
+        return (v && OK.indexOf(v)>=0) ? v : null;
+      })(),
       trade: iTr>=0 && norm(row[iTr]) ? norm(row[iTr]) : null,
       bd: iBD>=0 && norm(row[iBD])==='是' ? 1:0,
       dec: iDec>=0 && norm(row[iDec])==='是' ? 1:0,
       code: iC>=0 && row[iC]!==undefined && !isNaN(parseFloat(row[iC])) ? parseInt(row[iC]) : null,
-      since: iS>=0 && row[iS] ? String(row[iS]).slice(0,10) : null,
+      since: (function(){
+        // Date 객체 / 엑셀 시리얼 / 문자열을 모두 YYYY-MM-DD 로 정규화
+        if(iS<0) return null;
+        var v=row[iS];
+        if(v===null || v===undefined || v==='') return null;
+        var d=null;
+        if(v instanceof Date) d=v;
+        else if(typeof v==='number' && v>20000 && v<60000){
+          // 엑셀 시리얼 날짜 (1900-01-01 기준)
+          d=new Date(Date.UTC(1899,11,30) + v*86400000);
+        } else {
+          var t=String(v).trim();
+          var m=t.match(/(\d{4})[-/.년\s]*(\d{1,2})/);
+          if(m) return m[1]+'-'+('0'+m[2]).slice(-2)+'-01';
+          var p2=Date.parse(t);
+          if(!isNaN(p2)) d=new Date(p2);
+        }
+        if(!d || isNaN(d.getTime())) return null;
+        var y=d.getUTCFullYear(), mo=d.getUTCMonth()+1, dd=d.getUTCDate();
+        if(y<2000 || y>2100) return null;
+        return y+'-'+('0'+mo).slice(-2)+'-'+('0'+dd).slice(-2);
+      })(),
       yr: isNaN(yr)?0:yr,
       m: m, s: sm, ab: ab, v: v, hasPerf: true
     });
@@ -1704,7 +1777,10 @@ function PeriodBar(p){
     h('div',{className:'pgrp'},
       h('span',{className:'plb'},'월'),
       h('select',{className:'sel',value:p.m,onChange:function(e){ p.onMonth(+e.target.value); }},
-        [1,2,3,4,5,6,7,8,9,10,11,12].map(function(m){ return h('option',{key:m,value:m},m+'월'); }))),
+        [1,2,3,4,5,6,7,8,9,10,11,12].map(function(m){
+          // 데이터가 있는 월(NM)까지만 선택 가능
+          return h('option',{key:m,value:m,disabled:m>NM}, m+'월'+(m>NM?' (데이터 없음)':''));
+        }))),
     h('div',{className:'pgrp'},
       h('span',{className:'plb'},'주'),
       h('div',{className:'wks'}, wks.map(function(k){
@@ -2104,6 +2180,71 @@ function autoPlan(x){
   return '대응 방안을 더블클릭해 작성하세요';
 }
 
+// ================= 신규 고객 추이 =================
+// since(新增合作时间) 기준 월별 신규 등록 + 첫 판매월 기준 거래 개시
+function newCustomers(rows, pm, year){
+  var y = year || 2026;
+  var reg=[], first=[];
+  for(var i=0;i<NM;i++){ reg.push(0); first.push(0); }
+  var prevYear=0, noSince=0;
+  rows.forEach(function(r){
+    // 1) 협업 등록 시점
+    if(r.since){
+      var s=String(r.since);
+      var yy=parseInt(s.slice(0,4),10), mm=parseInt(s.slice(5,7),10);
+      if(yy===y && mm>=1 && mm<=NM) reg[mm-1]++;
+      else if(yy<y) prevYear++;
+    } else noSince++;
+    // 2) 첫 판매 월
+    for(var j=0;j<NM;j++){
+      if((r.m[j]||0)>0){ first[j]++; break; }
+    }
+  });
+  return {reg:reg, first:first, prevYear:prevYear, noSince:noSince,
+    regTot: reg.reduce(function(a,b){return a+b;},0),
+    firstTot: first.reduce(function(a,b){return a+b;},0)};
+}
+
+function NewCustCard(p){
+  var N=p.data, pm=p.pm;
+  var mx=0;
+  for(var i=0;i<pm;i++){ if(N.reg[i]>mx) mx=N.reg[i]; if(N.first[i]>mx) mx=N.first[i]; }
+  if(!mx) mx=1;
+  var cum=0;
+  var rows=[];
+  for(var i=0;i<pm;i++){
+    cum+=N.reg[i];
+    rows.push({m:MON[i], reg:N.reg[i], first:N.first[i], cum:cum});
+  }
+  return h('div',null,
+    h('div',{className:'tw'},
+      h('table',{className:'tbl'},
+        h('thead',null,h('tr',null,
+          h('th',null,'월'),
+          h('th',{className:'num'},'신규 등록'),
+          h('th',{style:{minWidth:'120px'}},''),
+          h('th',{className:'num'},'누적'),
+          h('th',{className:'num'},'첫 거래'))),
+        h('tbody',null, rows.map(function(r,i){
+          return h('tr',{key:i},
+            h('td',null,h('b',null,r.m)),
+            h('td',{className:'num'}, r.reg? h('b',null,nf(r.reg)) : h('span',{className:'dim'},'·')),
+            h('td',null, h('div',{className:'inbar-t'},
+              h('div',{className:'inbar-f',style:{width:(r.reg/mx*100)+'%'}}))),
+            h('td',{className:'num'}, h('span',{className:'dim'},nf(r.cum))),
+            h('td',{className:'num'}, r.first? nf(r.first) : h('span',{className:'dim'},'·')));
+        }))
+      )),
+    h('div',{className:'pcap'},
+      h('span',{className:'pchip'},'2026년 신규 ',h('b',null,nf(N.regTot)+'개소')),
+      h('span',{className:'pchip'},'2025년 이전 ',h('b',null,nf(N.prevYear)+'개소')),
+      N.noSince? h('span',{className:'pchip bad'},'협업일자 미입력 ',h('b',null,nf(N.noSince)+'개소')) : null),
+    h('div',{className:'agg-n'},
+      '※ 「신규 등록」은 CRM의 新增合作时间 기준입니다. 미입력 '+nf(N.noSince)+'개소는 집계에서 빠집니다. '+
+      '「첫 거래」는 판매 데이터로 계산한 실제 거래 개시 월입니다.')
+  );
+}
+
 // Card with hide/show. id -> persisted in db.hidden
 function Card(p){
   var on = !p.hidden;
@@ -2137,6 +2278,8 @@ function Overview(p){
       h('div',{className:'mini-h',style:{marginTop:'14px'}},'고객유형별'),
       h(Bars,{data:p.byType.map(function(g){return{label:g.key,value:g.total,zh:1,
         sub:' · '+nf(g.n)+'개소'};})})),
+    h(Card,Object.assign({title:'신규 고객 추이',note:'新增合作时间 기준'},C('ov_new')),
+      h(NewCustCard,{data:newCustomers(p.view, p.pm||NM), pm:p.pm||NM})),
     h(Card,Object.assign({title:'월별 시스템 수량',note:'진할수록 많음 · 자동 집계'},C('ov_heat')),
       h('div',{className:'agg-n'},'※ 수정은 「고객」 탭에서 월을 고르고 수량을 더블클릭하세요.'),
       h(Heat,{rowLabel:'월', cols:SYS,
@@ -2574,6 +2717,43 @@ function InactiveTab(p){
   );
 }
 
+// ================= 비활성화 고객 전용 KPI =================
+function InactKpi(p){
+  var base=p.pm, lo=Math.max(0,base-3);
+  var span=MON[lo]+'~'+MON[base-1];
+  var K=useMemo(function(){
+    var n=p.rows.length, no=0, low=0, act=0, t3sum=0, cum=0, noVisit=0, lost=0;
+    p.rows.forEach(function(r){
+      var t=0; for(var i=lo;i<base;i++) t+=(r.m[i]||0);
+      var c=0; for(var i=0;i<base;i++) c+=(r.m[i]||0);
+      t3sum+=t; cum+=c;
+      if(t===0){ no++; if(!r.v) noVisit++; if(c>0) lost++; }
+      else if(t<=5) low++;
+      else act++;
+    });
+    return {n:n, no:no, low:low, act:act, t3:t3sum, cum:cum, noVisit:noVisit, lost:lost,
+      rate: n? act/n*100 : 0};
+  },[p.rows,base,lo]);
+
+  return h('div',null,
+    h('div',{className:'kpis kpis-5'},
+      h(KPI,{label:'전체 고객',value:nf(K.n),unit:'개소',sub:'현재 필터 기준'}),
+      h(KPI,{label:'3개월 미구매',value:nf(K.no),unit:'개소',warn:K.no>0,
+        sub:span+' 구매 0 ('+pf(K.n? K.no/K.n*100:0)+')'}),
+      h(KPI,{label:'거래 끊김',value:nf(K.lost),unit:'개소',warn:K.lost>0,
+        sub:'과거 구매 있었으나 최근 0'}),
+      h(KPI,{label:'방문 기록 0',value:nf(K.noVisit),unit:'개소',warn:K.noVisit>0,
+        sub:'미구매 중 미접촉'}),
+      h(KPI,{label:'소량 구매',value:nf(K.low),unit:'개소',
+        sub:'3개월 5개 이하'}),
+      h(KPI,{label:'정상 구매',value:nf(K.act),unit:'개소',hero:1,
+        sub:pf(K.rate)+' · 3개월 5개 초과'})
+    ),
+    h('div',{className:'note-w'},
+      '※ '+span+' 3개월 기준입니다. 「거래 끊김」은 과거엔 구매했으나 최근 3개월간 0인 고객으로, 가장 시급한 관리 대상입니다.')
+  );
+}
+
 function App(){
   var _b=useState(store); var db=_b[0], setDb=_b[1];
   var _a=useState(function(){
@@ -2587,7 +2767,7 @@ function App(){
   var _g=useState({k:'total',d:-1}); var sort=_g[0], setSort=_g[1];
   var _h=useState(null); var sel=_h[0], setSel=_h[1];
   var _i=useState(new Date().getFullYear()); var py=_i[0], setPy=_i[1];
-  var _j=useState(new Date().getMonth()+1); var pm=_j[0], setPm=_j[1];
+  var _j=useState(function(){ return Math.min(new Date().getMonth()+1, NM); }); var pm=_j[0], setPm=_j[1];
   var _k=useState(null); var pick=_k[0], setPick=_k[1];   // viewing a past snapshot
   var _l=useState(false); var busy=_l[0], setBusy=_l[1];
   var _m=useState(getCloudUrl); var gurl=_m[0], setGurl=_m[1];
@@ -2605,6 +2785,12 @@ function App(){
   var snaps=useMemo(function(){ return sortSnaps(db.snaps||[]); },[db.snaps]);
 
   useEffect(function(){ persistAll(db, rows); },[db, rows]);
+  // 옛 형식 저장본이 폐기된 경우 안내
+  useEffect(function(){
+    if(db.staleDropped){
+      setMsg({t:'warn',m:'이전 버전에서 저장된 데이터의 날짜 형식이 달라 초기화했습니다. 「엑셀 불러오기」로 다시 올려 주세요.'});
+    }
+  },[]);
   useEffect(function(){ if(!msg) return; var t=setTimeout(function(){setMsg(null);},5000); return function(){clearTimeout(t);}; },[msg]);
 
   var provs=useMemo(function(){ return uniq(rows.map(function(r){return r.prov;})); },[rows]);
@@ -2636,9 +2822,7 @@ function App(){
       if(flt.dealer){ if(flt.dealer==='__none'){ if(r.dealer) return false; } else if(r.dealer!==flt.dealer) return false; }
       if(flt.type && r.type!==flt.type) return false;
       if(flt.flag==='bd' && !r.bd) return false;
-      if(flt.flag==='dec' && !r.dec) return false;
       if(flt.flag==='zero' && sum(r.m)>0) return false;
-      if(flt.flag==='note' && !(notes[r.id]&&(notes[r.id].txt||notes[r.id].act))) return false;
       if(qq && r.name.toLowerCase().indexOf(qq)<0 && String(r.code||'').indexOf(qq)<0) return false;
       return true;
     });
@@ -2653,6 +2837,33 @@ function App(){
   // 최근 3개월 (기준달 pm) — 실질 지표
   var R3=useMemo(function(){ return recent3(kview, pm); },[kview,pm]);
   var R3p=useMemo(function(){ return pm>1? recent3(kview, pm-1) : null; },[kview,pm]);
+  // 월별 신규 고객 (新增合作时间 기준, 현재 필터 반영)
+  var NEW=useMemo(function(){
+    var src = tabProv? rows.filter(function(r){ return r.prov===tabProv; }) : rows;
+    src = src.filter(function(r){
+      if(flt.prov && r.prov!==flt.prov) return false;
+      if(flt.mgr && r.mgr!==flt.mgr) return false;
+      if(flt.dealer){ if(flt.dealer==='__none'){ if(r.dealer) return false; } else if(r.dealer!==flt.dealer) return false; }
+      if(flt.type && r.type!==flt.type) return false;
+      if(flt.flag==='bd' && !r.bd) return false;
+      if(flt.flag==='zero' && sum(r.m)>0) return false;
+      var qq=q.trim().toLowerCase();
+      if(qq && r.name.toLowerCase().indexOf(qq)<0 && String(r.code||'').indexOf(qq)<0) return false;
+      return true;
+    });
+    function cnt(mo){
+      var n=0;
+      src.forEach(function(r){
+        if(!r.since) return;
+        var y=parseInt(String(r.since).slice(0,4),10);
+        var m=parseInt(String(r.since).slice(5,7),10);
+        if(y===2026 && m===mo) n++;
+      });
+      return n;
+    }
+    var cum=0; for(var i=1;i<=pm;i++) cum+=cnt(i);
+    return {cur:cnt(pm), prev: pm>1? cnt(pm-1) : null, cum:cum};
+  },[rows,pm,flt,q,tabProv]);
   var autoA=useMemo(function(){ return autoIssues(rows, pm); },[rows,pm]);
   useEffect(function(){
     if(acts===null) setDb(function(pv){ return Object.assign({},pv,{acts:autoIssues(rows,pm)}); });
@@ -2669,11 +2880,15 @@ function App(){
       return i>0? snaps[i-1] : null;
     }
     if(pm<=1) return null;
-    var a=aggUpto(rows, pm-1);
+    // 현재 필터가 걸린 고객만 대상으로 전달 누계를 계산합니다 (id 기준 매칭).
+    var ids={}; kview.forEach(function(r){ ids[r.id]=1; });
+    var src=rows.filter(function(r){ return ids[r.id]; });
+    if(!src.length) return null;
+    var a=aggUpto(src, pm-1);
     return {y:py, w:0, mo:pm-1, label:(pm-1)+'月', at:'',
       n:a.n, act:a.act, rate:a.rate, total:a.total, avg:a.avg, vis:a.vis,
       dec:a.dec, bd:a.bd, sys:a.sys, per:null, _excel:1};
-  },[snaps,pick,rows,pm,py]);
+  },[snaps,pick,rows,pm,py,kview]);
   function prevLabel(a,b){
     if(!b) return '';
     if(b._excel) return '전달 대비';
@@ -2681,7 +2896,8 @@ function App(){
     return (am&&bm&&am===bm)? '전주 대비' : '전달 대비';
   }
   var hardFilter = !!(flt.prov||flt.mgr||flt.dealer||flt.type||flt.flag||q||tabProv);
-  var pv = hardFilter? null : prev;
+  // 엑셀 기준 전달 대비(_excel)는 필터 중에도 계산됩니다. 주차 스냅샷 비교만 전체 기준.
+  var pv = (prev && prev._excel)? prev : (hardFilter? null : prev);
 
   function saveEdit(d){
     if(pick){ setMsg({t:'err',m:'과거 주차를 보는 중에는 수정할 수 없습니다. "최신으로"를 먼저 누르세요.'}); return; }
@@ -2733,7 +2949,13 @@ function App(){
   }
   // 월을 고르면 엑셀 데이터로 즉시 계산합니다 (스냅샷 불필요).
   function pickYear(y){ setPy(y); setPick(null); }
-  function pickMonth(m){ setPm(m); setPick(null); }
+  function pickMonth(m){
+    if(m>NM){
+      setMsg({t:'warn',m:MON[m-1]+' 데이터가 아직 없습니다. 엑셀에 '+MON[NM-1]+'까지만 들어 있습니다.'});
+      return;
+    }
+    setPm(m); setPick(null);
+  }
 
   // 인라인 수정 (더블클릭) — 자동 저장
   function editField(id, key, val){
@@ -2908,7 +3130,11 @@ function App(){
           setMsg({t:'err',m:'인식 가능한 시트가 없습니다. 客户名称·省份 컬럼이 있는지 확인해 주세요.'}); return;
         }
         var res=mergeData(rows,ing);
+        // 엑셀에 새 월 데이터가 들어오면 NM 자동 확장 (예: 8月 추가 시 NM=8)
+        var nm=calcNM(res.rows);
+        if(nm!==NM){ NM=nm; }
         setRows(res.rows);
+        if(pm>NM) setPm(NM);
         var st=res.stat;
         // 엑셀을 올리면 그 시점을 자동으로 기록합니다 (버튼 불필요)
         var k=isoWeekOf(new Date());
@@ -3024,7 +3250,14 @@ function App(){
   function applyLoaded(r){
     if(!r) return;
     var o=r.data;
-    if(o.rows) setRows(o.rows);
+    if(o.rows){
+      if(rowsStale(o.rows)) setMsg({t:'warn',m:'클라우드 데이터의 날짜 형식이 옛 버전입니다. 「엑셀 불러오기」로 갱신 후 다시 저장해 주세요.'});
+      var fixed=fixRows(o.rows);
+      var nm=calcNM(fixed);
+      if(nm!==NM){ NM=nm; }
+      setRows(fixed);
+      if(pm>NM) setPm(NM);
+    }
     setDb({notes:o.notes||{}, snaps:sortSnaps(o.snaps||[]), hidden:o.hidden||{}, acts:o.acts||null,
       iss:o.iss||{hq:null,mgr:{},deal:{}}, staff:o.staff||{}, plans:o.plans||{}});
     setPick(null);
@@ -3064,7 +3297,12 @@ function App(){
     fr.onload=function(e){
       try{
         var o=JSON.parse(e.target.result);
-        if(o.rows) setRows(o.rows);
+        if(o.rows){
+          if(rowsStale(o.rows)){
+            setMsg({t:'warn',m:'백업 파일의 날짜 형식이 옛 버전입니다. 신규 고객 집계가 부정확할 수 있으니 「엑셀 불러오기」로 최신 파일을 올려 주세요.'});
+          }
+          setRows(fixRows(o.rows));
+        }
         setDb({notes:o.notes||{}, snaps:sortSnaps(o.snaps||[]), hidden:o.hidden||{}, acts:o.acts||null,
           iss:o.iss||{hq:null,mgr:{},deal:{}}, staff:o.staff||{}, plans:o.plans||{}});
         setPick(null);
@@ -3134,8 +3372,9 @@ function App(){
         h('select',{className:'rsel',value:flt.type,onChange:function(e){setFlt(Object.assign({},flt,{type:e.target.value}));}},
           h('option',{value:''},'전체 유형'),types.map(function(x){return h('option',{key:x,value:x},x);})),
         h('select',{className:'rsel',value:flt.flag,onChange:function(e){setFlt(Object.assign({},flt,{flag:e.target.value}));}},
-          h('option',{value:''},'조건 없음'),h('option',{value:'dec'},'持续下降만'),h('option',{value:'bd'},'BD客户만'),
-          h('option',{value:'zero'},'실적 0만'),h('option',{value:'note'},'메모 있는 것만')),
+          h('option',{value:''},'특별선택'),
+          h('option',{value:'bd'},'BD고객'),
+          h('option',{value:'zero'},'실적없음')),
         filtered? h('button',{className:'rbtn',onClick:function(){setFlt({prov:'',mgr:'',dealer:'',type:'',flag:''});setQ('');}},'필터 초기화'):null,
         hidCount? h('button',{className:'rbtn',onClick:function(){ setDb(Object.assign({},db,{hidden:{}})); }},'숨긴 카드 '+hidCount+'개 모두 보기'):null),
 
@@ -3202,23 +3441,26 @@ function App(){
 
       h(PeriodBar,{snaps:snaps,cur:pick,y:py,m:pm,onYear:pickYear,onMonth:pickMonth,onPick:setPick}),
 
+      (tab==='inact')? h(InactKpi,{rows:kview, pm:pm, prevRows:rows}) :
       h('div',{className:'kpis kpis-5'},
         h(KPI,{label:'고객수',value:nf(A.n),unit:'개소',
           sub:(filtered||tabProv)?('전체 '+nf(baseRows.length)+'개 중'):null,prev:pv,delta:pv?A.n-pv.n:null}),
         h(KPI,{label:'거래 고객',value:nf(A.act),unit:'개소',sub:'1~'+pm+'月 누적',prev:pv,delta:pv?A.act-pv.act:null}),
-        h(KPI,{label:'누적 구매율',value:pf(A.rate),sub:'1~'+pm+'月 한 번이라도',prev:pv,delta:pv?A.rate-pv.rate:null,pct:1}),
-        h(KPI,{label:'고객당 평균구매수',value:A.avg.toFixed(1),unit:'개',prev:pv,delta:pv?A.avg-pv.avg:null,dec:1}),
+        h(KPI,{label:MON[pm-1]+' 신규 고객',value:nf(NEW.cur),unit:'개소',
+          sub:'2026년 누적 '+nf(NEW.cum)+'개소',
+          prev:NEW.prev!==null?{}:null, delta:NEW.prev!==null? NEW.cur-NEW.prev : null}),
         h(KPI,{label:'3개월 미구매',value:nf(R3.no),unit:'개소',warn:R3.no>0,
           sub:'중단 '+nf(R3.churn)+' + 미개시 '+nf(R3.never),
           prev:R3p?{}:null, delta:R3p? R3.no-R3p.no : null, invert:1}),
         h(KPI,{label:'실구매율',value:pf(R3.rate),sub:MON[R3.lo]+'~'+MON[R3.hi-1]+' 구매 '+nf(R3.yes)+'개소',
-          prev:R3p?{}:null, delta:R3p? R3.rate-R3p.rate : null, pct:1})),
+          prev:R3p?{}:null, delta:R3p? R3.rate-R3p.rate : null, pct:1}),
+        h(KPI,{label:'고객당 평균구매수',value:A.avg.toFixed(1),unit:'개',prev:pv,delta:pv?A.avg-pv.avg:null,dec:1})),
 
-      (pm===NM)? h('div',{className:'note-w'},
+      (tab!=='inact' && pm===NM)? h('div',{className:'note-w'},
         '※ '+MON[NM-1]+'은 진행 중인 달입니다(15일 기준). 3개월 창에 미완 월이 포함되어 미구매·실구매율이 실제보다 나쁘게 보일 수 있습니다.'
       ) : null,
 
-      h('div',{className:'kpis kpis-s'},
+      (tab==='inact')? null : h('div',{className:'kpis kpis-s'},
         SYS.map(function(sn,i){
           var v=A.sys[i], sh=A.total? v/A.total*100 : 0;
           return h(KPI,{key:i,label:sn,value:nf(v),unit:'개',sub:A.total? pf(sh)+' 비중':null,
@@ -3231,7 +3473,7 @@ function App(){
         pv? h('span',{className:'pchip'},
               prevLabel(pick||{mo:lastS&&lastS.mo}, pv)+' = ',
               h('b',null, pv._excel? pv.label : ((pv.mo? pv.mo+'月 ':'')+pv.label)))
-          : h('span',{className:'pchip'}, filtered? '필터 중 — 증감 미표시'
+          : h('span',{className:'pchip'}, (pm<=1)? '1月은 비교 대상이 없습니다'
               : (snaps.length? '이전 스냅샷이 있어야 증감이 표시됩니다' : '스냅샷 저장 시 증감 표시')),
         snaps.slice(-10).map(function(x){
           return h('span',{key:x.y+'-'+x.w,className:'snap'+((pick&&pick.y===x.y&&pick.w===x.w)?' cur':'')},
@@ -3247,9 +3489,8 @@ function App(){
         hq:hqList(), pm:pm, onHqEdit:hqEdit, onHqDel:hqDel, onHqAdd:hqAdd, onHqReset:hqReset,
         acts:acts||autoA, onActs:function(n){ setDb(function(pv){ return Object.assign({},pv,{acts:n}); }); },
         autoActs:function(){ return autoIssues(rows,pm); }}):null,
-      tab==='weekly'? h(WeeklyTab,{snaps:snaps,rows:rows,prev:prev,notes:notes,C:C,
-        provs:provs, prov:tprov.weekly, onProv:function(v){ setTP('weekly',v); },
-        counts:(function(){ var c={'':rows.length}; rows.forEach(function(r){ c[r.prov]=(c[r.prov]||0)+1; }); return c; })()}):null,
+      tab==='weekly'? h(WeeklyTab,{snaps:snaps,rows:tabRows('weekly'),prev:prev,notes:notes,C:C,
+        provs:provs, prov:tprov.weekly, onProv:function(v){ setTP('weekly',v); }, counts:provCounts}):null,
       tab==='mgr'? h(MgrTab,{by:groupOf(tabRows('mgr'),'mgr'),C:C,rows:tabRows('mgr'),pm:pm,
         provs:provs, prov:tprov.mgr, onProv:function(v){ setTP('mgr',v); }, counts:provCounts,
         mergeIss:function(a){ return mergeIss(a,'mgr'); },
