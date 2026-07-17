@@ -422,6 +422,18 @@ td.tde{position:relative}
 /* 비활성화 고객 — 목록 부제 */
 .iss-i{font-size:13px;color:var(--ink)}
 .iss-k .sm2{color:var(--ink)}
+.addi{margin-top:5px}
+.isst .st-r .x{border:0;background:none;color:var(--dim);cursor:pointer;font-size:13px;
+  line-height:1;padding:0 3px;flex:none;opacity:0}
+.isst .st-r:hover .x{opacity:1}
+.isst .st-r .x:hover{color:var(--red)}
+.hq-r .x{border:0;background:none;color:var(--dim);cursor:pointer;font-size:13px;
+  line-height:1;padding:0 3px;flex:none;opacity:0;margin-left:auto}
+.hq-r:hover .x{opacity:1}
+.hq-r .x:hover{color:var(--red)}
+.hq-f{display:flex;gap:5px;margin-top:9px;padding-top:8px;border-top:1px solid var(--ln)}
+.agg-n{font-size:11px;color:var(--dim);margin-bottom:7px;padding:4px 8px;background:var(--sf);
+  border-radius:2px;border-left:2px solid var(--ln)}
 
 </style>
 </head>
@@ -901,22 +913,26 @@ function store(){
   var seed = (typeof SEED_SNAPS!=='undefined' && SEED_SNAPS) ? SEED_SNAPS : [];
   try{
     var r=localStorage.getItem(LS_KEY);
-    if(!r) return {notes:{}, snaps:seed.slice(), hidden:{}, rows:null, acts:null, stamp:seedStamp()};
+    if(!r) return {notes:{}, snaps:seed.slice(), hidden:{}, rows:null, acts:null,
+      iss:{hq:null,mgr:{},deal:{}}, stamp:seedStamp()};
     var o=JSON.parse(r);
     // SEED가 갱신됐으면 저장된 rows·액션을 버리고 새 데이터를 씁니다.
     var fresh = (o.stamp!==seedStamp());
     return {notes:o.notes||{}, snaps:(o.snaps&&o.snaps.length)?o.snaps:seed.slice(),
       hidden:o.hidden||{}, rows: fresh? null : (o.rows||null),
-      acts: fresh? null : (o.acts||null), stamp:seedStamp()};
+      acts: fresh? null : (o.acts||null),
+      iss: fresh? {hq:null,mgr:{},deal:{}} : (o.iss||{hq:null,mgr:{},deal:{}}),
+      stamp:seedStamp()};
   }
-  catch(e){ return {notes:{}, snaps:seed.slice(), hidden:{}, rows:null, acts:null, stamp:seedStamp()}; }
+  catch(e){ return {notes:{}, snaps:seed.slice(), hidden:{}, rows:null, acts:null,
+    iss:{hq:null,mgr:{},deal:{}}, stamp:seedStamp()}; }
 }
 // 수정한 rows까지 함께 저장 (자동 저장)
 function persistAll(db, rows){
   try{
     localStorage.setItem(LS_KEY, JSON.stringify({
       notes:db.notes||{}, snaps:db.snaps||[], hidden:db.hidden||{}, rows:rows||null,
-      acts:db.acts||null, stamp:seedStamp()
+      acts:db.acts||null, iss:db.iss||{hq:null,mgr:{},deal:{}}, stamp:seedStamp()
     }));
     return true;
   }catch(e){ return false; }
@@ -1914,7 +1930,27 @@ function dealIssues(by, rows, pm){
   });
 }
 
-// ---- 이슈 표: 담당자 | 대리상 | 현황 | 개선사항 ----
+// ---- 이슈 표: 담당자 | 대리상 | 현황 | 개선사항 (더블클릭 수정) ----
+function EdText(p){
+  var _a=useState(false); var on=_a[0], setOn=_a[1];
+  var ref=useRef(null);
+  useEffect(function(){ if(on&&ref.current){ ref.current.focus(); ref.current.select(); } },[on]);
+  function commit(v){
+    setOn(false);
+    var t=String(v).trim();
+    if(t===p.value) return;
+    p.onSave(t);
+  }
+  if(!on) return h('span',{className:'act-t zh',onDoubleClick:function(){ setOn(true); },
+    title:'더블클릭하면 수정합니다'}, p.value);
+  return h('input',{ref:ref,className:'ein aci',defaultValue:p.value,
+    onBlur:function(e){ commit(e.target.value); },
+    onKeyDown:function(e){
+      if(e.key==='Enter'){ e.preventDefault(); commit(e.target.value); }
+      if(e.key==='Escape'){ setOn(false); }
+    }});
+}
+
 function IssueTable(p){
   var LV=['','주의','시급'];
   return h('div',{className:'tw'},
@@ -1923,7 +1959,7 @@ function IssueTable(p){
         h('th',{style:{minWidth:'90px'}}, p.keyLabel||'담당자'),
         p.showDealer? h('th',{style:{minWidth:'110px'}},'대리상') : null,
         h('th',{style:{minWidth:'150px'}},'현황'),
-        h('th',null,'개선사항'))),
+        h('th',null,'개선사항 (더블클릭 수정)'))),
       h('tbody',null, p.rows.map(function(r,i){
         return h('tr',{key:i},
           h('td',null,h('b',{className:'zh dk'},r.key)),
@@ -1937,22 +1973,31 @@ function IssueTable(p){
           h('td',null, h('div',{className:'st-i'}, r.iss.map(function(x,j){
             return h('div',{key:j,className:'st-r'},
               x.lv? h('span',{className:'lv lv'+x.lv},LV[x.lv]) : h('span',{className:'lv lv0'},'양호'),
-              h('span',{className:'zh'},x.t));
-          }))));
+              h(EdText,{value:x.t, onSave:function(v){ p.onEdit(r.key, j, v); }}),
+              h('button',{className:'x',title:'삭제',
+                onClick:function(){ p.onDel(r.key, j); }},'×'));
+          }),
+          h('button',{className:'btn sm addi',onClick:function(){ p.onAdd(r.key); }},'+ 추가'))));
       }))
     ));
 }
 
-// ---- 화남본부 이슈 카드 (제목 + 설명) ----
+// ---- 화남본부 이슈 카드 (더블클릭 수정) ----
 function HqCard(p){
   var LV=['','주의','시급'];
-  return h('div',{className:'hq'}, p.rows.map(function(x,i){
-    return h('div',{className:'hq-r',key:i},
-      x.lv? h('span',{className:'lv lv'+x.lv},LV[x.lv]) : h('span',{className:'lv lv0'},'참고'),
-      h('div',null,
-        h('b',{className:'zh'},x.t),
-        x.d? h('div',{className:'hq-d zh'},x.d):null));
-  }));
+  return h('div',{className:'hq'},
+    p.rows.map(function(x,i){
+      return h('div',{className:'hq-r',key:i},
+        x.lv? h('span',{className:'lv lv'+x.lv},LV[x.lv]) : h('span',{className:'lv lv0'},'참고'),
+        h('div',{style:{flex:1}},
+          h(EdText,{value:x.t, onSave:function(v){ p.onEdit(i,'t',v); }}),
+          h('div',{className:'hq-d zh'},
+            h(EdText,{value:x.d||'', onSave:function(v){ p.onEdit(i,'d',v); }}))),
+        h('button',{className:'x',title:'삭제',onClick:function(){ p.onDel(i); }},'×'));
+    }),
+    h('div',{className:'hq-f'},
+      h('button',{className:'btn sm',onClick:p.onAdd},'+ 항목 추가'),
+      h('button',{className:'btn sm',onClick:p.onReset},'자동 분석 다시')));
 }
 
 // Card with hide/show. id -> persisted in db.hidden
@@ -1972,6 +2017,9 @@ function Card(p){
 function Overview(p){
   var C=p.C;
   return h('div',{className:'lay'},
+    h(Card,Object.assign({title:'화남본부 현황 분석 · 이슈사항',
+      note:MON[(p.pm||NM)-1]+' 기준 · 더블클릭 수정 · 액션은 주간현황'},C('ov_hq')),
+      h(HqCard,{rows:p.hq||[], onEdit:p.onHqEdit, onDel:p.onHqDel, onAdd:p.onHqAdd, onReset:p.onHqReset})),
     // 좌: 화남본부 이슈 (반너비)
     h(Card,Object.assign({title:'화남본부 현황 분석 · 이슈사항',
       note:MON[(p.pm||NM)-1]+' 기준 · 개선 액션은 주간현황 탭'},C('ov_hq')),
@@ -1986,7 +2034,8 @@ function Overview(p){
       h('div',{className:'mini-h',style:{marginTop:'14px'}},'고객유형별'),
       h(Bars,{data:p.byType.map(function(g){return{label:g.key,value:g.total,zh:1,
         sub:' · '+nf(g.n)+'곳'};})})),
-    h(Card,Object.assign({title:'월별 시스템 수량',note:'진할수록 많음'},C('ov_heat')),
+    h(Card,Object.assign({title:'월별 시스템 수량',note:'진할수록 많음 · 자동 집계'},C('ov_heat')),
+      h('div',{className:'agg-n'},'※ 수정은 「고객」 탭에서 월을 고르고 수량을 더블클릭하세요.'),
       h(Heat,{rowLabel:'월', cols:SYS,
         rows:MON.slice(0,NM).map(function(m,i){
           return {key:m, cells:p.A.ms[i], total:p.A.mo[i]};
@@ -2138,10 +2187,13 @@ function MgrTab(p){
   return h('div',null,
     h(ProvBar,{provs:p.provs,cur:p.prov,onPick:p.onProv,counts:p.counts,label:'지역'}),
     h('div',{className:'lay'},
-    h(Card,Object.assign({title:'담당자별 이슈사항',note:'자동 분석 · 최대 3개',wide:true},C('mg_iss')),
+    h(Card,Object.assign({title:'담당자별 이슈사항',note:'더블클릭 수정 · 자동 저장',wide:true},C('mg_iss')),
       h('div',{className:'big'},
-        h(IssueTable,{keyLabel:'담당자',showDealer:true,rows:mgrIssues(p.by, p.rows||[], p.pm||NM)}))),
-    h(Card,Object.assign({title:'담당자별 실적',note:p.by.length+'명',wide:true},C('mg_tbl')),
+        h(IssueTable,{keyLabel:'담당자',showDealer:true,
+          rows:(p.mergeIss||function(x){return x;})(mgrIssues(p.by, p.rows||[], p.pm||NM)),
+          onEdit:p.onIssEdit, onDel:p.onIssDel, onAdd:p.onIssAdd}))),
+    h(Card,Object.assign({title:'담당자별 실적',note:p.by.length+'명 · 자동 집계',wide:true},C('mg_tbl')),
+      h('div',{className:'agg-n'},'※ 고객 데이터의 합계입니다. 수정하려면 「고객」 탭에서 개별 고객을 고치세요.'),
       h('div',{className:'big'},h(Table,{cols:cols,rows:p.by}))),
     h(Card,Object.assign({title:'담당자별 판매수량',wide:true},C('mg_bar')),
       h(Bars,{data:p.by.map(function(g){return{label:g.key,value:g.total,zh:1,
@@ -2179,10 +2231,13 @@ function DealTab(p){
   return h('div',null,
     h(ProvBar,{provs:p.provs,cur:p.prov,onPick:p.onProv,counts:p.counts,label:'지역'}),
     h('div',{className:'lay'},
-      h(Card,Object.assign({title:'대리상별 이슈사항',note:'자동 분석 · 최대 3개',wide:true},C('dl_iss')),
+      h(Card,Object.assign({title:'대리상별 이슈사항',note:'더블클릭 수정 · 자동 저장',wide:true},C('dl_iss')),
         h('div',{className:'big'},
-          h(IssueTable,{keyLabel:'대리상',showDealer:false,rows:dealIssues(p.by, p.rows||[], p.pm||NM)}))),
-      h(Card,Object.assign({title:'대리상별 실적',note:p.by.length+'개사 · 막대 통합',wide:true},C('dl_tbl')),
+          h(IssueTable,{keyLabel:'대리상',showDealer:false,
+            rows:(p.mergeIss||function(x){return x;})(dealIssues(p.by, p.rows||[], p.pm||NM)),
+            onEdit:p.onIssEdit, onDel:p.onIssDel, onAdd:p.onIssAdd}))),
+      h(Card,Object.assign({title:'대리상별 실적',note:p.by.length+'개사 · 자동 집계',wide:true},C('dl_tbl')),
+        h('div',{className:'agg-n'},'※ 고객 데이터의 합계입니다. 수정하려면 「고객」 탭에서 개별 고객을 고치세요.'),
         h('div',{className:'big'},h(Table,{cols:cols,rows:p.by}))),
       h(Card,Object.assign({title:'대리상별 시스템 수량',note:'진할수록 많음',wide:true},C('dl_heat')),
         h(Heat,{rowLabel:'대리상', cols:SYS,
@@ -2192,13 +2247,16 @@ function DealTab(p){
 
 function CustTab(p){
   var view=p.view, notes=p.notes, sort=p.sort, prev=p.prev;
+  // 수정할 월 (기본 = 현재 기준달). 시스템 수량은 이 달의 값을 고칩니다.
+  var _e=useState((p.pm||NM)-1); var emi=_e[0], setEmi=_e[1];
   var rows=useMemo(function(){
     var pp=prev?prev.per:null;
     var a=view.map(function(r){
       var t=sum(r.m);
       var sy=[]; for(var j=0;j<NS;j++){ var q=0; for(var i=0;i<NM;i++) q+=((r.s&&r.s[i]&&r.s[i][j])||0); sy.push(q); }
       var o=Object.assign({},r,{total:t,_hl:r.dec===1, d: pp? t-((pp[r.id]&&pp[r.id].t)||0) : null, sys:sy});
-      for(var j=0;j<NS;j++) o['sy'+j]=sy[j];
+      // 정렬은 선택한 달의 값 기준
+      for(var j=0;j<NS;j++) o['sy'+j]=(r.s&&r.s[emi]&&r.s[emi][j])||0;
       return o;
     });
     var k=sort.k,d=sort.d;
@@ -2210,7 +2268,7 @@ function CustTab(p){
       return ((xa||0)-(ya||0))*d;
     });
     return a;
-  },[view,sort,prev]);
+  },[view,sort,prev,emi]);
 
   function onSort(k){ p.setSort(sort.k===k?{k:k,d:-sort.d}:{k:k,d:(k==='name'?1:-1)}); }
 
@@ -2232,8 +2290,14 @@ function CustTab(p){
     {t:'판매수량',k:'total',num:1,r:function(r){return h('b',null,r.total?nf(r.total):h('span',{className:'dim'},'0'));}}
   ];
   SYS.forEach(function(sn,i){
-    cols.push({t:sn,k:'sy'+i,num:1,r:function(r){
-      return r.sys[i]? nf(r.sys[i]) : h('span',{className:'dim'},'·'); }});
+    cols.push({t:sn,k:'sy'+i,num:1,
+      r:function(r){
+        var v=(r.s&&r.s[emi]&&r.s[emi][i])||0;
+        return v? h('b',null,nf(v)) : h('span',{className:'dim'},'·');
+      },
+      edit:{type:'num',
+        get:function(r){ return (r.s&&r.s[emi]&&r.s[emi][i])||0; },
+        set:function(r,v){ p.onCell(r.id, emi, i, v); }}});
   });
   if(prev) cols.push({t:'전주대비',k:'d',num:1,r:function(r){
     if(r.d===null) return '-';
@@ -2244,8 +2308,15 @@ function CustTab(p){
 
   return h('div',null,
     h(ProvBar,{provs:p.provs,cur:p.prov,onPick:p.onProv,counts:p.counts,label:'지역'}),
+    h('div',{className:'segs'},
+      h('span',{className:'plb'},'수량 수정 대상 월'),
+      h('div',{className:'segb mo-seg'}, MON.slice(0,NM).map(function(m,i){
+        return h('button',{key:i,className:'sg'+(emi===i?' on':''),onClick:function(){ setEmi(i); }},m);
+      })),
+      h('span',{className:'ed-n'},'AO·AR·ST·BD·ARi 열은 선택한 달의 수량입니다. 더블클릭하면 수정됩니다.')),
     h('div',{className:'lay'},
-    h(Card,Object.assign({title:'고객 목록',note:nf(rows.length)+'개 · 더블클릭 수정 · 고객명 클릭 시 메모',wide:true},p.C('cu_tbl')),
+    h(Card,Object.assign({title:'고객 목록',
+      note:nf(rows.length)+'개 · '+MON[emi]+' 수량 · 더블클릭 수정 · 고객명 클릭 시 메모',wide:true},p.C('cu_tbl')),
       h(Table,{cols:cols,rows:rows,onSort:onSort,sortK:sort.k,sortD:sort.d,locked:p.locked}),
       h('datalist',{id:'dl-mgr'},(p.mgrs||[]).map(function(x){return h('option',{key:x,value:x});})),
       h('datalist',{id:'dl-dealer'},(p.dealers||[]).map(function(x){return h('option',{key:x,value:x});})),
@@ -2366,7 +2437,9 @@ function InactiveTab(p){
           x[1], h('b',null,' '+nf(x[2])));
       }))),
     h('div',{className:'lay'},
-      h(Card,Object.assign({title:'지역별'},C('in_prov')), h(Table,{cols:gcols('지역'),rows:byProv})),
+      h(Card,Object.assign({title:'지역별',note:'자동 집계'},C('in_prov')),
+        h('div',{className:'agg-n'},'※ 아래 목록에서 개별 고객을 수정하세요.'),
+        h(Table,{cols:gcols('지역'),rows:byProv})),
       h(Card,Object.assign({title:'담당자별'},C('in_mgr')), h(Table,{cols:gcols('담당자'),rows:byMgr})),
       h(Card,Object.assign({title:'대리상별',note:byDeal.length+'개사',wide:true},C('in_deal')),
         h(Table,{cols:gcols('대리상'),rows:byDeal})),
@@ -2405,6 +2478,7 @@ function App(){
   var notes=db.notes||{};
   var hidden=db.hidden||{};
   var acts=db.acts||null;
+  var issOv=db.iss||{hq:null,mgr:{},deal:{}};
   var snaps=useMemo(function(){ return sortSnaps(db.snaps||[]); },[db.snaps]);
 
   useEffect(function(){ persistAll(db, rows); },[db, rows]);
@@ -2564,6 +2638,67 @@ function App(){
     });
   }
 
+  // ── 이슈 편집 (자동 저장) ──
+  function saveIss(next){ setDb(function(pv){ return Object.assign({},pv,{iss:next}); }); }
+  // 화남본부 이슈
+  function hqList(){ return issOv.hq || hqIssues(rows,pm); }
+  function hqEdit(i,k,v){
+    var L=hqList().map(function(x){ return Object.assign({},x); });
+    L[i][k]=v; saveIss(Object.assign({},issOv,{hq:L}));
+  }
+  function hqDel(i){
+    var L=hqList().filter(function(_,j){ return j!==i; });
+    saveIss(Object.assign({},issOv,{hq:L}));
+  }
+  function hqAdd(){
+    var L=hqList().concat([{lv:1,t:'새 이슈 — 더블클릭해 수정',d:'설명을 입력하세요'}]);
+    saveIss(Object.assign({},issOv,{hq:L}));
+  }
+  function hqReset(){ saveIss(Object.assign({},issOv,{hq:null})); }
+  // 담당자·대리상 이슈
+  function grpEdit(kind,key,j,v){
+    var m=Object.assign({},issOv[kind]||{});
+    var base=m[key];
+    if(!base){
+      var auto = kind==='mgr'
+        ? mgrIssues(groupOf(tabRows('mgr'),'mgr'), tabRows('mgr'), pm)
+        : dealIssues(groupOf(tabRows('dealer'),'dealer'), tabRows('dealer'), pm);
+      var f=auto.filter(function(x){ return x.key===key; })[0];
+      base=f? f.iss.map(function(x){ return Object.assign({},x); }) : [];
+    }
+    var L=base.map(function(x){ return Object.assign({},x); });
+    if(L[j]) L[j].t=v;
+    m[key]=L;
+    var o=Object.assign({},issOv); o[kind]=m; saveIss(o);
+  }
+  function grpDel(kind,key,j){
+    var m=Object.assign({},issOv[kind]||{});
+    var auto = kind==='mgr'
+      ? mgrIssues(groupOf(tabRows('mgr'),'mgr'), tabRows('mgr'), pm)
+      : dealIssues(groupOf(tabRows('dealer'),'dealer'), tabRows('dealer'), pm);
+    var f=auto.filter(function(x){ return x.key===key; })[0];
+    var base=m[key]||(f? f.iss:[]);
+    m[key]=base.filter(function(_,i){ return i!==j; });
+    var o=Object.assign({},issOv); o[kind]=m; saveIss(o);
+  }
+  function grpAdd(kind,key){
+    var m=Object.assign({},issOv[kind]||{});
+    var auto = kind==='mgr'
+      ? mgrIssues(groupOf(tabRows('mgr'),'mgr'), tabRows('mgr'), pm)
+      : dealIssues(groupOf(tabRows('dealer'),'dealer'), tabRows('dealer'), pm);
+    var f=auto.filter(function(x){ return x.key===key; })[0];
+    var base=m[key]||(f? f.iss:[]);
+    m[key]=base.concat([{lv:1,t:'새 개선사항 — 더블클릭해 수정'}]);
+    var o=Object.assign({},issOv); o[kind]=m; saveIss(o);
+  }
+  // 자동 이슈에 사용자 수정본을 덮어씌워 반환
+  function mergeIss(auto, kind){
+    var m=issOv[kind]||{};
+    return auto.map(function(g){
+      return m[g.key]? Object.assign({},g,{iss:m[g.key]}) : g;
+    });
+  }
+
   function toggleCard(id){
     setDb(function(pv){
       var hd=Object.assign({},pv.hidden||{});
@@ -2676,7 +2811,7 @@ function App(){
   function doCloudSave(){
     if(!gurl){ setCfg(true); return; }
     setBusy(true);
-    cloudSave(gurl,{rows:rows,notes:notes,snaps:db.snaps||[],hidden:hidden,acts:acts})
+    cloudSave(gurl,{rows:rows,notes:notes,snaps:db.snaps||[],hidden:hidden,acts:acts,iss:issOv})
       .then(function(r){
         setMsg({t:r.noCors?'warn':'ok',
           m: r.noCors
@@ -2695,7 +2830,8 @@ function App(){
         if(!r){ setMsg({t:'err',m:'클라우드에 저장된 데이터가 없습니다.'}); return; }
         var o=r.data;
         if(o.rows) setRows(o.rows);
-        setDb({notes:o.notes||{}, snaps:sortSnaps(o.snaps||[]), hidden:o.hidden||{}, acts:o.acts||null});
+        setDb({notes:o.notes||{}, snaps:sortSnaps(o.snaps||[]), hidden:o.hidden||{}, acts:o.acts||null,
+          iss:o.iss||{hq:null,mgr:{},deal:{}}});
         setPick(null);
         setMsg({t:'ok',m:'클라우드에서 불러왔습니다. (마지막 저장 '+(r.at||'알 수 없음')+')'});
       })
@@ -2704,7 +2840,7 @@ function App(){
   }
 
   function exportJson(){
-    var blob=new Blob([JSON.stringify({rows:rows,notes:notes,snaps:db.snaps||[],hidden:hidden,acts:acts,at:new Date().toISOString()},null,1)],{type:'application/json'});
+    var blob=new Blob([JSON.stringify({rows:rows,notes:notes,snaps:db.snaps||[],hidden:hidden,acts:acts,iss:issOv,at:new Date().toISOString()},null,1)],{type:'application/json'});
     var u=URL.createObjectURL(blob),a=document.createElement('a');
     a.href=u; a.download='화남현황판_백업_'+today()+'.json'; a.click(); URL.revokeObjectURL(u);
   }
@@ -2715,7 +2851,8 @@ function App(){
       try{
         var o=JSON.parse(e.target.result);
         if(o.rows) setRows(o.rows);
-        setDb({notes:o.notes||{}, snaps:sortSnaps(o.snaps||[]), hidden:o.hidden||{}, acts:o.acts||null});
+        setDb({notes:o.notes||{}, snaps:sortSnaps(o.snaps||[]), hidden:o.hidden||{}, acts:o.acts||null,
+          iss:o.iss||{hq:null,mgr:{},deal:{}}});
         setPick(null);
         setMsg({t:'ok',m:'백업을 복원했습니다.'});
       }catch(err){ setMsg({t:'err',m:'백업 파일이 올바르지 않습니다.'}); }
@@ -2881,16 +3018,24 @@ function App(){
         onChange:function(n){ setDb(function(pv){ return Object.assign({},pv,{acts:n}); }); }}) : null,
 
       tab==='overview'? h(Overview,{A:A,view:view,byProv:byProv,byType:byType,pick:pick,C:C,
-        hq:hqIssues(rows,pm), pm:pm}):null,
+        hq:hqList(), pm:pm, onHqEdit:hqEdit, onHqDel:hqDel, onHqAdd:hqAdd, onHqReset:hqReset}):null,
       tab==='weekly'? h(WeeklyTab,{snaps:snaps,rows:rows,prev:prev,notes:notes,C:C,
         provs:provs, prov:tprov.weekly, onProv:function(v){ setTP('weekly',v); },
         counts:(function(){ var c={'':rows.length}; rows.forEach(function(r){ c[r.prov]=(c[r.prov]||0)+1; }); return c; })()}):null,
       tab==='mgr'? h(MgrTab,{by:groupOf(tabRows('mgr'),'mgr'),C:C,rows:tabRows('mgr'),pm:pm,
-        provs:provs, prov:tprov.mgr, onProv:function(v){ setTP('mgr',v); }, counts:provCounts}):null,
+        provs:provs, prov:tprov.mgr, onProv:function(v){ setTP('mgr',v); }, counts:provCounts,
+        mergeIss:function(a){ return mergeIss(a,'mgr'); },
+        onIssEdit:function(k,j,v){ grpEdit('mgr',k,j,v); },
+        onIssDel:function(k,j){ grpDel('mgr',k,j); },
+        onIssAdd:function(k){ grpAdd('mgr',k); }}):null,
       tab==='dealer'? h(DealTab,{by:groupOf(tabRows('dealer'),'dealer'),C:C,rows:tabRows('dealer'),pm:pm,
-        provs:provs, prov:tprov.dealer, onProv:function(v){ setTP('dealer',v); }, counts:provCounts}):null,
+        provs:provs, prov:tprov.dealer, onProv:function(v){ setTP('dealer',v); }, counts:provCounts,
+        mergeIss:function(a){ return mergeIss(a,'deal'); },
+        onIssEdit:function(k,j,v){ grpEdit('deal',k,j,v); },
+        onIssDel:function(k,j){ grpDel('deal',k,j); },
+        onIssAdd:function(k){ grpAdd('deal',k); }}):null,
       tab==='cust'? h(CustTab,{view:tabRows('cust'),notes:notes,setNote:setNote,sort:sort,setSort:setSort,sel:sel,setSel:setSel,
-        prev:prev,pick:pick,C:C,onEdit:editField,onCell:editCell,locked:!!pick,dealers:dealers,types:types,mgrs:mgrs,
+        prev:prev,pick:pick,C:C,onEdit:editField,onCell:editCell,locked:!!pick,dealers:dealers,types:types,mgrs:mgrs,pm:pm,
         provs:provs, prov:tprov.cust, onProv:function(v){ setTP('cust',v); }, counts:provCounts}):null,
       tab==='inact'? h(InactiveTab,{rows:tabRows('inact'),pm:pm,onEdit:editField,C:C,locked:!!pick,
         dealers:dealers, types:types,
