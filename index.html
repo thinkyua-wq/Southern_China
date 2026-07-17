@@ -884,9 +884,41 @@ function cloudSave(url, data, slot){
     });
 }
 
+// GAS는 script.google.com → script.googleusercontent.com 으로 리다이렉트합니다.
+// 이때 CORS 헤더가 사라져 fetch가 실패할 수 있어, 실패 시 JSONP로 우회합니다.
+function gasGet(url){
+  return fetch(url, {redirect:'follow'})
+    .then(function(res){ return res.text(); })
+    .then(function(t){
+      try{ return JSON.parse(t); }
+      catch(e){ throw new Error('응답을 해석할 수 없습니다.'); }
+    })
+    .catch(function(){
+      // CORS 차단 시 JSONP 우회
+      return jsonpGet(url);
+    });
+}
+
+function jsonpGet(url){
+  return new Promise(function(resolve, reject){
+    var cb='__hnCrmCb'+Date.now()+Math.floor(Math.random()*1000);
+    var s=document.createElement('script');
+    var to=setTimeout(function(){ cleanup(); reject(new Error('클라우드 응답 시간 초과 (VPN 연결을 확인하세요)')); }, 30000);
+    function cleanup(){
+      clearTimeout(to);
+      try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
+      if(s.parentNode) s.parentNode.removeChild(s);
+    }
+    window[cb]=function(data){ cleanup(); resolve(data); };
+    s.onerror=function(){ cleanup(); reject(new Error('클라우드에 연결할 수 없습니다. VPN과 배포 설정(액세스: 모든 사용자)을 확인하세요.')); };
+    s.src=url+(url.indexOf('?')<0?'?':'&')+'callback='+cb;
+    document.head.appendChild(s);
+  });
+}
+
 function cloudLoad(url, slot){
-  var u=url+(url.indexOf('?')<0?'?':'&')+'key='+(slot||'main')+'&t='+Date.now();
-  return fetch(u).then(function(res){ return res.json(); }).then(function(j){
+  var u=url+(url.indexOf('?')<0?'?':'&')+'key='+encodeURIComponent(slot||'main')+'&t='+Date.now();
+  return gasGet(u).then(function(j){
     if(!j.ok) throw new Error(j.error||'Unknown error');
     var d=j.data||{};
     if(d && d._z && d._c){
@@ -903,10 +935,9 @@ function cloudLoad(url, slot){
   });
 }
 
-// 저장 전에 클라우드 현재 상태를 확인 (덮어쓰기 사고 방지)
 function cloudPeek(url){
-  var u=url+(url.indexOf('?')<0?'?':'&')+'key=main&peek=1&t='+Date.now();
-  return fetch(u).then(function(res){ return res.json(); }).then(function(j){
+  var u=url+(url.indexOf('?')<0?'?':'&')+'key=main&t='+Date.now();
+  return gasGet(u).then(function(j){
     if(!j.ok) return null;
     var d=j.data||{};
     if(d && d._z && d._c && typeof LZString!=='undefined'){
@@ -916,7 +947,6 @@ function cloudPeek(url){
     return {rows:d.rows.length, at:j.lastSaved||d._at||null};
   }).catch(function(){ return null; });
 }
-
 
 // ---- 클라우드 주차 목록 (index 슬롯) ----
 function cloudIndex(url){
