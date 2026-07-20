@@ -477,6 +477,39 @@ td.tde{position:relative}
 @keyframes cfgIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .rbtn.on{background:var(--tl);border-color:var(--tl);color:#fff}
 
+/* ===== 세미나 계획·실행 탭 (화남 하반기) ===== */
+.sem-wrap{display:flex;flex-direction:column;gap:10px}
+.sem-head{background:var(--pn);border:1px solid var(--ln);border-radius:var(--rd);padding:10px 11px}
+.sem3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sem-charts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:900px){.sem3{grid-template-columns:1fr}.sem-charts{grid-template-columns:1fr}}
+.sem-wrap .tbl th{cursor:default}
+.sem-wrap .tbl th[role=button]{cursor:pointer}
+.sem-wrap .tbl td .ec{min-height:16px}
+.sem-wrap .tbl tr.cur td{background:var(--tl4)!important}
+.sem-badge{display:inline-block;font-size:11px;font-weight:800;padding:1px 7px;border-radius:10px;white-space:nowrap}
+.sem-exp>td{background:var(--sf);padding:11px 13px!important}
+.sem-detail{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:var(--rd);overflow:hidden}
+.sem-df{background:var(--pn);display:flex;gap:8px;padding:6px 9px;font-size:12.5px;align-items:baseline}
+.sem-df.wide{grid-column:1/-1}
+.sem-dl{color:var(--dim);font-weight:700;min-width:64px;flex:none}
+.sem-dv{color:var(--ink);flex:1;min-width:0}
+@media(max-width:900px){.sem-detail{grid-template-columns:1fr}}
+/* 6단락 메모 카드 */
+.sem-memo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:900px){.sem-memo-grid{grid-template-columns:1fr}}
+.sem-sec{border:1px solid var(--ln);border-radius:var(--rd);overflow:hidden;background:var(--pn)}
+.sem-sec-h{background:var(--side);color:#fff;font-size:12.5px;font-weight:800;padding:7px 10px;display:flex;align-items:center;gap:8px}
+.sem-sec-n{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;background:var(--tl);color:#fff;font-size:10.5px;font-weight:800;flex:none}
+.sem-sec-b{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.sem-mf{display:flex;flex-direction:column;gap:2px;padding:6px 10px;font-size:12.5px;border-bottom:1px solid #f0f0f0;border-right:1px solid #f0f0f0}
+.sem-mf.wide{grid-column:1/-1;border-right:0}
+.sem-ml{color:var(--dim);font-weight:700;font-size:11px}
+.sem-mv{color:var(--ink);font-weight:600;min-width:0}
+.sem-mv .ec.ecx{display:inline-block;border-bottom:1px dotted var(--tl3)}
+.sem-hint{grid-column:1/-1;padding:5px 10px;font-size:11px;color:var(--dim);background:var(--sf)}
+@media(max-width:560px){.sem-sec-b{grid-template-columns:1fr}.sem-mf{border-right:0}}
+
 </style>
 </head>
 <body>
@@ -2784,6 +2817,447 @@ function InactKpi(p){
   );
 }
 
+/* ==== 화남 하반기 세미나 모듈 ==== */
+/* ===== 화남 하반기 세미나/커스회의 시드 (업로드 엑셀 기준) ===== */
+var SEM_EDU_SEED = [{"id": "edu_7", "yearMonth": "2026-7", "month": "7월", "date": "7/19~20", "region": "광동", "city": "佛山", "target": "", "content": "无牙颇种植治疗", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_8", "yearMonth": "2026-7", "month": "7월", "date": "7/22~23", "region": "광동", "city": "广州", "target": "", "content": "精品班(磨牙区即刻种植)", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_9", "yearMonth": "2026-7", "month": "7월", "date": "7/23", "region": "광서", "city": "南宁", "target": "", "content": "前后牙即刻种植", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_10", "yearMonth": "2026-7", "month": "7월", "date": "7/24", "region": "광동", "city": "湛江", "target": "DSO", "content": "复杂种植病例学术交流沙龙", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "샤롱", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_11", "yearMonth": "2026-7", "month": "7월", "date": "7/28", "region": "광동", "city": "深圳", "target": "ARi", "content": "骨萎缩无牙颇中的应用(ARi)", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "ARi", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_12", "yearMonth": "2026-8", "month": "8월", "date": "8/4", "region": "광동", "city": "深圳", "target": "", "content": "前后牙即刻种植(BD,AR)", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "BD,AR", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_13", "yearMonth": "2026-8", "month": "8월", "date": "8/18", "region": "광동", "city": "东莞", "target": "ARi", "content": "ARi 培训班", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_14", "yearMonth": "2026-8", "month": "8월", "date": "8월말", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_15", "yearMonth": "2026-9", "month": "9월", "date": "미정", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_16", "yearMonth": "2026-9", "month": "9월", "date": "미정", "region": "광서", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #1", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_17", "yearMonth": "2026-9", "month": "9월", "date": "미정", "region": "광동", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #2", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_18", "yearMonth": "2026-10", "month": "10월", "date": "미정", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_19", "yearMonth": "2026-10", "month": "10월", "date": "미정", "region": "광서", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #1", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_20", "yearMonth": "2026-10", "month": "10월", "date": "미정", "region": "광동", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #2", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_21", "yearMonth": "2026-11", "month": "11월", "date": "미정", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_22", "yearMonth": "2026-11", "month": "11월", "date": "미정", "region": "광서", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #1", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_23", "yearMonth": "2026-11", "month": "11월", "date": "미정", "region": "광동", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #2", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_24", "yearMonth": "2026-12", "month": "12월", "date": "미정", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_25", "yearMonth": "2026-12", "month": "12월", "date": "미정", "region": "해남", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #1", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_26", "yearMonth": "2026-12", "month": "12월", "date": "미정", "region": "광동", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #2", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}];
+
+var SEM_MEET_SEED = [{"id": "meet_30", "yearMonth": "2026-7", "month": "7월", "round": "#1", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_31", "yearMonth": "2026-7", "month": "7월", "round": "#2", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_32", "yearMonth": "2026-7", "month": "7월", "round": "#3", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_33", "yearMonth": "2026-7", "month": "7월", "round": "#4", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_34", "yearMonth": "2026-7", "month": "7월", "round": "#5", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_35", "yearMonth": "2026-7", "month": "7월", "round": "#6", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_36", "yearMonth": "2026-7", "month": "7월", "round": "#7", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_37", "yearMonth": "2026-7", "month": "7월", "round": "#8", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_38", "yearMonth": "2026-7", "month": "7월", "round": "#9", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_39", "yearMonth": "2026-7", "month": "7월", "round": "#10", "date": "미정", "region": "해남", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_40", "yearMonth": "2026-8", "month": "8월", "round": "#1", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_41", "yearMonth": "2026-8", "month": "8월", "round": "#2", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_42", "yearMonth": "2026-8", "month": "8월", "round": "#3", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_43", "yearMonth": "2026-8", "month": "8월", "round": "#4", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_44", "yearMonth": "2026-8", "month": "8월", "round": "#5", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_45", "yearMonth": "2026-8", "month": "8월", "round": "#6", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_46", "yearMonth": "2026-8", "month": "8월", "round": "#7", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_47", "yearMonth": "2026-8", "month": "8월", "round": "#8", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_48", "yearMonth": "2026-8", "month": "8월", "round": "#9", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_49", "yearMonth": "2026-8", "month": "8월", "round": "#10", "date": "미정", "region": "해남", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_50", "yearMonth": "2026-9", "month": "9월", "round": "#1", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_51", "yearMonth": "2026-9", "month": "9월", "round": "#2", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_52", "yearMonth": "2026-9", "month": "9월", "round": "#3", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_53", "yearMonth": "2026-9", "month": "9월", "round": "#4", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_54", "yearMonth": "2026-9", "month": "9월", "round": "#5", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_55", "yearMonth": "2026-9", "month": "9월", "round": "#6", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_56", "yearMonth": "2026-9", "month": "9월", "round": "#7", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_57", "yearMonth": "2026-9", "month": "9월", "round": "#8", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_58", "yearMonth": "2026-9", "month": "9월", "round": "#9", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_59", "yearMonth": "2026-9", "month": "9월", "round": "#10", "date": "미정", "region": "해남", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_60", "yearMonth": "2026-10", "month": "10월", "round": "#1", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_61", "yearMonth": "2026-10", "month": "10월", "round": "#2", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_62", "yearMonth": "2026-10", "month": "10월", "round": "#3", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_63", "yearMonth": "2026-10", "month": "10월", "round": "#4", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_64", "yearMonth": "2026-10", "month": "10월", "round": "#5", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_65", "yearMonth": "2026-10", "month": "10월", "round": "#6", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_66", "yearMonth": "2026-10", "month": "10월", "round": "#7", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_67", "yearMonth": "2026-10", "month": "10월", "round": "#8", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_68", "yearMonth": "2026-10", "month": "10월", "round": "#9", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_69", "yearMonth": "2026-10", "month": "10월", "round": "#10", "date": "미정", "region": "해남", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_70", "yearMonth": "2026-11", "month": "11월", "round": "#1", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_71", "yearMonth": "2026-11", "month": "11월", "round": "#2", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_72", "yearMonth": "2026-11", "month": "11월", "round": "#3", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_73", "yearMonth": "2026-11", "month": "11월", "round": "#4", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_74", "yearMonth": "2026-11", "month": "11월", "round": "#5", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_75", "yearMonth": "2026-11", "month": "11월", "round": "#6", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_76", "yearMonth": "2026-11", "month": "11월", "round": "#7", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_77", "yearMonth": "2026-11", "month": "11월", "round": "#8", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_78", "yearMonth": "2026-11", "month": "11월", "round": "#9", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_79", "yearMonth": "2026-11", "month": "11월", "round": "#10", "date": "미정", "region": "해남", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_80", "yearMonth": "2026-12", "month": "12월", "round": "#1", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_81", "yearMonth": "2026-12", "month": "12월", "round": "#2", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_82", "yearMonth": "2026-12", "month": "12월", "round": "#3", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_83", "yearMonth": "2026-12", "month": "12월", "round": "#4", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_84", "yearMonth": "2026-12", "month": "12월", "round": "#5", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_85", "yearMonth": "2026-12", "month": "12월", "round": "#6", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_86", "yearMonth": "2026-12", "month": "12월", "round": "#7", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_87", "yearMonth": "2026-12", "month": "12월", "round": "#8", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_88", "yearMonth": "2026-12", "month": "12월", "round": "#9", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_89", "yearMonth": "2026-12", "month": "12월", "round": "#10", "date": "미정", "region": "해남", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}];
+
+/* ===== 세미나(화남 하반기) 저장 헬퍼 — 독립 localStorage ===== */
+var SEM_LS = { edu:'hncrm_sem_edu_v2', meet:'hncrm_sem_meet_v2' };
+function semLoad(k, fb){ try{ var r=localStorage.getItem(SEM_LS[k]); if(!r) return fb; var o=JSON.parse(r); return (o&&o.length!==undefined)?o:fb; }catch(e){ return fb; } }
+function semSave(k, v){ try{ localStorage.setItem(SEM_LS[k], JSON.stringify(v)); }catch(e){} }
+
+/* ===== 표시 헬퍼 ===== */
+function snum(n, dec){ if(n===null||n===undefined||n===''||isNaN(n)) return '-'; dec=dec||0; return (+n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:dec}); }
+function semRateCol(v){ if(v===null||v===undefined) return 'var(--dim)'; if(v>=95) return 'var(--grn)'; if(v>=60) return 'var(--tlD)'; if(v>=30) return 'var(--amb)'; return 'var(--red)'; }
+function semConvCol(v){ if(v===null||v===undefined) return 'var(--dim)'; if(v>=30) return 'var(--grn)'; if(v>=15) return 'var(--amb)'; return 'var(--red)'; }
+var SEM_TGT_COL = { 'ARi':'#3c9cb4', 'DSO':'#c9962f', 'BD/ARi/AO':'#2e9e6b', 'BD,AR':'#7a5ea8' };
+function tgtCol(t){ return SEM_TGT_COL[t] || '#8a8a8a'; }
+function tgtBadge(t){ if(!t) return h('span',{className:'sem-badge',style:{background:'#eee',color:'#8a8a8a'}},'미지정');
+  return h('span',{className:'sem-badge',style:{background:tgtCol(t)+'22',color:tgtCol(t)}}, t); }
+/* 샤롱 vs 세미나(培训班) 분류 */
+function isSalon(r){ var s=String((r.content||'')+' '+(r.target||'')); return /沙龙|샤롱|살롱|salon/i.test(s); }
+
+/* ===== ISO 주차 유틸 (연도/월/주 기간바) ===== */
+function isoWeek(dt){ var d=new Date(Date.UTC(dt.getFullYear(),dt.getMonth(),dt.getDate())); var day=d.getUTCDay()||7; d.setUTCDate(d.getUTCDate()+4-day);
+  var ys=new Date(Date.UTC(d.getUTCFullYear(),0,1)); var wn=Math.ceil((((d-ys)/86400000)+1)/7); return {year:d.getUTCFullYear(), week:wn}; }
+function mondayOfWeek(year, week){ var simple=new Date(Date.UTC(year,0,1+(week-1)*7)); var dow=simple.getUTCDay();
+  var mon=new Date(simple); if(dow<=4) mon.setUTCDate(simple.getUTCDate()-simple.getUTCDay()+1); else mon.setUTCDate(simple.getUTCDate()+8-simple.getUTCDay()); return mon; }
+function weeksOfMonth(year, mo){ var seen={}, out=[], last=new Date(year, mo, 0).getDate();
+  for(var d=1; d<=last; d++){ var iw=isoWeek(new Date(year, mo-1, d)); var key=iw.year+'-'+iw.week;
+    if(!seen[key]){ seen[key]=1; var mon=mondayOfWeek(iw.year, iw.week); out.push({year:iw.year, week:iw.week, sub:(mon.getUTCMonth()+1)+'/'+mon.getUTCDate()}); } }
+  return out; }
+
+/* ================= 세미나 계획·실행 탭 (화남 하반기) ================= */
+function SeminarTab(p){
+  var edu=p.edu||[], meet=p.meet||[];
+  var setEdu=p.setEdu, setMeet=p.setMeet;
+
+  var _s=useState('summary'); var sub=_s[0], setSub=_s[1];
+  var _m=useState(0);         var mo=_m[0], setMo=_m[1];   // 0 = 하반기 전체
+  var _w=useState(null);      var wk=_w[0], setWk=_w[1];   // {year,week} or null
+  var _x=useState({});        var exp=_x[0], setExp=_x[1];
+  var _sel=useState(null);    var sel=_sel[0], setSel=_sel[1];   // 세미나 상세: 선택 세미나 id
+  var _o=useState({k:null,d:'asc'}); var so=_o[0], setSo=_o[1];
+
+  var YEAR=2026, MONTHS=[7,8,9,10,11,12];
+  var isAll=!mo;
+  var monLabel = wk? ('W'+wk.week) : (isAll? '하반기(7~12月)' : (mo+'月'));
+  var ym=function(r){ return String(r.yearMonth||''); };
+  var monthOf=function(r){ var pp=ym(r).split('-'); return pp[1]?+pp[1]:0; };
+  function semDateOf(r){ var s=String(r.date||''); var m=s.match(/(\d{1,2})[\/\.](\d{1,2})/); if(!m) return null; return new Date(YEAR,(+m[1])-1,+m[2]); }
+  function inMonth(r){ return isAll? MONTHS.indexOf(monthOf(r))>=0 : monthOf(r)===mo; }
+  function inScope(r){ if(!inMonth(r)) return false; if(wk){ var dt=semDateOf(r); if(!dt) return false; var iw=isoWeek(dt); if(iw.year!==wk.year||iw.week!==wk.week) return false; } return true; }
+
+  var eduAll = edu.filter(inScope);
+  var meetAll = meet.filter(inMonth);   // 커스회의는 날짜 미정 → 월 단위 관리
+
+  var sumEdu=function(arr){ return arr.reduce(function(a,r){ return {
+    people:a.people+(+r.people||0), peopleAct:a.peopleAct+(+r.peopleAct||0),
+    conv:a.conv+(+r.conv||0), convAct:a.convAct+(+r.convAct||0),
+    cost:a.cost+(+r.costTot||0), hands:a.hands+((String(r.hands).indexOf('O')>=0||String(r.hands).indexOf('유')>=0||String(r.hands).indexOf('Y')>=0||r.hands===true||String(r.hands).indexOf('핸즈')>=0)?1:0) };},
+    {people:0,peopleAct:0,conv:0,convAct:0,cost:0,hands:0}); };
+  var S=sumEdu(eduAll);
+  var pct=function(a,pl){ return pl>0? Math.round(a/pl*100):null; };
+
+  /* ── 편집 ── */
+  var NUMF={people:0,peopleAct:0,conv:0,convAct:0,costLec:1,costSem:1,costTot:1};
+  function updEdu(id, field, val){
+    setEdu(function(prev){ return prev.map(function(r){ if(r.id!==id) return r;
+      var fv = (field in NUMF)? (parseFloat(String(val).replace(/,/g,''))||0) : val;
+      var nr=Object.assign({},r); nr[field]=fv;
+      if(field==='costLec'||field==='costSem') nr.costTot=(+nr.costLec||0)+(+nr.costSem||0);
+      return nr; }); });
+  }
+  function addEdu(){
+    var mm=isAll?7:mo;
+    setEdu(function(prev){ return prev.concat([{ id:'edu_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
+      yearMonth:YEAR+'-'+mm, month:mm+'월', date:'', region:'광동', city:'', target:'', content:'', hands:'',
+      people:0, peopleAct:0, conv:0, convAct:0, lecturer:'', dealer:'', costLec:0, costSem:0, costTot:0 }]); });
+  }
+  function delEdu(id){ if(!confirm('이 세미나를 삭제하시겠습니까?')) return; setEdu(function(prev){ return prev.filter(function(r){ return r.id!==id; }); }); }
+  function toggleExp(id){ setExp(function(pv){ var n=Object.assign({},pv); n[id]=!n[id]; return n; }); }
+
+  function updMeet(id, field, val){
+    setMeet(function(prev){ return prev.map(function(r){ if(r.id!==id) return r;
+      var fv=(field==='people')?(parseFloat(val)||0):val; var nr=Object.assign({},r); nr[field]=fv; return nr; }); });
+  }
+  function addMeet(){ var mm=isAll?7:mo;
+    setMeet(function(prev){ return prev.concat([{ id:'meet_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
+      yearMonth:YEAR+'-'+mm, month:mm+'월', round:'#'+(prev.filter(function(x){return monthOf(x)===mm;}).length+1),
+      date:'', region:'광동', city:'', clinic:'', system:'', dealer:'', people:0, lecturer:'林芳扬' }]); });
+  }
+  function delMeet(id){ if(!confirm('이 커스회의를 삭제하시겠습니까?')) return; setMeet(function(prev){ return prev.filter(function(r){ return r.id!==id; }); }); }
+
+  /* ── 정렬 ── */
+  function handleSort(k){ setSo(function(o){ if(o.k!==k) return {k:k,d:'asc'}; if(o.d==='asc') return {k:k,d:'desc'}; return {k:null,d:'asc'}; }); }
+  function sortMark(k){ return so.k!==k?'⇅':(so.d==='asc'?'▲':'▼'); }
+  function sortRows(arr){ if(!so.k) return arr; return arr.slice().sort(function(a,b){
+    var av=(a[so.k]==null?'':a[so.k]).toString(), bv=(b[so.k]==null?'':b[so.k]).toString();
+    var c=av.localeCompare(bv,'ko',{numeric:true}); return so.d==='asc'?c:-c; }); }
+
+  /* ── 월별 시리즈(차트) ── */
+  var monthly=[]; MONTHS.forEach(function(m){
+    var e=edu.filter(function(r){ return monthOf(r)===m; });
+    var done=e.filter(function(r){ return (+r.peopleAct||0)>0; });
+    var s=sumEdu(e), sa=sumEdu(done);
+    monthly.push({ m:m+'月', cntP:e.length, cntA:done.length,
+      pplP:s.people, pplA:s.peopleAct, cvP:s.conv, cvA:s.convAct }); });
+
+  /* ── EdCell 헬퍼 ── */
+  function edN(row, field, dec){ return h(EdCell,{row:row,locked:false,col:{
+    r:function(rr){ return snum(rr[field],dec||0); },
+    edit:{type:'text',get:function(rr){ return rr[field]===0?0:(rr[field]||''); },set:function(rr,v){ updEdu(rr.id,field,v); }} }}); }
+  function edT(row, field){ return h(EdCell,{row:row,locked:false,col:{
+    r:function(rr){ return rr[field]? rr[field] : h('span',{className:'dim'},'—'); },
+    edit:{type:'text',get:function(rr){ return rr[field]||''; },set:function(rr,v){ updEdu(rr.id,field,v); }} }}); }
+
+  /* ── 헤더: 하위탭 + 연도/월/주 기간바 (표준 동반조건) ── */
+  var weeks = isAll? [] : weeksOfMonth(YEAR, mo);
+  var head = h('div',{className:'sem-head'},
+    h('div',{className:'segs',style:{marginBottom:'8px',border:0,padding:0,background:'none'}},
+      h('span',{className:'plb'},'세미나'),
+      h('div',{className:'segb',style:{marginLeft:0}},
+        [['summary','서머리'],['plan','계획'],['actual','실행'],['detail','세미나 상세'],['meet','커스회의']].map(function(t){
+          return h('button',{key:t[0],className:'sg'+(sub===t[0]?' on':''),onClick:function(){ setSub(t[0]); }}, t[1]);
+        }))),
+    h('div',{className:'pbar',style:{marginBottom:0}},
+      h('div',{className:'pgrp'}, h('span',{className:'plb'},'연도'),
+        h('select',{className:'sel',value:YEAR,onChange:function(){}}, h('option',{value:YEAR}, YEAR+'년'))),
+      h('div',{className:'pgrp'}, h('span',{className:'plb'},'월'),
+        h('select',{className:'sel',value:mo,onChange:function(e){ setMo(+e.target.value); setWk(null); }},
+          h('option',{value:0},'하반기 전체'),
+          MONTHS.map(function(x){ return h('option',{key:x,value:x}, x+'月'); }))),
+      h('div',{className:'pgrp'}, h('span',{className:'plb'},'주'),
+        h('div',{className:'wks'}, isAll? h('span',{className:'dim',style:{fontSize:'11px'}},'월을 선택하면 주차가 표시됩니다')
+          : weeks.map(function(w){ var on=wk&&wk.week===w.week&&wk.year===w.year;
+            return h('button',{key:w.week,className:'wk has'+(on?' on':''),
+              onClick:function(){ setWk(on? null : {year:w.year, week:w.week}); }},
+              h('b',null,'W'+w.week), h('span',null,w.sub)); }))),
+      h('div',{className:'pnav',style:{marginLeft:'auto',alignItems:'center'}},
+        wk? h('button',{className:'btn sm',onClick:function(){ setWk(null); }},'주 해제') : null,
+        h('span',{className:'dim',style:{fontSize:'11.5px',whiteSpace:'nowrap',marginLeft:'6px'}}, '세미나 '+eduAll.length+'건 · 커스회의 '+meetAll.length+'건'))));
+
+  /* ── 지표카드 + 차트 (서머리·커스회의 외) ── */
+  var metricRow=null, charts=null;
+  if(sub!=='summary' && sub!=='meet'){
+    var pRate=pct(S.peopleAct,S.people), cRate=(S.peopleAct||S.people)>0? Math.round(S.convAct/(S.peopleAct||S.people)*100):null;
+    metricRow = h('div',{className:'sem3'},
+      metricCard('목표인원 → 실제','명', S.people, S.peopleAct, pRate, '달성 95% 목표', semRateCol(pRate)),
+      metricCard('전환고객 → 실제','명', S.conv, S.convAct, cRate, '전환율 최소 30%', semConvCol(cRate)),
+      budgetCard());
+    charts = h('div',{className:'sem-charts'},
+      semBar('월별 세미나 건수','건', monthly,'cntP','cntA','#a8d4de','#3c9cb4','계획','실행'),
+      semBar('월별 인원 목표/실제','명', monthly,'pplP','pplA','#bfe3cf','#2e9e6b','목표','실제'),
+      semBar('월별 전환고객 목표/실제','명', monthly,'cvP','cvA','#e6d3b0','#c9962f','목표','실제'));
+  }
+
+  var body;
+  if(sub==='summary')      body=renderSummary();
+  else if(sub==='meet')    body=renderMeet();
+  else if(sub==='detail')  body=renderDetailPane();
+  else                     body=renderTable(sub);
+
+  return h('div',{className:'sem-wrap'}, head, metricRow, charts, body);
+
+  /* ---------- 카드/지표 헬퍼 ---------- */
+  function metricCard(label, unit, planV, actV, rate, sub2, col){
+    return h('div',{className:'card',style:{padding:'10px 12px'}},
+      h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'4px'}},
+        h('span',{style:{fontSize:'11px',color:'var(--dim)',fontWeight:700,letterSpacing:'.04em',textTransform:'uppercase'}}, label),
+        h('span',{style:{fontWeight:800,fontSize:'12px',color:col}}, rate===null?'-':rate+'%')),
+      h('div',{style:{display:'flex',alignItems:'baseline',gap:'6px'}},
+        h('b',{style:{fontSize:'19px',fontWeight:800,fontVariantNumeric:'tabular-nums'}}, snum(planV,0)),
+        h('span',{className:'dim'},'→'),
+        h('b',{style:{fontSize:'19px',fontWeight:800,color:'var(--ink2)',fontVariantNumeric:'tabular-nums'}}, snum(actV,0)),
+        h('span',{className:'dim',style:{fontSize:'10px'}}, unit)),
+      h('div',{className:'bar-tr',style:{height:'6px',marginTop:'8px'}},
+        h('div',{className:'bar-fi',style:{width:Math.min(100,rate||0)+'%',background:col}})),
+      h('div',{className:'dim',style:{fontSize:'10.5px',marginTop:'4px'}}, sub2));
+  }
+  function budgetCard(){
+    return h('div',{className:'card',style:{padding:'10px 12px'}},
+      h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'4px'}},
+        h('span',{style:{fontSize:'11px',color:'var(--dim)',fontWeight:700,letterSpacing:'.04em',textTransform:'uppercase'}}, '총비용(예산)'),
+        h('span',{className:'sem-badge',style:{background:'var(--tl4)',color:'var(--tlD)'}}, monLabel)),
+      h('div',{style:{display:'flex',alignItems:'baseline',gap:'4px'}},
+        h('b',{style:{fontSize:'19px',fontWeight:800,color:'var(--tlD)',fontVariantNumeric:'tabular-nums'}}, snum(S.cost,0)),
+        h('span',{className:'dim',style:{fontSize:'10px'}},'元(RMB)')),
+      h('div',{className:'dim',style:{fontSize:'10.5px',marginTop:'8px'}}, '핸즈온 '+S.hands+'건 · 강사비+세미나비 합산'));
+  }
+
+  /* ---------- 서머리 (구역 / 샤롱·세미나 / 커스회의 + 그래프) ---------- */
+  function renderSummary(){
+    var regions=['광동','광서','해남'];
+    // 월별 요약 시리즈
+    var ms=[]; MONTHS.forEach(function(m){
+      var e=edu.filter(function(r){ return monthOf(r)===m; });
+      var sal=e.filter(isSalon).length;
+      ms.push({ m:m+'月', sem:e.length-sal, sal:sal, mt:meet.filter(function(r){return monthOf(r)===m;}).length, z:0 });
+    });
+    var salTot=edu.filter(isSalon).length, semTot=edu.length-salTot;
+
+    function pivot(keys, label, predOf, colorOf){
+      return h('div',{className:'tw',style:{marginBottom:'14px'}},
+        h('table',{className:'tbl hmt',style:{minWidth:'720px'}},
+          h('thead',null, h('tr',null, h('th',null,label),
+            MONTHS.map(function(m){ return h('th',{key:m,className:'num'}, m+'月'); }), h('th',{className:'num'},'합계'))),
+          h('tbody',null,
+            keys.map(function(k){ var pr=predOf(k);
+              return h('tr',{key:k},
+                h('td',{style:{fontWeight:600}}, colorOf? h('span',null, h('span',{style:{display:'inline-block',width:'8px',height:'8px',borderRadius:'2px',background:colorOf(k),marginRight:'5px'}}), k) : k),
+                MONTHS.map(function(m){ var v=edu.filter(function(r){ return monthOf(r)===m && pr(r); }).length; return h('td',{key:m,className:'num'+(v?'':' dim')}, v||'·'); }),
+                h('td',{className:'num',style:{background:'var(--tl4)',fontWeight:800}}, edu.filter(pr).length));
+            }),
+            h('tr',{className:'etot'}, h('td',null,'합계'),
+              MONTHS.map(function(m){ return h('td',{key:m,className:'num'}, edu.filter(function(r){return monthOf(r)===m;}).length); }),
+              h('td',{className:'num',style:{background:'var(--tl3)'}}, edu.length)))));
+    }
+    return h('div',{className:'card wide'},
+      h('div',{className:'card-h'},
+        h('h3',null,'화남 하반기 교육 서머리 · '+YEAR+'년'),
+        h('span',{className:'card-n'},'교육세미나 '+edu.length+'건 (샤롱 '+salTot+' · 세미나 '+semTot+') · 커스회의 '+meet.length+'건')),
+      // 그래프
+      h('div',{className:'sem-charts',style:{marginBottom:'14px'}},
+        semBar('월별 세미나 건수 (샤롱/세미나)','건', ms,'sem','sal','#3c9cb4','#c9962f','세미나','샤롱'),
+        semBar('월별 커스회의','건', ms,'mt',null,'#2e9e6b',null,'커스회의',null),
+        semBar('월별 목표 인원','명', monthly,'pplP',null,'#a8d4de',null,'목표인원',null)),
+      // 1) 구역별
+      h('div',{className:'mini-h'},'구역(省)별 × 월'),
+      pivot(regions, '구역', function(k){ return function(r){ return r.region===k; }; }, null),
+      // 2) 샤롱 / 세미나
+      h('div',{className:'mini-h'},'샤롱 / 세미나(培训班)별 × 월'),
+      pivot(['세미나','샤롱'], '유형',
+        function(k){ return function(r){ return k==='샤롱'? isSalon(r) : !isSalon(r); }; },
+        function(k){ return k==='샤롱'? '#c9962f' : '#3c9cb4'; }),
+      // 3) 커스회의
+      h('div',{className:'mini-h'},'커스회의 (지역별 · 월 최대 10회)'),
+      h('div',{className:'tw'},
+        h('table',{className:'tbl hmt',style:{minWidth:'720px'}},
+          h('thead',null, h('tr',null, h('th',null,'구역'),
+            MONTHS.map(function(m){ return h('th',{key:m,className:'num'}, m+'月'); }), h('th',{className:'num'},'합계'))),
+          h('tbody',null,
+            regions.map(function(rg){
+              return h('tr',{key:rg}, h('td',{style:{fontWeight:600}}, rg),
+                MONTHS.map(function(m){ var v=meet.filter(function(r){ return monthOf(r)===m && r.region===rg; }).length; return h('td',{key:m,className:'num'+(v?'':' dim')}, v||'·'); }),
+                h('td',{className:'num',style:{background:'var(--tl4)',fontWeight:800}}, meet.filter(function(r){return r.region===rg;}).length));
+            }),
+            h('tr',{className:'etot'}, h('td',null,'합계'),
+              MONTHS.map(function(m){ return h('td',{key:m,className:'num'}, meet.filter(function(r){return monthOf(r)===m;}).length); }),
+              h('td',{className:'num',style:{background:'var(--tl3)'}}, meet.length)))) ),
+      h('p',{className:'ed-n',style:{marginTop:'8px'}},
+        '* 구역·유형(샤롱/세미나)·월별 건수는 [계획]·[실행] 데이터에서 자동 집계됩니다. 커스회의는 [커스회의] 탭에서 관리합니다. 인원 달성 목표 95% · 전환고객 최소 30%.')
+    );
+  }
+
+  /* ---------- 계획 / 실행 상세표 ---------- */
+  function renderTable(mode){
+    var isAct=mode==='actual';
+    var rowsArr=sortRows(eduAll); var out=[];
+    if(rowsArr.length===0){ out.push(h('tr',{key:'e'}, h('td',{colSpan:12,className:'empty'}, monLabel+' 세미나가 없습니다. [+ 세미나 추가]를 사용하세요.'))); }
+    else {
+      rowsArr.forEach(function(r){
+        var open=!!exp[r.id];
+        var achieve=(+r.people>0)? Math.round((+r.peopleAct||0)/r.people*100):null;
+        var convR=((+r.peopleAct||0)>0)? Math.round((+r.convAct||0)/r.peopleAct*100):null;
+        if(!isAct){
+          out.push(h('tr',{key:r.id},
+            h('td',{className:'tde'}, edT(r,'date')), h('td',{className:'tde'}, edT(r,'region')), h('td',{className:'tde'}, edT(r,'city')),
+            h('td',{className:'tde'}, tgtBadgeEdit(r)), h('td',{className:'tde',style:{minWidth:'160px'}}, edT(r,'content')),
+            h('td',{className:'tde',style:{textAlign:'center'}}, edT(r,'hands')),
+            h('td',{className:'num tde'}, edN(r,'people',0)), h('td',{className:'num tde'}, edN(r,'conv',0)),
+            h('td',{className:'tde'}, edT(r,'lecturer')), h('td',{className:'tde'}, edT(r,'dealer')),
+            h('td',{className:'num tde'}, edN(r,'costTot',0)),
+            h('td',{className:'num'}, h('button',{className:'lnk',onClick:function(){ toggleExp(r.id); }}, open?'▾':'▸'))));
+        } else {
+          out.push(h('tr',{key:r.id},
+            h('td',{className:'tde'}, edT(r,'date')), h('td',{className:'tde'}, edT(r,'city')), h('td',{className:'tde'}, tgtBadgeEdit(r)),
+            h('td',{className:'num',style:{color:'var(--dim)'}}, snum(r.people,0)), h('td',{className:'num tde'}, edN(r,'peopleAct',0)),
+            h('td',{className:'num',style:{fontWeight:800,color:semRateCol(achieve)}}, achieve===null?'-':achieve+'%'),
+            h('td',{className:'num',style:{color:'var(--dim)'}}, snum(r.conv,0)), h('td',{className:'num tde'}, edN(r,'convAct',0)),
+            h('td',{className:'num',style:{fontWeight:800,color:semConvCol(convR)}}, convR===null?'-':convR+'%'),
+            h('td',{className:'num tde'}, edN(r,'costTot',0)),
+            h('td',{className:'num'}, h('button',{className:'lnk',onClick:function(){ toggleExp(r.id); }}, open?'▾':'▸'))));
+        }
+        if(open) out.push(expandRow(r, isAct?11:12));
+      });
+      if(!isAct){
+        out.push(h('tr',{key:'tot',className:'etot'}, h('td',{colSpan:6,style:{textAlign:'center'}}, monLabel+' 합계'),
+          h('td',{className:'num'}, snum(S.people,0)), h('td',{className:'num'}, snum(S.conv,0)), h('td',null), h('td',null), h('td',{className:'num'}, snum(S.cost,0)), h('td',null)));
+      } else {
+        out.push(h('tr',{key:'tot',className:'etot'}, h('td',{colSpan:3,style:{textAlign:'center'}}, monLabel+' 합계'),
+          h('td',{className:'num'}, snum(S.people,0)), h('td',{className:'num'}, snum(S.peopleAct,0)),
+          h('td',{className:'num',style:{color:semRateCol(pct(S.peopleAct,S.people))}}, pct(S.peopleAct,S.people)===null?'-':pct(S.peopleAct,S.people)+'%'),
+          h('td',{className:'num'}, snum(S.conv,0)), h('td',{className:'num'}, snum(S.convAct,0)),
+          h('td',{className:'num',style:{color:semConvCol(S.peopleAct>0?Math.round(S.convAct/S.peopleAct*100):null)}}, S.peopleAct>0?Math.round(S.convAct/S.peopleAct*100)+'%':'-'),
+          h('td',{className:'num'}, snum(S.cost,0)), h('td',null)));
+      }
+    }
+    var headCells = !isAct
+      ? [thS('date','일자'),thS('region','구역'),thS('city','지역'),th('목표고객'),th('내용'),th('핸즈온'),thS('people','인원'),th('전환'),th('강사'),th('대리상'),th('총비용'),th('상세')]
+      : [thS('date','일자'),thS('city','지역'),th('목표고객'),th('목표인원'),th('실제인원'),th('달성%'),th('목표전환'),th('실제전환'),th('전환%'),th('비용'),th('상세')];
+    return h('div',{className:'card wide'},
+      h('div',{className:'card-h'},
+        h('h3',null,(isAct?'실행(실적 입력)':'계획')+' · '+monLabel),
+        h('button',{className:'btn pri sm',onClick:addEdu},'+ 세미나 추가')),
+      h('div',{className:'tw'}, h('table',{className:'tbl',style:{minWidth:isAct?'980px':'1100px'}},
+        h('thead',null, h('tr',null, headCells)), h('tbody',null, out))),
+      h('p',{className:'ed-n',style:{marginTop:'8px'}}, isAct
+        ? '* [실행] 탭에서 실제 인원·전환·비용을 입력하면 달성%·전환%가 자동 계산됩니다(인원 목표 95% · 전환 최소 30%).'
+        : '* 셀을 더블클릭하면 바로 수정됩니다. 오른쪽 ▸ 상세에서 내용·강사·대리상·비용 세부가 펼쳐집니다. 비용 단위는 元(RMB).'));
+    function th(t){ return h('th',{key:t,className:'num'}, t); }
+    function thS(k,t){ return h('th',{key:k,className:'num',role:'button',onClick:function(){ handleSort(k); },title:'정렬'}, t,' ',h('span',{className:'dim',style:{fontSize:'9px'}}, sortMark(k))); }
+  }
+  function tgtBadgeEdit(r){ return h(EdCell,{row:r,locked:false,col:{
+    r:function(rr){ return tgtBadge(rr.target); },
+    edit:{type:'text',get:function(rr){ return rr.target||''; },set:function(rr,v){ updEdu(rr.id,'target',v); }} }}); }
+  function expandRow(r, span){
+    return h('tr',{key:r.id+'_x',className:'sem-exp'}, h('td',{colSpan:span},
+      h('div',{className:'sem-detail'},
+        df('구역', r.region||'—'), df('지역', r.city||'—'), df('목표고객', tgtBadge(r.target)),
+        df('핸즈온', h(EdCell,{row:r,locked:false,col:{r:function(rr){return rr.hands||h('span',{className:'dim'},'—');},edit:{type:'text',get:function(rr){return rr.hands||'';},set:function(rr,v){ updEdu(rr.id,'hands',v); }}}})),
+        df('강사', edT(r,'lecturer')), df('대리상', edT(r,'dealer')),
+        df('강사비용', edN(r,'costLec',0)), df('세미나비용', edN(r,'costSem',0)), df('총비용', h('b',null,snum(r.costTot,0)+' 元')),
+        df('인원(목표/실제)', h('span',null, snum(r.people,0), h('span',{className:'dim'},' / '), h('b',{style:{color:'var(--ink2)'}}, snum(r.peopleAct,0)))),
+        df('전환(목표/실제)', h('span',null, snum(r.conv,0), h('span',{className:'dim'},' / '), h('b',{style:{color:'var(--ink2)'}}, snum(r.convAct,0)))),
+        df('내용', edT(r,'content'), true)),
+      h('div',{style:{textAlign:'right',marginTop:'8px'}}, h('button',{className:'btn dg sm',onClick:function(){ delEdu(r.id); }},'세미나 삭제'))));
+  }
+  function df(label, val, wide){ return h('div',{className:'sem-df'+(wide?' wide':'')}, h('span',{className:'sem-dl'},label), h('span',{className:'sem-dv'},val)); }
+
+  /* ---------- 세미나 상세 (표 → 카드 메모, 연동) ---------- */
+  function renderDetailPane(){
+    var list=sortRows(eduAll);
+    var selId = (sel && list.some(function(r){ return r.id===sel; }))? sel : (list[0] && list[0].id);
+    var selRow = list.filter(function(r){ return r.id===selId; })[0];
+    // ── 표 (먼저) : 행 클릭 = 아래 카드 메모 선택 ──
+    var out=[];
+    if(list.length===0){ out.push(h('tr',{key:'e'}, h('td',{colSpan:8,className:'empty'}, monLabel+' 세미나가 없습니다. [계획] 탭에서 추가하세요.'))); }
+    else list.forEach(function(r){
+      out.push(h('tr',{key:r.id,className:(r.id===selId?'cur':''),style:{cursor:'pointer'},onClick:function(){ setSel(r.id); }},
+        h('td',{className:'tde'}, edT(r,'date')), h('td',{className:'tde'}, edT(r,'region')), h('td',{className:'tde'}, edT(r,'city')),
+        h('td',null, tgtBadge(r.target)), h('td',{className:'tde',style:{minWidth:'180px'}}, edT(r,'content')),
+        h('td',{className:'tde'}, edT(r,'lecturer')), h('td',{className:'num tde'}, edN(r,'costTot',0)),
+        h('td',{className:'num'}, h('span',{style:{color:(r.id===selId?'var(--tlD)':'var(--dim)'),fontWeight:800}}, r.id===selId?'▼ 열림':'메모'))));
+    });
+    var tableCard = h('div',{className:'card wide'},
+      h('div',{className:'card-h'}, h('h3',null,'세미나 목록 · '+monLabel),
+        h('span',{className:'card-n'},'행을 클릭하면 아래 6단락 메모가 열립니다 · 표·메모는 실시간 연동')),
+      h('div',{className:'tw'}, h('table',{className:'tbl',style:{minWidth:'980px'}},
+        h('thead',null, h('tr',null, h('th',null,'일자'),h('th',null,'구역'),h('th',null,'지역'),h('th',null,'목표고객'),h('th',null,'내용'),h('th',null,'강사'),h('th',{className:'num'},'총비용'),h('th',{className:'num'},'메모'))),
+        h('tbody',null, out))));
+    // ── 카드 메모 (다음) ──
+    return h('div',{style:{display:'flex',flexDirection:'column',gap:'10px'}}, tableCard, selRow? memoCard(selRow) : null);
+  }
+
+  function memoCard(r){
+    var achieve=(+r.people>0)? Math.round((+r.peopleAct||0)/r.people*100):null;
+    var convR=((+r.peopleAct||0)>0)? Math.round((+r.convAct||0)/r.peopleAct*100):null;
+    function mf(label, node, wide){ return h('div',{className:'sem-mf'+(wide?' wide':'')}, h('span',{className:'sem-ml'},label), h('span',{className:'sem-mv'},node)); }
+    function sec(no, title, fields, tone){ return h('div',{className:'sem-sec'},
+      h('div',{className:'sem-sec-h'}, h('span',{className:'sem-sec-n',style:tone?{background:tone}:null}, no), title),
+      h('div',{className:'sem-sec-b'}, fields)); }
+    return h('div',{className:'card wide sem-memo'},
+      h('div',{className:'card-h'},
+        h('h3',null,'세미나 상세 메모'),
+        h('div',{style:{marginLeft:'auto',display:'flex',alignItems:'center',gap:'8px'}},
+          tgtBadge(r.target),
+          h('span',{className:'card-n'}, (r.date||'일자미정')+' · '+(r.region||'')+' '+(r.city||'')))),
+      h('div',{className:'sem-memo-grid'},
+        sec('1','세미나 개요', [
+          mf('세미나명', edT(r,'name'), true),
+          mf('일자', edT(r,'date')), mf('시간', edT(r,'time')),
+          mf('구역', edT(r,'region')), mf('지역', edT(r,'city')),
+          mf('장소', edT(r,'venue'), true) ]),
+        sec('2','개최 목적', [
+          mf('목적', edT(r,'purpose'), true),
+          h('div',{className:'sem-hint'},'예: 제품 진입 · 신규 고객 개발 · DSO 공략 · 기존 고객 유지 등') ]),
+        sec('3','대상 및 목표', [
+          mf('참석 대상', edT(r,'audience'), true),
+          mf('목표 인원', edN(r,'people',0)), mf('초청 고객 유형', tgtBadgeEdit(r)) ]),
+        sec('4','강연자 정보', [
+          mf('강연자명', edT(r,'lecturer')), mf('소속', edT(r,'lecAffil')),
+          mf('직함', edT(r,'lecTitle')), mf('주요 전문 분야', edT(r,'lecField')) ]),
+        sec('5','교육 내용', [
+          mf('강의 주제', edT(r,'content'), true),
+          mf('세부 일정', edT(r,'schedule'), true),
+          mf('Hands-on/케이스', edT(r,'hands'), true) ]),
+        sec('6','성과 및 F/U', [
+          mf('참석 인원', h('span',null, edN(r,'peopleAct',0), achieve!==null? h('span',{className:'dim',style:{marginLeft:'6px'}},'(목표 '+snum(r.people,0)+' · 달성 '+achieve+'%)'):null)),
+          mf('신규 고객', h('span',null, edN(r,'convAct',0), convR!==null? h('span',{className:'dim',style:{marginLeft:'6px'}},'(전환율 '+convR+'%)'):null)),
+          mf('관심 제품', edT(r,'fuProduct'), true),
+          mf('샘플 제공', edT(r,'fuSample')), mf('구매 전환', edT(r,'fuPurchase')),
+          mf('후속 방문 계획', edT(r,'fuFollow'), true) ], 'var(--grn)')),
+      h('p',{className:'ed-n',style:{marginTop:'10px'}},'* 각 항목을 더블클릭하면 그 자리에서 수정되고 즉시 저장됩니다. 위 표의 값과 실시간으로 연동됩니다(한쪽을 고치면 다른 쪽도 바뀝니다).'));
+  }
+
+  /* ---------- 커스회의 ---------- */
+  function renderMeet(){
+    var rowsArr=sortRows(meetAll), byMonth={};
+    rowsArr.forEach(function(r){ var m=monthOf(r); (byMonth[m]=byMonth[m]||[]).push(r); });
+    var monthsShown=isAll? MONTHS : [mo]; var out=[];
+    monthsShown.forEach(function(m){ var arr=byMonth[m]||[];
+      out.push(h('tr',{key:'m'+m,className:'hl'}, h('td',{colSpan:9,style:{fontWeight:800,color:'var(--tlD)'}}, m+'月 · '+arr.length+'회')));
+      if(arr.length===0) out.push(h('tr',{key:'m'+m+'e'}, h('td',{colSpan:9,className:'dim',style:{textAlign:'center',padding:'8px'}},'계획 없음')));
+      arr.forEach(function(r){ out.push(h('tr',{key:r.id},
+        h('td',{style:{fontWeight:700}}, r.round||''), h('td',{className:'tde'}, meetCell(r,'date')), h('td',{className:'tde'}, meetCell(r,'region')),
+        h('td',{className:'tde'}, meetCell(r,'city')), h('td',{className:'tde'}, meetCell(r,'clinic')), h('td',{className:'tde'}, meetCell(r,'system')),
+        h('td',{className:'tde'}, meetCell(r,'dealer')), h('td',{className:'num tde'}, meetCellN(r,'people')), h('td',{className:'tde'}, meetCell(r,'lecturer')))); });
+    });
+    return h('div',{className:'card wide'},
+      h('div',{className:'card-h'}, h('h3',null,'지역별 커스회의 · '+monLabel), h('button',{className:'btn pri sm',onClick:addMeet},'+ 회차 추가')),
+      h('div',{className:'tw'}, h('table',{className:'tbl',style:{minWidth:'900px'}},
+        h('thead',null, h('tr',null, h('th',null,'회차'),h('th',null,'날짜'),h('th',null,'구역'),h('th',null,'지역'),h('th',null,'치과명'),h('th',null,'시스템'),h('th',null,'대리상'),h('th',{className:'num'},'인원'),h('th',null,'강사'))),
+        h('tbody',null, out))),
+      h('p',{className:'ed-n',style:{marginTop:'8px'}},'* 지역별 커스회의는 월 최대 10회 배분입니다(기본 강사 林芳扬). 셀을 더블클릭해 치과명·시스템·대리상·인원을 채워 넣으세요.'));
+    function meetCell(r,f){ return h(EdCell,{row:r,locked:false,col:{ r:function(rr){ return rr[f]? rr[f] : h('span',{className:'dim'},'—'); }, edit:{type:'text',get:function(rr){return rr[f]||'';},set:function(rr,v){ updMeet(rr.id,f,v); }}}}); }
+    function meetCellN(r,f){ return h(EdCell,{row:r,locked:false,col:{ r:function(rr){ return rr[f]?snum(rr[f],0):h('span',{className:'dim'},'—'); }, edit:{type:'num',get:function(rr){return rr[f]||0;},set:function(rr,v){ updMeet(rr.id,f,v); }}}}); }
+  }
+}
+
+/* ===== 미니 그룹막대 차트 (단일/이중 시리즈) ===== */
+function semBar(title, unit, data, kP, kA, colP, colA, lgP, lgA){
+  var W=520,H=190,PL=38,PR=10,PT=14,PB=28, iw=W-PL-PR, ih=H-PT-PB;
+  var dual = kA!==null && kA!==undefined;
+  var max=1; data.forEach(function(d){ max=Math.max(max,d[kP], dual?d[kA]:0); }); max=max*1.15||1;
+  var n=data.length, gap=iw/n, bw=gap*(dual?0.30:0.46), Y=function(v){ return PT+ih-(v/max)*ih; };
+  return h('div',{className:'card',style:{padding:'10px 12px'}},
+    h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'baseline',marginBottom:'4px'}},
+      h('b',{style:{fontSize:'12.5px'}}, title), h('span',{className:'dim',style:{fontSize:'10px'}}, unit)),
+    h('svg',{className:'mchart',viewBox:'0 0 '+W+' '+H,preserveAspectRatio:'xMidYMid meet'},
+      [0,max/2,max].map(function(t,i){ var y=Y(t); return h('g',{key:i}, h('line',{x1:PL,y1:y,x2:W-PR,y2:y,className:'grid'}), h('text',{x:PL-6,y:y+3,className:'ax',textAnchor:'end'}, snum(t,0))); }),
+      data.map(function(d,i){ var cx=PL+gap*i+gap/2; return h('g',{key:i},
+        dual? h('rect',{x:cx-bw-1,y:Y(d[kP]),width:bw,height:Math.max(0,ih-(Y(d[kP])-PT)),fill:colP,rx:1})
+            : h('rect',{x:cx-bw/2,y:Y(d[kP]),width:bw,height:Math.max(0,ih-(Y(d[kP])-PT)),fill:colP,rx:1}),
+        dual? h('rect',{x:cx+1,y:Y(d[kA]),width:bw,height:Math.max(0,ih-(Y(d[kA])-PT)),fill:colA,rx:1}) : null,
+        h('text',{x:cx,y:H-16,className:'ax',textAnchor:'middle',style:{fontSize:'9px'}}, d.m)); })),
+    h('div',{className:'slgd',style:{marginTop:'4px'}},
+      h('span',{className:'sl2'}, h('i',{style:{background:colP}}), lgP||'계획'),
+      dual? h('span',{className:'sl2'}, h('i',{style:{background:colA}}), lgA||'실행') : null));
+}
+
+
 function App(){
   var _b=useState(store); var db=_b[0], setDb=_b[1];
   var _a=useState(function(){
@@ -2805,6 +3279,12 @@ function App(){
   var _p=useState({mgr:'',dealer:'',cust:'',weekly:'',inact:''}); var tprov=_p[0], setTprov=_p[1];
   function setTP(k,v){ setTprov(function(o){ var n=Object.assign({},o); n[k]=v; return n; }); }
   var fileRef=useRef(null);
+
+  // ── 세미나(화남 하반기) 상태 — 독립 저장 ──
+  var _se=useState(function(){ return semLoad('edu', SEM_EDU_SEED); });   var semEdu=_se[0], setSemEdu=_se[1];
+  var _sm=useState(function(){ return semLoad('meet', SEM_MEET_SEED); }); var semMeet=_sm[0], setSemMeet=_sm[1];
+  useEffect(function(){ semSave('edu', semEdu); },[semEdu]);
+  useEffect(function(){ semSave('meet', semMeet); },[semMeet]);
 
   var notes=db.notes||{};
   var hidden=db.hidden||{};
@@ -3369,9 +3849,9 @@ function App(){
     });
   }
 
-  var TABS=[['overview','월별현황'],['weekly','주간현황'],['mgr','담당자'],['dealer','대리상'],['cust','고객'],['inact','비활성화 고객']];
+  var TABS=[['overview','월별현황'],['weekly','주간현황'],['mgr','담당자'],['dealer','대리상'],['cust','고객'],['inact','비활성화 고객'],['sem','세미나 계획·실행']];
   var lastS=snaps.length? snaps[snaps.length-1] : null;
-  var TITLE={overview:'월별현황',weekly:'주간현황',mgr:'담당자별 실적',dealer:'대리상별 실적',cust:'고객 목록',inact:'비활성화 고객'};
+  var TITLE={overview:'월별현황',weekly:'주간현황',mgr:'담당자별 실적',dealer:'대리상별 실적',cust:'고객 목록',inact:'비활성화 고객',sem:'세미나 계획·실행'};
   var hidCount=Object.keys(hidden).length;
 
   return h('div',{className:'shell'},
@@ -3438,12 +3918,15 @@ function App(){
       h('div',{className:'mhead'},
         h('div',null,
           h('h2',null,TITLE[tab]),
-          h('div',{className:'sub'}, pick? ('과거 주차 시점 — '+pick.y+'-'+pick.label)
-            : ('단위: 임플란트 개 · 1~'+pm+'月 누계 (엑셀 기준)'))),
+          h('div',{className:'sub'}, tab==='sem'? '화남 하반기 교육계획 · 광동·광서·해남 · 인원 달성 95% · 전환 최소 30%'
+            : (pick? ('과거 주차 시점 — '+pick.y+'-'+pick.label)
+            : ('단위: 임플란트 개 · 1~'+pm+'月 누계 (엑셀 기준)')))),
         h('div',{className:'mmeta'},
-          pick? h('b',{className:'vw'},pick.y+'-'+pick.label+' 시점 보기') : '데이터 기준일: 2026. 07. 15',
+          tab==='sem'? h('b',{className:'vw'},'화남 하반기')
+            : (pick? h('b',{className:'vw'},pick.y+'-'+pick.label+' 시점 보기') : '데이터 기준일: 2026. 07. 15'),
           h('br'),
-          snaps.length? ('스냅샷 '+snaps.length+'개 · 최근 '+lastS.y+'-'+lastS.label) : '스냅샷 없음')),
+          tab==='sem'? '세미나 '+semEdu.length+'건 · 커스회의 '+semMeet.length+'건'
+            : (snaps.length? ('스냅샷 '+snaps.length+'개 · 최근 '+lastS.y+'-'+lastS.label) : '스냅샷 없음'))),
 
       cfg? h('div',{className:'cfg'},
         h('div',{className:'np-l'},'Google Apps Script 웹앱 URL (유아님 전용 — 이 기기에만 저장됩니다)'),
@@ -3458,7 +3941,7 @@ function App(){
           lastCloudSave()? h('span',null,h('br'),'· 마지막 클라우드 저장: '+lastCloudSave().slice(0,16).replace('T',' ')) : null)
       ):null,
 
-      (!rows.length)? h('div',{className:'empty-b'},
+      (!rows.length && tab!=='sem')? h('div',{className:'empty-b'},
         h('b',null,'데이터가 없습니다'),
         h('div',null,'왼쪽 ',h('b',null,'「엑셀 불러오기」'),'로 CRM 파일을 올리거나, ',
           h('b',null,'「클라우드 불러오기」'),' / ',h('b',null,'「복원」'),'으로 저장된 데이터를 가져오세요.'),
@@ -3469,9 +3952,9 @@ function App(){
       msg? h('div',{className:'toast '+msg.t,role:'status'},msg.m):null,
       busy? h('div',{className:'toast ok'},'처리 중입니다…'):null,
 
-      h(PeriodBar,{snaps:snaps,cur:pick,y:py,m:pm,onYear:pickYear,onMonth:pickMonth,onPick:setPick}),
+      tab==='sem'? null : h(PeriodBar,{snaps:snaps,cur:pick,y:py,m:pm,onYear:pickYear,onMonth:pickMonth,onPick:setPick}),
 
-      (tab==='inact')? h(InactKpi,{rows:kview, pm:pm, prevRows:rows}) :
+      tab==='sem'? null : (tab==='inact')? h(InactKpi,{rows:kview, pm:pm, prevRows:rows}) :
       h('div',{className:'kpis kpis-5'},
         h(KPI,{label:'고객수',value:nf(A.n),unit:'개소',
           sub:(filtered||tabProv)?('전체 '+nf(baseRows.length)+'개 중'):null,prev:pv,delta:pv?A.n-pv.n:null}),
@@ -3486,11 +3969,11 @@ function App(){
           prev:R3p?{}:null, delta:R3p? R3.rate-R3p.rate : null, pct:1}),
         h(KPI,{label:'고객당 평균구매수',value:A.avg.toFixed(1),unit:'개',prev:pv,delta:pv?A.avg-pv.avg:null,dec:1})),
 
-      (tab!=='inact' && pm===NM)? h('div',{className:'note-w'},
+      (tab!=='inact' && tab!=='sem' && pm===NM)? h('div',{className:'note-w'},
         '※ '+MON[NM-1]+'은 진행 중인 달입니다(15일 기준). 3개월 창에 미완 월이 포함되어 미구매·실구매율이 실제보다 나쁘게 보일 수 있습니다.'
       ) : null,
 
-      (tab==='inact')? null : h('div',{className:'kpis kpis-s'},
+      (tab==='inact'||tab==='sem')? null : h('div',{className:'kpis kpis-s'},
         SYS.map(function(sn,i){
           var v=A.sys[i], sh=A.total? v/A.total*100 : 0;
           return h(KPI,{key:i,label:sn,value:nf(v),unit:'개',sub:A.total? pf(sh)+' 비중':null,
@@ -3499,7 +3982,7 @@ function App(){
         h(KPI,{label:'총 판매수량',value:nf(A.total),unit:'개',hero:1,sub:'AO+AR+ST+BD+ARi',
           prev:pv,delta:pv?A.total-pv.total:null})),
 
-      h('div',{className:'snaps'},
+      tab==='sem'? null : h('div',{className:'snaps'},
         pv? h('span',{className:'pchip'},
               prevLabel(pick||{mo:lastS&&lastS.mo}, pv)+' = ',
               h('b',null, pv._excel? pv.label : ((pv.mo? pv.mo+'月 ':'')+pv.label)))
@@ -3540,7 +4023,8 @@ function App(){
         provs:provs, prov:tprov.cust, onProv:function(v){ setTP('cust',v); }, counts:provCounts}):null,
       tab==='inact'? h(InactiveTab,{rows:tabRows('inact'),pm:pm,onEdit:editField,C:C,locked:!!pick,
         dealers:dealers, types:types,
-        provs:provs, prov:tprov.inact, onProv:function(v){ setTP('inact',v); }, counts:provCounts}):null
+        provs:provs, prov:tprov.inact, onProv:function(v){ setTP('inact',v); }, counts:provCounts}):null,
+      tab==='sem'? h(SeminarTab,{edu:semEdu,setEdu:setSemEdu,meet:semMeet,setMeet:setSemMeet}):null
     )
   );
 }
