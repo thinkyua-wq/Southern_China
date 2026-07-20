@@ -231,21 +231,33 @@ option,select,
 .empty b{display:block;font-size:14px;color:var(--ink2);margin-bottom:4px}
 
 @media(max-width:900px){
-  .shell{grid-template-columns:1fr}
-  .rail{position:static;max-height:none;padding:10px 0 14px}
-  .rail-s{margin-bottom:10px}
-  .rnav{flex-direction:row;flex-wrap:wrap}
-  .rb{flex:1;min-width:88px;justify-content:center}
-  .rgrid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+  /* 모바일: 레일 왼쪽 · 현황판 오른쪽 2단 유지 */
+  .shell{grid-template-columns:132px 1fr}
+  .rail{padding:10px 0 14px}
+  .rail-b{padding:0 9px 10px}
+  .rail-b h1{font-size:13px}
+  .rail-b p{font-size:10px}
+  .rail-s{margin-bottom:10px;padding:0 9px}
+  .rail-s h4{font-size:9px;letter-spacing:.1em}
+  .rnav{flex-direction:column}
+  .rb{font-size:12px;padding:6px 8px}
+  .rsel,.rbtn{font-size:11.5px}
+  .rgrid{display:grid;grid-template-columns:1fr;gap:5px}
   .rgrid .rbtn,.rgrid .rsel{margin-bottom:0}
+  .rfoot{padding:8px 9px 0}
   .kpis{grid-template-columns:repeat(2,1fr)}
   .kpi.hero{grid-column:1/-1}
   .lay{grid-template-columns:1fr}
   .card.wide{grid-column:auto}
-  .main{padding:12px 11px 32px}
+  .main{padding:12px 10px 32px;min-width:0}
+  .mhead h2{font-size:17px}
   .pnav{margin-left:0}
   .wks{width:100%}
   .wk{flex:1;min-width:42px}
+}
+@media(max-width:520px){
+  .shell{grid-template-columns:112px 1fr}
+  .rb{font-size:11.5px;padding:5px 7px}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
@@ -486,6 +498,25 @@ td.tde{position:relative}
 .sem-wrap .tbl th{cursor:default}
 .sem-wrap .tbl th[role=button]{cursor:pointer}
 .sem-wrap .tbl td .ec{min-height:16px}
+.sem-fu-tbl{font-size:13.5px}
+.sem-fu-tbl th{font-size:12px}
+.sem-fu-tbl td{padding:6px 8px}
+/* 조직도 */
+.org-top{display:flex;justify-content:center;align-items:center;gap:40px;margin:8px 0 18px;flex-wrap:wrap}
+.org-box{background:#2f4f7f;color:#fff;border-radius:4px;padding:8px 16px;font-weight:800;font-size:14px;text-align:center;min-width:96px}
+.org-box .ec{color:#fff}
+.org-lead{font-size:16px;padding:10px 22px}
+.org-dep{background:#5a6b86}
+.org-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:900px){.org-cols{grid-template-columns:1fr 1fr}}
+.org-col{display:flex;flex-direction:column;align-items:center;gap:6px}
+.org-region{font-size:11.5px;font-weight:700;color:var(--ink2)}
+.org-mlist{display:flex;flex-direction:column;gap:6px;width:100%}
+.org-mbox{border:1px solid #2f4f7f;border-radius:4px;background:var(--pn);text-align:center;overflow:hidden}
+.org-mn{background:#eef2f8;font-weight:700;padding:4px 6px;font-size:12.5px;border-bottom:1px solid #dde4ef}
+.org-md{padding:4px 6px;font-size:12px;color:var(--ink2)}
+.org-mh{padding:3px 6px;font-size:12px;font-weight:800;color:#2f4f7f;border-top:1px solid #eee;background:#fafbfd}
+.org-foot{background:#2f4f7f;color:#fff;font-weight:800;font-size:12.5px;padding:6px;border-radius:4px;width:100%;text-align:center;margin-top:2px}
 .sem-wrap .tbl tr.cur td{background:var(--tl4)!important}
 .sem-badge{display:inline-block;font-size:11px;font-weight:800;padding:1px 7px;border-radius:10px;white-space:nowrap}
 .sem-exp>td{background:var(--sf);padding:11px 13px!important}
@@ -991,7 +1022,10 @@ function cloudSaveIndex(url, weeks){
   return cloudSave(url, {weeks:weeks, rows:[], _idx:1}, 'index');
 }
 
-var h = React.createElement;
+var ZH_DICT={"현황 분석 / 이슈사항": "现状分析 / 问题", "현황 분석 · 영업 액션": "现状分析 · 销售行动", "화남본부 현황 분석 · 이슈사항": "华南本部现状分析 · 问题", "담당자별 이슈사항": "负责人问题", "대리상별 이슈사항": "代理商问题", "담당자별 실적": "负责人业绩", "대리상별 실적": "代理商业绩", "고객 목록": "客户列表", "시스템별 구성": "各系统构成", "월별 판매수량": "各月销量", "시스템별 판매수량": "各系统销量", "담당자별 판매수량": "各负责人销量", "대리상별 시스템 수량": "各代理商系统数量", "담당자별 시스템 수량": "各负责人系统数量", "판매개수 누적추세": "销量累计趋势", "방문 누계 추세": "拜访累计趋势", "가동률 추세": "活跃率趋势", "지역별 비중 추이": "各地区占比趋势", "신규 고객 추이": "新客户趋势", "증가 TOP 10": "增长 TOP 10", "월별 시스템 수량": "各月系统数量", "월별 이슈 액션플랜": "各月问题行动计划", "액션 플랜": "行动计划", "개선사항 (더블클릭 수정)": "改进事项 (双击修改)", "영업 액션 (더블클릭 수정)": "销售行动 (双击修改)", "직접 입력한 이슈": "手动录入的问题", "자동 분석 다시": "重新自动分析", "현황 분석": "现状分析", "이슈사항": "问题", "월별 누계 (엑셀)": "各月累计 (Excel)", "월별현황": "月度概况", "주간현황": "周概况", "고객명": "客户名", "담당자": "负责人", "대리상": "代理商", "유형": "类型", "방문": "拜访", "판매": "销售", "증감": "增减", "시스템": "系统", "첫 거래": "首次成交", "신규 등록": "新登记", "판매수량": "销量", "방문 메모": "拜访备注", "메가젠 담당": "美格真负责", "대리상 직원": "代理商员工", "진할수록 많음": "颜色越深越多", "100% 기준": "100%基准", "구역": "省份", "지역": "地区", "합계": "合计", "전체": "全部", "현재": "当前", "이전": "上期", "목표": "目标", "실제": "实际", "비용": "费用", "인원": "人数", "치과": "诊所", "치과명": "诊所名", "회차": "场次", "장소": "地点", "소속": "单位", "직함": "职务", "시간": "时间", "목적": "目的", "내용": "内容", "날짜": "日期", "일자": "日期", "강사": "讲师", "전환": "转化", "달성": "达成", "비중": "占比", "실적": "业绩", "상세": "详情", "메모": "备注", "삭제": "删除", "추가": "添加", "저장": "保存", "설정": "设置", "정렬": "排序", "상위": "前列", "당월": "当月", "증가": "增长", "신규": "新", "누계": "累计", "누적": "累计", "편중": "集中", "미지정": "未指定", "미배정": "未分配", "정상 구매": "正常购买", "소량 구매": "少量购买", "정체 고객": "停滞客户", "BD고객": "BD客户", "실적없음": "无业绩", "거래 끊김": "交易中断", "신규 거래 개시": "新开始交易", "당월 증가": "当月增长", "당월 신규": "当月新增", "미구매": "未购", "거래 고객": "成交客户", "고객수": "客户数", "거래": "交易", "고객": "客户", "기초고객": "基础客户", "정상": "正常", "양호": "良好", "주의": "注意", "하락": "下降", "현황": "现状", "숨기기": "隐藏", "펼치기": "展开", "▸ 보기": "▸ 查看", "▼ 열림": "▼ 展开", "▾ 숨김": "▾ 收起", "+ 항목 추가": "+ 添加项", "최신으로": "回到最新", "닫기": "关闭", "더하기": "相加", "덮어쓰기": "覆盖", "완료": "完成", "참고": "参考", "해당": "对应", "5개 이하": "5个以下", "전체 고객": "全部客户", "전체 고객수": "全部客户数", "이슈가 없습니다.": "暂无问题", "정체 고객이 없습니다.": "暂无停滞客户", "증가한 고객이 없습니다.": "暂无增长客户", "신규 거래 개시 고객이 없습니다.": "暂无新开始交易客户", "표시할 데이터가 없습니다.": "暂无可显示数据", "해당하는 고객이 없습니다.": "暂无符合客户", "특이사항 없음": "无特殊事项", "변동 없음": "无变动", "설명을 입력하세요": "请输入说明", "대응 방안을 더블클릭해 작성하세요": "双击填写应对方案", "액션을 더블클릭해 작성하세요": "双击填写行动", "광동": "广东", "광서": "广西", "해남": "海南", "데이터": "数据", "필터": "筛选", "메뉴": "菜单", "스냅샷 없음": "无快照", "고객유형별": "按客户类型", "개선사항": "改进事项", "영업 액션": "销售行动", "현황 분석 · 이슈사항": "现状分析 · 问题", "연도":"年度","월":"月","주":"周","1월":"1月","2월":"2月","3월":"3月","4월":"4月","5월":"5月","6월":"6月","7월":"7月","8월":"8月","9월":"9月","10월":"10月","11월":"11月","12월":"12月","스냅샷 저장 시 증감 표시":"保存快照后显示增减","1月은 비교 대상이 없습니다":"1月无可比较对象","이전 스냅샷이 있어야 증감이 표시됩니다":"需有上一快照才显示增减"};
+var UI_LANG='ko';
+var _hReact = React.createElement;
+var h = function(){ if(UI_LANG!=='zh') return _hReact.apply(null, arguments); var a=arguments, args=new Array(a.length); for(var i=0;i<a.length;i++){ var v=a[i]; if(i>=2 && typeof v==='string'){ var t=ZH_DICT[v]; if(t!==undefined) v=t; } args[i]=v; } return _hReact.apply(null, args); };
 var useState = React.useState, useMemo = React.useMemo, useEffect = React.useEffect, useRef = React.useRef;
 var MON = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
 // 데이터가 실제로 존재하는 마지막 월 (엑셀이 갱신되면 자동 확장)
@@ -2819,12 +2853,13 @@ function InactKpi(p){
 
 /* ==== 화남 하반기 세미나 모듈 ==== */
 /* ===== 화남 하반기 세미나/커스회의 시드 (업로드 엑셀 기준) ===== */
-var SEM_EDU_SEED = [{"id": "edu_7", "yearMonth": "2026-7", "month": "7월", "date": "7/19~20", "region": "광동", "city": "佛山", "target": "", "content": "无牙颇种植治疗", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_8", "yearMonth": "2026-7", "month": "7월", "date": "7/22~23", "region": "광동", "city": "广州", "target": "", "content": "精品班(磨牙区即刻种植)", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_9", "yearMonth": "2026-7", "month": "7월", "date": "7/23", "region": "광서", "city": "南宁", "target": "", "content": "前后牙即刻种植", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_10", "yearMonth": "2026-7", "month": "7월", "date": "7/24", "region": "광동", "city": "湛江", "target": "DSO", "content": "复杂种植病例学术交流沙龙", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "샤롱", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_11", "yearMonth": "2026-7", "month": "7월", "date": "7/28", "region": "광동", "city": "深圳", "target": "ARi", "content": "骨萎缩无牙颇中的应用(ARi)", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "ARi", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_12", "yearMonth": "2026-8", "month": "8월", "date": "8/4", "region": "광동", "city": "深圳", "target": "", "content": "前后牙即刻种植(BD,AR)", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "BD,AR", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_13", "yearMonth": "2026-8", "month": "8월", "date": "8/18", "region": "광동", "city": "东莞", "target": "ARi", "content": "ARi 培训班", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_14", "yearMonth": "2026-8", "month": "8월", "date": "8월말", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_15", "yearMonth": "2026-9", "month": "9월", "date": "미정", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_16", "yearMonth": "2026-9", "month": "9월", "date": "미정", "region": "광서", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #1", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_17", "yearMonth": "2026-9", "month": "9월", "date": "미정", "region": "광동", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #2", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_18", "yearMonth": "2026-10", "month": "10월", "date": "미정", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_19", "yearMonth": "2026-10", "month": "10월", "date": "미정", "region": "광서", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #1", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_20", "yearMonth": "2026-10", "month": "10월", "date": "미정", "region": "광동", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #2", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_21", "yearMonth": "2026-11", "month": "11월", "date": "미정", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_22", "yearMonth": "2026-11", "month": "11월", "date": "미정", "region": "광서", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #1", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_23", "yearMonth": "2026-11", "month": "11월", "date": "미정", "region": "광동", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #2", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_24", "yearMonth": "2026-12", "month": "12월", "date": "미정", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_25", "yearMonth": "2026-12", "month": "12월", "date": "미정", "region": "해남", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #1", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_26", "yearMonth": "2026-12", "month": "12월", "date": "미정", "region": "광동", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #2", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}];
+var SEM_EDU_SEED = [{"id": "edu_ceo0713", "yearMonth": "2026-7", "month": "7월", "date": "7/13", "region": "광동", "city": "深圳", "target": "CEO살롱", "content": "CEO沙龙", "hands": "", "people": 84, "peopleAct": 84, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0, "name": "CEO沙龙", "venue": "深圳(심천)", "time": "", "purpose": "7/27(BD·AR 발치 후 즉시식립) / 8/4 ARi 행사 모객. 유료 RMB 1200위안(ARi/BD 픽스쳐 2개 증정).", "audience": "CEO/원장", "fu": true}, {"id": "edu_7", "yearMonth": "2026-7", "month": "7월", "date": "7/19~20", "region": "광동", "city": "佛山", "target": "", "content": "无牙颇种植治疗", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_8", "yearMonth": "2026-7", "month": "7월", "date": "7/22~23", "region": "광동", "city": "广州", "target": "", "content": "精品班(磨牙区即刻种植)", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_9", "yearMonth": "2026-7", "month": "7월", "date": "7/23", "region": "광서", "city": "南宁", "target": "", "content": "前后牙即刻种植", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_10", "yearMonth": "2026-7", "month": "7월", "date": "7/24", "region": "광동", "city": "湛江", "target": "DSO", "content": "复杂种植病例学术交流沙龙", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "샤롱", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_11", "yearMonth": "2026-7", "month": "7월", "date": "7/28", "region": "광동", "city": "深圳", "target": "ARi", "content": "骨萎缩无牙颇中的应用(ARi)", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "ARi", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_12", "yearMonth": "2026-8", "month": "8월", "date": "8/4", "region": "광동", "city": "深圳", "target": "", "content": "前后牙即刻种植(BD,AR)", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "BD,AR", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_13", "yearMonth": "2026-8", "month": "8월", "date": "8/18", "region": "광동", "city": "东莞", "target": "ARi", "content": "ARi 培训班", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_14", "yearMonth": "2026-8", "month": "8월", "date": "8월말", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_15", "yearMonth": "2026-9", "month": "9월", "date": "미정", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_16", "yearMonth": "2026-9", "month": "9월", "date": "미정", "region": "광서", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #1", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_17", "yearMonth": "2026-9", "month": "9월", "date": "미정", "region": "광동", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #2", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_18", "yearMonth": "2026-10", "month": "10월", "date": "미정", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_19", "yearMonth": "2026-10", "month": "10월", "date": "미정", "region": "광서", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #1", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_20", "yearMonth": "2026-10", "month": "10월", "date": "미정", "region": "광동", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #2", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_21", "yearMonth": "2026-11", "month": "11월", "date": "미정", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_22", "yearMonth": "2026-11", "month": "11월", "date": "미정", "region": "광서", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #1", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_23", "yearMonth": "2026-11", "month": "11월", "date": "미정", "region": "광동", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #2", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_24", "yearMonth": "2026-12", "month": "12월", "date": "미정", "region": "광동", "city": "미정", "target": "ARi", "content": "ARi 수술 세미나", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "徐世同", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_25", "yearMonth": "2026-12", "month": "12월", "date": "미정", "region": "해남", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #1", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}, {"id": "edu_26", "yearMonth": "2026-12", "month": "12월", "date": "미정", "region": "광동", "city": "미정", "target": "BD/ARi/AO", "content": "샤롱(沙龙) #2", "hands": "", "people": 0, "peopleAct": 0, "conv": 0, "convAct": 0, "lecturer": "", "dealer": "", "costLec": 0, "costSem": 0, "costTot": 0}];
 
+var SEM_FU_SEED = [{"id": "fu_1", "no": "1", "kind": "DSO", "name": "舒成林", "clinic": "爱康健富港口腔诊所", "dealer": "扫码", "sales": "-", "usage": "", "join": "", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_2", "no": "2", "kind": "DSO", "name": "殷奕", "clinic": "爱康健口腔", "dealer": "扫码", "sales": "-", "usage": "", "join": "", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_3", "no": "3", "kind": "DSO", "name": "曾诚", "clinic": "爱康健口腔", "dealer": "扫码", "sales": "-", "usage": "", "join": "", "isMega": "是", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_4", "no": "4", "kind": "DSO", "name": "张静", "clinic": "拜博口腔", "dealer": "无", "sales": "王哲", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_5", "no": "5", "kind": "DSO", "name": "刘慧杰", "clinic": "春分口腔", "dealer": "齐即美", "sales": "黎国杨", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_6", "no": "6", "kind": "DSO", "name": "刘军", "clinic": "德伦口腔", "dealer": "扫码", "sales": "王哲", "usage": "", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_7", "no": "7", "kind": "民营", "name": "程亚菲", "clinic": "深圳瑞吉口腔", "dealer": "深圳鹏生", "sales": "曾剑磊", "usage": "1000", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_8", "no": "8", "kind": "民营", "name": "古彩雄", "clinic": "广齿美口腔", "dealer": "医路", "sales": "邓冬云", "usage": "800", "join": "是", "isMega": "", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_9", "no": "9", "kind": "民营", "name": "徐文平", "clinic": "仁康医院", "dealer": "医路", "sales": "邓冬云", "usage": "1000", "join": "是", "isMega": "", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_10", "no": "10", "kind": "民营", "name": "李文翔", "clinic": "粤北口腔", "dealer": "齐即美", "sales": "黎国杨", "usage": "500", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_11", "no": "11", "kind": "民营", "name": "李沛冉", "clinic": "粤北口腔", "dealer": "齐即美", "sales": "黎国杨", "usage": "500", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_12", "no": "12", "kind": "民营", "name": "谢易航", "clinic": "佛冠口腔", "dealer": "医路", "sales": "邓冬云", "usage": "500", "join": "否", "isMega": "", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_13", "no": "13", "kind": "民营", "name": "姚国豪", "clinic": "御景口腔", "dealer": "医路", "sales": "邓冬云", "usage": "300", "join": "是", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_14", "no": "14", "kind": "民营", "name": "涂星", "clinic": "丽都口腔", "dealer": "无", "sales": "王哲", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_15", "no": "15", "kind": "民营", "name": "宋萧逸", "clinic": "一欣口腔", "dealer": "鹏生", "sales": "邓冬云", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_16", "no": "16", "kind": "民营", "name": "刘竟", "clinic": "瑞尔口腔", "dealer": "无", "sales": "王哲", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_17", "no": "17", "kind": "民营", "name": "吴通", "clinic": "康通生口腔", "dealer": "医路", "sales": "邓冬云", "usage": "600", "join": "是", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_18", "no": "18", "kind": "民营", "name": "宁中一", "clinic": "益佳口腔", "dealer": "医路", "sales": "姚永富", "usage": "1000", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_19", "no": "19", "kind": "民营", "name": "邹志锋", "clinic": "同和口腔", "dealer": "医路", "sales": "姚永富", "usage": "500", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_20", "no": "20", "kind": "民营", "name": "刘伟锋", "clinic": "优德口腔", "dealer": "医路", "sales": "姚永富", "usage": "800", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_21", "no": "21", "kind": "民营", "name": "吴不谦", "clinic": "贝乐口腔", "dealer": "医路", "sales": "姚永富", "usage": "1000", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_22", "no": "22", "kind": "民营", "name": "王贤君", "clinic": "贤君口腔", "dealer": "医路", "sales": "姚永富", "usage": "300", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_23", "no": "23", "kind": "民营", "name": "胡之函", "clinic": "匠心口腔", "dealer": "齐即美", "sales": "黎国杨", "usage": "200", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_24", "no": "24", "kind": "民营", "name": "谭启飞", "clinic": "花沐里口腔", "dealer": "医路", "sales": "邓冬云", "usage": "", "join": "否", "isMega": "", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_25", "no": "25", "kind": "民营", "name": "吕洋", "clinic": "泓英口腔", "dealer": "医路", "sales": "姚永富", "usage": "1000", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_26", "no": "26", "kind": "民营", "name": "陈达泓", "clinic": "达泓口腔", "dealer": "医路", "sales": "姚永富", "usage": "500", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_27", "no": "27", "kind": "民营", "name": "李艺君", "clinic": "加齐口腔", "dealer": "医路", "sales": "姚永富", "usage": "800", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_28", "no": "28", "kind": "民营", "name": "李文刚", "clinic": "深圳芮航口腔", "dealer": "无", "sales": "王哲", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_29", "no": "29", "kind": "民营", "name": "张柒", "clinic": "德诺口腔", "dealer": "医路", "sales": "姚永富", "usage": "1000", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_30", "no": "30", "kind": "民营", "name": "杨睿慈", "clinic": "睿慈口腔", "dealer": "医路", "sales": "姚永富", "usage": "1500", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_31", "no": "31", "kind": "民营", "name": "王广雅", "clinic": "广雅口腔", "dealer": "医路", "sales": "姚永富", "usage": "800", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_32", "no": "32", "kind": "民营", "name": "郑坚", "clinic": "深圳禾贝口腔", "dealer": "深圳鹏生", "sales": "尹东均", "usage": "500", "join": "是", "isMega": "否", "attend": "是", "visitDate": "2026-07-15", "inviteHO": "已确定7/27， 8/4", "deal": ""}, {"id": "fu_33", "no": "33", "kind": "民营", "name": "李诺", "clinic": "深圳善诺美口腔", "dealer": "深圳鹏生", "sales": "李国洪", "usage": "500", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_34", "no": "34", "kind": "民营", "name": "杨露露", "clinic": "深圳善诺美口腔", "dealer": "深圳鹏生", "sales": "李国洪", "usage": "500", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_35", "no": "35", "kind": "民营", "name": "李哲", "clinic": "德仁口腔", "dealer": "医路", "sales": "姚永富", "usage": "10000", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_36", "no": "36", "kind": "民营", "name": "张仁智", "clinic": "智仁口腔", "dealer": "医路", "sales": "姚永富", "usage": "1000", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_37", "no": "37", "kind": "民营", "name": "徐国际", "clinic": "星皓口腔", "dealer": "安榭里", "sales": "毛彬宇", "usage": "100", "join": "是", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_38", "no": "38", "kind": "民营", "name": "黄元鸿", "clinic": "卫齿口腔", "dealer": "医路", "sales": "邓冬云", "usage": "1000", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_39", "no": "39", "kind": "民营", "name": "黄日鸿", "clinic": "卫齿口腔", "dealer": "医路", "sales": "邓冬云", "usage": "1000", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_40", "no": "40", "kind": "民营", "name": "许鹄川", "clinic": "成华齿科", "dealer": "鹏生", "sales": "曾剑磊", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_41", "no": "41", "kind": "民营", "name": "李英", "clinic": "诺德医疗", "dealer": "鹏生", "sales": "曾剑磊", "usage": "", "join": "是", "isMega": "", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_42", "no": "42", "kind": "民营", "name": "李欣超", "clinic": "千尚口腔", "dealer": "鹏生", "sales": "曾剑磊", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_43", "no": "43", "kind": "民营", "name": "李先美", "clinic": "同安何氏口腔", "dealer": "鹏生", "sales": "曾剑磊", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_44", "no": "44", "kind": "民营", "name": "李奇峰", "clinic": "石围社康", "dealer": "李文玉", "sales": "尹东均", "usage": "", "join": "是", "isMega": "是", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_45", "no": "45", "kind": "民营", "name": "加项全", "clinic": "利尚口腔", "dealer": "鹏生", "sales": "曾剑磊", "usage": "", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_46", "no": "46", "kind": "民营", "name": "秦刚", "clinic": "弘意口腔", "dealer": "鹏生", "sales": "曾剑磊", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_47", "no": "47", "kind": "民营", "name": "朱金心", "clinic": "深圳希奥口腔", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_48", "no": "48", "kind": "民营", "name": "葛照伊", "clinic": "博森理想口腔", "dealer": "扫码", "sales": "-", "usage": "", "join": "否", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_49", "no": "49", "kind": "民营", "name": "沈冰慧", "clinic": "高卡口腔", "dealer": "扫码", "sales": "-", "usage": "", "join": "否", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_50", "no": "50", "kind": "民营", "name": "张文龙", "clinic": "广州幸运口腔", "dealer": "扫码", "sales": "-", "usage": "", "join": "否", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_51", "no": "51", "kind": "民营", "name": "刘凯", "clinic": "深圳格致口腔诊所", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_52", "no": "52", "kind": "民营", "name": "崔琳娜", "clinic": "广州九德口腔门诊部", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_53", "no": "53", "kind": "民营", "name": "张仲元", "clinic": "吴华娣口腔诊所", "dealer": "扫码", "sales": "-", "usage": "", "join": "否", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_54", "no": "54", "kind": "民营", "name": "陈奕名", "clinic": "雅美时代口腔门诊部", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_55", "no": "55", "kind": "民营", "name": "吴女士", "clinic": "口腔诊所", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_56", "no": "56", "kind": "民营", "name": "陈金勇", "clinic": "深圳牙科医疗中心", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_57", "no": "57", "kind": "民营", "name": "曹绣莲", "clinic": "丹妮齿科", "dealer": "扫码", "sales": "-", "usage": "", "join": "否", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_58", "no": "58", "kind": "民营", "name": "何旺颖", "clinic": "丹妮齿科", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_59", "no": "59", "kind": "民营", "name": "闫杰", "clinic": "一生口腔", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_60", "no": "60", "kind": "民营", "name": "吴七喜", "clinic": "一生口腔", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_61", "no": "61", "kind": "民营", "name": "陈敏凤", "clinic": "诺德时代口腔诊所", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_62", "no": "62", "kind": "民营", "name": "卜茂茂", "clinic": "深圳企鹅门诊部", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_63", "no": "63", "kind": "民营", "name": "谢露露", "clinic": "深圳诺德时代口腔诊所", "dealer": "扫码", "sales": "-", "usage": "", "join": "否", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_64", "no": "64", "kind": "民营", "name": "占生", "clinic": "懿德口腔诊所", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_65", "no": "65", "kind": "民营", "name": "张锡钦", "clinic": "惠州张锡钦口腔诊所", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_66", "no": "66", "kind": "民营", "name": "罗洛天", "clinic": "深圳福美悦口腔", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_67", "no": "67", "kind": "民营", "name": "赵甜", "clinic": "协美齿科", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_68", "no": "68", "kind": "民营", "name": "陈营", "clinic": "青柠檬口腔", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_69", "no": "69", "kind": "民营", "name": "欧阳丽辉", "clinic": "深圳莱悦口腔门诊部", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_70", "no": "70", "kind": "民营", "name": "汪睿", "clinic": "深圳和贝口腔门诊部", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_71", "no": "71", "kind": "民营", "name": "谷江鹏", "clinic": "美芽口腔", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_72", "no": "72", "kind": "民营", "name": "丁玉虹", "clinic": "五一齿科", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "2026-07-15", "inviteHO": "", "deal": ""}, {"id": "fu_73", "no": "73", "kind": "民营", "name": "林医生", "clinic": "五一齿科", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "2026-07-15", "inviteHO": "", "deal": ""}, {"id": "fu_74", "no": "74", "kind": "民营", "name": "邓晓明", "clinic": "菲腊美芽口腔", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_75", "no": "75", "kind": "民营", "name": "刘洋", "clinic": "牙博口腔", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_76", "no": "76", "kind": "民营", "name": "冯子伟", "clinic": "江西景德镇美阳口腔", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_77", "no": "77", "kind": "民营", "name": "吴伟柱", "clinic": "伟维齿科", "dealer": "扫码", "sales": "-", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_78", "no": "78", "kind": "民营", "name": "贺春华", "clinic": "深圳南山齐铭口腔", "dealer": "扫码", "sales": "邓冬云", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_79", "no": "79", "kind": "民营", "name": "陈泽鹏", "clinic": "宝安人民医院", "dealer": "鹏生", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_80", "no": "80", "kind": "民营", "name": "孙冬悦", "clinic": "东中口腔", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_81", "no": "81", "kind": "民营", "name": "孙冬瑞", "clinic": "东中口腔", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_82", "no": "82", "kind": "民营", "name": "赵甜", "clinic": "协美齿科", "dealer": "", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_83", "no": "83", "kind": "民营", "name": "郭雷涛", "clinic": "正广口腔", "dealer": "", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_84", "no": "84", "kind": "民营", "name": "莫兆强", "clinic": "协美口腔", "dealer": "鹏生", "sales": "", "usage": "", "join": "否", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_85", "no": "85", "kind": "民营", "name": "贺鹏", "clinic": "恒生医院口腔科", "dealer": "鹏生", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_86", "no": "86", "kind": "民营", "name": "古彩雄", "clinic": "东莞广齿美口腔", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_87", "no": "87", "kind": "民营", "name": "林茂文", "clinic": "军仁门诊", "dealer": "", "sales": "邓冬云", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_88", "no": "88", "kind": "民营", "name": "冯子伟", "clinic": "江西景德镇美阳口腔", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_89", "no": "89", "kind": "民营", "name": "吴伟柱", "clinic": "伟维齿科", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_90", "no": "90", "kind": "民营", "name": "吴医生", "clinic": "深圳康通生口腔诊所", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_91", "no": "91", "kind": "民营", "name": "徐文平", "clinic": "东莞仁康医院", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_92", "no": "92", "kind": "民营", "name": "缪医生", "clinic": "深圳龙盛口腔", "dealer": "", "sales": "李颖昱", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_93", "no": "93", "kind": "民营", "name": "林灼柱", "clinic": "深圳隽美口腔", "dealer": "彭郎", "sales": "尹东均", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_94", "no": "94", "kind": "民营", "name": "胡永权", "clinic": "深圳利尚齿科", "dealer": "", "sales": "李颖昱", "usage": "", "join": "是", "isMega": "是", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_95", "no": "95", "kind": "民营", "name": "陈仁助", "clinic": "深圳利尚齿科", "dealer": "", "sales": "李颖昱", "usage": "", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_96", "no": "96", "kind": "民营", "name": "陈宏亮", "clinic": "深圳新广仁口腔门诊部", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_97", "no": "97", "kind": "民营", "name": "王敏", "clinic": "深圳黎庆开德信口腔门诊部", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "是", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_98", "no": "98", "kind": "民营", "name": "李龙飞", "clinic": "深圳铭德口腔", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_99", "no": "99", "kind": "民营", "name": "刘照华", "clinic": "深圳铭德口腔", "dealer": "", "sales": "曾剑磊", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_100", "no": "100", "kind": "民营", "name": "谢家伟", "clinic": "深圳铭德口腔", "dealer": "", "sales": "曾剑磊", "usage": "", "join": "否", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_101", "no": "101", "kind": "民营", "name": "原院长", "clinic": "深圳铭德口腔", "dealer": "", "sales": "曾剑磊", "usage": "", "join": "否", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_102", "no": "102", "kind": "民营", "name": "罗良智", "clinic": "深圳铭德口腔", "dealer": "", "sales": "曾剑磊", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_103", "no": "103", "kind": "民营", "name": "洪雲星", "clinic": "深圳铭德口腔", "dealer": "", "sales": "曾剑磊", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_104", "no": "104", "kind": "民营", "name": "李奇锋", "clinic": "深圳光明石围社区健康服务中心", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_105", "no": "105", "kind": "民营", "name": "李林睿", "clinic": "深圳龙盛口腔", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_106", "no": "106", "kind": "民营", "name": "缪育彬", "clinic": "深圳龙东龙盛口腔诊所", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_107", "no": "107", "kind": "民营", "name": "郑福周", "clinic": "深圳友睦口腔", "dealer": "扫码", "sales": "", "usage": "", "join": "否", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_108", "no": "108", "kind": "民营", "name": "孙阳阳", "clinic": "格伦菲尔口腔", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_109", "no": "109", "kind": "民营", "name": "李宋华", "clinic": "深圳思睿口腔诊所", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_110", "no": "110", "kind": "民营", "name": "曲景富", "clinic": "深圳雅美时代口腔门诊部", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_111", "no": "111", "kind": "民营", "name": "曾安平", "clinic": "中正齿科", "dealer": "扫码", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_112", "no": "112", "kind": "民营", "name": "何建发", "clinic": "钟兴口腔", "dealer": "扫码", "sales": "邓冬云", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_113", "no": "113", "kind": "民营", "name": "聂邑", "clinic": "广州欧盾口腔", "dealer": "扫码", "sales": "王哲", "usage": "", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_114", "no": "114", "kind": "民营", "name": "缪志亮", "clinic": "深圳缪兴牙科", "dealer": "鹏生医疗", "sales": "曾剑磊", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_115", "no": "115", "kind": "民营", "name": "冯子伟", "clinic": "江西景德镇美阳口腔", "dealer": "", "sales": "", "usage": "", "join": "是", "isMega": "", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_116", "no": "116", "kind": "民营", "name": "吴伟柱", "clinic": "深圳伟维齿科", "dealer": "", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_117", "no": "117", "kind": "民营", "name": "吴医生", "clinic": "深圳康通生口腔诊所", "dealer": "", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_118", "no": "118", "kind": "民营", "name": "徐文平", "clinic": "东莞东莞仁康医院", "dealer": "", "sales": "邓冬云", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_119", "no": "119", "kind": "民营", "name": "石医生", "clinic": "深圳美佳德口腔", "dealer": "蓝富雄", "sales": "尹东均", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "2026-07-15", "inviteHO": "", "deal": ""}, {"id": "fu_120", "no": "120", "kind": "民营", "name": "侯雪川", "clinic": "深圳同步同欢口腔", "dealer": "", "sales": "李国洪", "usage": "", "join": "是", "isMega": "是", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_121", "no": "121", "kind": "民营", "name": "罗维", "clinic": "龙岗区妇幼保健院", "dealer": "", "sales": "曾剑磊", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_122", "no": "122", "kind": "民营", "name": "罗铃", "clinic": "汪洋齿科", "dealer": "", "sales": "曾剑磊", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_123", "no": "123", "kind": "民营", "name": "池金鸿", "clinic": "汪洋齿科龙城店", "dealer": "", "sales": "曾剑磊", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_124", "no": "124", "kind": "民营", "name": "张祥韬", "clinic": "汪洋齿科", "dealer": "", "sales": "曾剑磊", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_125", "no": "125", "kind": "民营", "name": "马医生", "clinic": "汪洋齿科", "dealer": "", "sales": "曾剑磊", "usage": "", "join": "", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": "准备签合同(AR,ARi, ST)"}, {"id": "fu_126", "no": "126", "kind": "民营", "name": "周鹏", "clinic": "松岗同业口腔", "dealer": "", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_127", "no": "127", "kind": "民营", "name": "李光健", "clinic": "深圳宝航口腔诊所", "dealer": "", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_128", "no": "128", "kind": "民营", "name": "蒋忠栋", "clinic": "深圳初心亲和口腔", "dealer": "", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_129", "no": "129", "kind": "民营", "name": "李娜", "clinic": "深圳一诚家庭口腔", "dealer": "", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_130", "no": "130", "kind": "民营", "name": "张孝华", "clinic": "深圳中海医院口腔", "dealer": "", "sales": "", "usage": "", "join": "是", "isMega": "否", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_131", "no": "131", "kind": "民营", "name": "吴爱良", "clinic": "齐铭口腔", "dealer": "", "sales": "邓冬云", "usage": "", "join": "是", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_132", "no": "132", "kind": "民营", "name": "郭美珍", "clinic": "元亨康健口腔诊所", "dealer": "", "sales": "", "usage": "", "join": "", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_133", "no": "133", "kind": "民营", "name": "梁瑞峰", "clinic": "爱雅健口腔", "dealer": "医路", "sales": "邓冬云", "usage": "", "join": "否", "isMega": "否", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_134", "no": "134", "kind": "民营", "name": "古彩雄", "clinic": "广齿美口腔", "dealer": "", "sales": "", "usage": "", "join": "", "isMega": "", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_135", "no": "135", "kind": "民营", "name": "胡志聪", "clinic": "诺德口腔", "dealer": "", "sales": "", "usage": "", "join": "", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_136", "no": "136", "kind": "民营", "name": "李华", "clinic": "博仕口腔", "dealer": "", "sales": "", "usage": "", "join": "", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_137", "no": "137", "kind": "民营", "name": "", "clinic": "新致美加工厂", "dealer": "", "sales": "", "usage": "", "join": "", "isMega": "", "attend": "", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_138", "no": "138", "kind": "民营", "name": "", "clinic": "刘下生口腔", "dealer": "", "sales": "", "usage": "", "join": "", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_139", "no": "139", "kind": "民营", "name": "萧榜名", "clinic": "新城同步口腔", "dealer": "", "sales": "", "usage": "", "join": "", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_140", "no": "140", "kind": "民营", "name": "张佳豪", "clinic": "新城同步口腔", "dealer": "", "sales": "", "usage": "", "join": "", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_141", "no": "141", "kind": "民营", "name": "苏医生", "clinic": "珠海南雅口腔", "dealer": "", "sales": "", "usage": "", "join": "", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_142", "no": "142", "kind": "民营", "name": "胡甜甜", "clinic": "雅冠口腔", "dealer": "", "sales": "", "usage": "", "join": "", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_143", "no": "143", "kind": "民营", "name": "刘威", "clinic": "博耀口腔", "dealer": "", "sales": "", "usage": "", "join": "", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_144", "no": "144", "kind": "民营", "name": "陈医生", "clinic": "柠檬口腔", "dealer": "", "sales": "", "usage": "", "join": "", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_145", "no": "145", "kind": "民营", "name": "邓医生", "clinic": "柠檬口腔", "dealer": "", "sales": "", "usage": "", "join": "", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_146", "no": "146", "kind": "民营", "name": "赵晋", "clinic": "越芽口腔", "dealer": "", "sales": "", "usage": "", "join": "", "isMega": "", "attend": "是", "visitDate": "", "inviteHO": "", "deal": ""}, {"id": "fu_147", "no": "147", "kind": "民营", "name": "张医生", "clinic": "伟民口腔", "dealer": "", "sales": "曾剑磊", "usage": "", "join": "", "isMega": "", "attend": "是", "visitDate": "2026-07-15", "inviteHO": "", "deal": ""}];
 var SEM_MEET_SEED = [{"id": "meet_30", "yearMonth": "2026-7", "month": "7월", "round": "#1", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_31", "yearMonth": "2026-7", "month": "7월", "round": "#2", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_32", "yearMonth": "2026-7", "month": "7월", "round": "#3", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_33", "yearMonth": "2026-7", "month": "7월", "round": "#4", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_34", "yearMonth": "2026-7", "month": "7월", "round": "#5", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_35", "yearMonth": "2026-7", "month": "7월", "round": "#6", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_36", "yearMonth": "2026-7", "month": "7월", "round": "#7", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_37", "yearMonth": "2026-7", "month": "7월", "round": "#8", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_38", "yearMonth": "2026-7", "month": "7월", "round": "#9", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_39", "yearMonth": "2026-7", "month": "7월", "round": "#10", "date": "미정", "region": "해남", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_40", "yearMonth": "2026-8", "month": "8월", "round": "#1", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_41", "yearMonth": "2026-8", "month": "8월", "round": "#2", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_42", "yearMonth": "2026-8", "month": "8월", "round": "#3", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_43", "yearMonth": "2026-8", "month": "8월", "round": "#4", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_44", "yearMonth": "2026-8", "month": "8월", "round": "#5", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_45", "yearMonth": "2026-8", "month": "8월", "round": "#6", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_46", "yearMonth": "2026-8", "month": "8월", "round": "#7", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_47", "yearMonth": "2026-8", "month": "8월", "round": "#8", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_48", "yearMonth": "2026-8", "month": "8월", "round": "#9", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_49", "yearMonth": "2026-8", "month": "8월", "round": "#10", "date": "미정", "region": "해남", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_50", "yearMonth": "2026-9", "month": "9월", "round": "#1", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_51", "yearMonth": "2026-9", "month": "9월", "round": "#2", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_52", "yearMonth": "2026-9", "month": "9월", "round": "#3", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_53", "yearMonth": "2026-9", "month": "9월", "round": "#4", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_54", "yearMonth": "2026-9", "month": "9월", "round": "#5", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_55", "yearMonth": "2026-9", "month": "9월", "round": "#6", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_56", "yearMonth": "2026-9", "month": "9월", "round": "#7", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_57", "yearMonth": "2026-9", "month": "9월", "round": "#8", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_58", "yearMonth": "2026-9", "month": "9월", "round": "#9", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_59", "yearMonth": "2026-9", "month": "9월", "round": "#10", "date": "미정", "region": "해남", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_60", "yearMonth": "2026-10", "month": "10월", "round": "#1", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_61", "yearMonth": "2026-10", "month": "10월", "round": "#2", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_62", "yearMonth": "2026-10", "month": "10월", "round": "#3", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_63", "yearMonth": "2026-10", "month": "10월", "round": "#4", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_64", "yearMonth": "2026-10", "month": "10월", "round": "#5", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_65", "yearMonth": "2026-10", "month": "10월", "round": "#6", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_66", "yearMonth": "2026-10", "month": "10월", "round": "#7", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_67", "yearMonth": "2026-10", "month": "10월", "round": "#8", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_68", "yearMonth": "2026-10", "month": "10월", "round": "#9", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_69", "yearMonth": "2026-10", "month": "10월", "round": "#10", "date": "미정", "region": "해남", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_70", "yearMonth": "2026-11", "month": "11월", "round": "#1", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_71", "yearMonth": "2026-11", "month": "11월", "round": "#2", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_72", "yearMonth": "2026-11", "month": "11월", "round": "#3", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_73", "yearMonth": "2026-11", "month": "11월", "round": "#4", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_74", "yearMonth": "2026-11", "month": "11월", "round": "#5", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_75", "yearMonth": "2026-11", "month": "11월", "round": "#6", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_76", "yearMonth": "2026-11", "month": "11월", "round": "#7", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_77", "yearMonth": "2026-11", "month": "11월", "round": "#8", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_78", "yearMonth": "2026-11", "month": "11월", "round": "#9", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_79", "yearMonth": "2026-11", "month": "11월", "round": "#10", "date": "미정", "region": "해남", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_80", "yearMonth": "2026-12", "month": "12월", "round": "#1", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_81", "yearMonth": "2026-12", "month": "12월", "round": "#2", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_82", "yearMonth": "2026-12", "month": "12월", "round": "#3", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_83", "yearMonth": "2026-12", "month": "12월", "round": "#4", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_84", "yearMonth": "2026-12", "month": "12월", "round": "#5", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_85", "yearMonth": "2026-12", "month": "12월", "round": "#6", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_86", "yearMonth": "2026-12", "month": "12월", "round": "#7", "date": "미정", "region": "광동", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_87", "yearMonth": "2026-12", "month": "12월", "round": "#8", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_88", "yearMonth": "2026-12", "month": "12월", "round": "#9", "date": "미정", "region": "광서", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}, {"id": "meet_89", "yearMonth": "2026-12", "month": "12월", "round": "#10", "date": "미정", "region": "해남", "city": "미정", "clinic": "", "system": "", "dealer": "", "people": 0, "lecturer": "林芳扬"}];
 
 /* ===== 세미나(화남 하반기) 저장 헬퍼 — 독립 localStorage ===== */
-var SEM_LS = { edu:'hncrm_sem_edu_v2', meet:'hncrm_sem_meet_v2' };
+var SEM_LS = { edu:'hncrm_sem_edu_v2', meet:'hncrm_sem_meet_v2', fu:'hncrm_sem_fu_v2' };
 function semLoad(k, fb){ try{ var r=localStorage.getItem(SEM_LS[k]); if(!r) return fb; var o=JSON.parse(r); return (o&&o.length!==undefined)?o:fb; }catch(e){ return fb; } }
 function semSave(k, v){ try{ localStorage.setItem(SEM_LS[k], JSON.stringify(v)); }catch(e){} }
 
@@ -2849,10 +2884,61 @@ function weeksOfMonth(year, mo){ var seen={}, out=[], last=new Date(year, mo, 0)
     if(!seen[key]){ seen[key]=1; var mon=mondayOfWeek(iw.year, iw.week); out.push({year:iw.year, week:iw.week, sub:(mon.getUTCMonth()+1)+'/'+mon.getUTCDate()}); } }
   return out; }
 
+/* ===== 세미나 엑셀 컬럼 매핑 (업/다운 라운드트립) ===== */
+var SEM_EDU_COLS=[['month','월'],['date','일자'],['region','구역'],['city','지역'],['target','목표고객'],['content','내용'],['hands','핸즈온'],['people','목표인원'],['peopleAct','실제인원'],['conv','목표전환'],['convAct','실제전환'],['lecturer','강사'],['dealer','대리상'],['costLec','강사비용'],['costSem','세미나비용'],['costTot','총비용'],['name','세미나명'],['time','시간'],['venue','장소'],['purpose','개최목적'],['audience','참석대상'],['lecAffil','소속'],['lecTitle','직함'],['lecField','전문분야'],['schedule','세부일정'],['fuProduct','관심제품'],['fuSample','샘플제공'],['fuPurchase','구매전환'],['fuFollow','후속방문계획']];
+var SEM_EDU_NUM={people:1,peopleAct:1,conv:1,convAct:1,costLec:1,costSem:1,costTot:1};
+var SEM_MEET_COLS=[['month','월'],['round','회차'],['date','날짜'],['region','구역'],['city','지역'],['clinic','치과명'],['system','시스템'],['dealer','대리상'],['people','인원'],['lecturer','강사']];
+function semEduToRows(arr){ return (arr||[]).map(function(r){ var o={}; SEM_EDU_COLS.forEach(function(c){ o[c[1]]=r[c[0]]==null?'':r[c[0]]; }); return o; }); }
+function semMeetToRows(arr){ return (arr||[]).map(function(r){ var o={}; SEM_MEET_COLS.forEach(function(c){ o[c[1]]=r[c[0]]==null?'':r[c[0]]; }); return o; }); }
+function semRowsToEdu(rows){ return (rows||[]).map(function(row,i){ var e={id:'edu_x'+Date.now()+'_'+i}; SEM_EDU_COLS.forEach(function(c){ var v=row[c[1]]; if(v===undefined||v===null) v=''; if(SEM_EDU_NUM[c[0]]) v=parseFloat(String(v).replace(/,/g,''))||0; e[c[0]]=v; }); var m=String(e.month).replace(/[^0-9]/g,'')||((String(e.date).match(/(\d+)[\/\.]/)||[])[1])||'7'; e.yearMonth='2026-'+m; e.costTot=(+e.costTot||0)||((+e.costLec||0)+(+e.costSem||0)); return e; }).filter(function(e){ return e.date||e.content||e.city; }); }
+function semRowsToMeet(rows){ return (rows||[]).map(function(row,i){ var e={id:'meet_x'+Date.now()+'_'+i}; SEM_MEET_COLS.forEach(function(c){ var v=row[c[1]]; if(v===undefined||v===null) v=''; if(c[0]==='people') v=parseFloat(v)||0; e[c[0]]=v; }); var m=String(e.month).replace(/[^0-9]/g,'')||'7'; e.yearMonth='2026-'+m; if(!e.lecturer) e.lecturer='林芳扬'; return e; }).filter(function(e){ return e.round||e.city||e.clinic; }); }
+
+/* ================= 조직도 (组织力量强化) ================= */
+var ORG_SEED = {
+  title:'尹钟河', deputy:'尹东均',
+  g:[
+    {head:'DSO', region:'', foot:'DSO 2名', m:[{n:'招聘',d:'DSO(开发)',h:''},{n:'王哲',d:'DSO(管理)',h:''}]},
+    {head:'姚永富', region:'广东西部(广州)', foot:'广东西部(广州) 4名', m:[{n:'招聘',d:'医路',h:''},{n:'邓冬云',d:'医路',h:'10名'},{n:'黎国扬',d:'齐即美 / 海南衫海',h:'5名'}]},
+    {head:'李国洪', region:'广东东部(深圳)', foot:'广东东部(深圳) 4名', m:[{n:'曾剑磊',d:'鹏生',h:'8名'},{n:'招聘',d:'聚赢',h:'10名'},{n:'李颖昱',d:'齐即美(粤东)',h:'5名'}]},
+    {head:'毛彬宇', region:'广西', foot:'广西 2名', m:[{n:'毛彬宇',d:'涅昱',h:'30名'}]}
+  ]
+};
+function OrgChart(p){
+  var org=p.org||ORG_SEED, setOrg=p.setOrg, zh=(p.lang==='zh');
+  function setTop(field,v){ setOrg(function(o){ var n=Object.assign({},o); n[field]=v; return n; }); }
+  function setG(gi,field,v){ setOrg(function(o){ var n=Object.assign({},o); n.g=o.g.map(function(gg,i){ if(i!==gi) return gg; var ng=Object.assign({},gg); ng[field]=v; return ng; }); return n; }); }
+  function setM(gi,mi,field,v){ setOrg(function(o){ var n=Object.assign({},o); n.g=o.g.map(function(gg,i){ if(i!==gi) return gg; var ng=Object.assign({},gg); ng.m=gg.m.map(function(mm,j){ if(j!==mi) return mm; var nm=Object.assign({},mm); nm[field]=v; return nm; }); return ng; }); return n; }); }
+  function oCell(getV, setV){ return h(EdCell,{row:{},locked:false,col:{
+    r:function(){ var v=getV(); return (v===''||v==null)? h('span',{style:{opacity:.45}},'—') : v; },
+    edit:{type:'text',get:function(){ return getV(); },set:function(_,val){ setV(val); }} }}); }
+  return h('div',{className:'card wide'},
+    h('div',{className:'card-h'},
+      h('h3',null, zh?'组织力量强化 (组织图)':'조직도 (组织力量强化)'),
+      h('span',{className:'card-n'}, zh?'双击方框即可修改 · 即时保存':'박스를 더블클릭하면 수정·즉시 저장됩니다')),
+    h('div',{className:'org-top'},
+      h('div',{className:'org-box org-lead'}, oCell(function(){return org.title;}, function(v){ setTop('title',v); })),
+      h('div',{className:'org-box org-dep'}, oCell(function(){return org.deputy;}, function(v){ setTop('deputy',v); }))),
+    h('div',{className:'org-cols'}, org.g.map(function(g,gi){
+      return h('div',{className:'org-col',key:gi},
+        h('div',{className:'org-box'}, oCell(function(){return g.head;}, function(v){ setG(gi,'head',v); })),
+        g.region!==''? h('div',{className:'org-region'}, oCell(function(){return g.region;}, function(v){ setG(gi,'region',v); })) : null,
+        h('div',{className:'org-mlist'}, g.m.map(function(m,mi){
+          return h('div',{className:'org-mbox',key:mi},
+            h('div',{className:'org-mn'}, oCell(function(){return m.n;}, function(v){ setM(gi,mi,'n',v); })),
+            h('div',{className:'org-md'}, oCell(function(){return m.d;}, function(v){ setM(gi,mi,'d',v); })),
+            h('div',{className:'org-mh'}, oCell(function(){return m.h;}, function(v){ setM(gi,mi,'h',v); })));
+        })),
+        h('div',{className:'org-foot'}, oCell(function(){return g.foot;}, function(v){ setG(gi,'foot',v); })));
+    })),
+    h('p',{className:'ed-n',style:{marginTop:'10px'}}, zh?'* 华南团队组织图。方框(姓名·代理商·人数·分区)双击修改，即时保存。':'* 화남팀 조직도입니다. 박스(이름·대리상·인원·구역)를 더블클릭해 수정하면 즉시 저장됩니다. 이름은 중국어로 유지합니다.'));
+}
+
 /* ================= 세미나 계획·실행 탭 (화남 하반기) ================= */
 function SeminarTab(p){
-  var edu=p.edu||[], meet=p.meet||[];
-  var setEdu=p.setEdu, setMeet=p.setMeet;
+  var edu=p.edu||[], meet=p.meet||[], fu=p.fu||[];
+  var setEdu=p.setEdu, setMeet=p.setMeet, setFu=p.setFu;
+  var zh=(p.lang==='zh');
+  var L=function(ko,cn){ return zh?cn:ko; };
 
   var _s=useState('summary'); var sub=_s[0], setSub=_s[1];
   var _m=useState(0);         var mo=_m[0], setMo=_m[1];   // 0 = 하반기 전체
@@ -2860,10 +2946,12 @@ function SeminarTab(p){
   var _x=useState({});        var exp=_x[0], setExp=_x[1];
   var _sel=useState(null);    var sel=_sel[0], setSel=_sel[1];   // 세미나 상세: 선택 세미나 id
   var _o=useState({k:null,d:'asc'}); var so=_o[0], setSo=_o[1];
+  var _fs=useState({k:null,d:'asc'}); var fso=_fs[0], setFso=_fs[1];   // 고객발굴(FU) 정렬
+  var _im=useState('replace'); var impMode=_im[0], setImpMode=_im[1];  // 엑셀 업로드: replace|append
 
   var YEAR=2026, MONTHS=[7,8,9,10,11,12];
   var isAll=!mo;
-  var monLabel = wk? ('W'+wk.week) : (isAll? '하반기(7~12月)' : (mo+'月'));
+  var monLabel = wk? ('W'+wk.week) : (isAll? L('하반기(7~12月)','下半年(7~12月)') : (mo+'月'));
   var ym=function(r){ return String(r.yearMonth||''); };
   var monthOf=function(r){ var pp=ym(r).split('-'); return pp[1]?+pp[1]:0; };
   function semDateOf(r){ var s=String(r.date||''); var m=s.match(/(\d{1,2})[\/\.](\d{1,2})/); if(!m) return null; return new Date(YEAR,(+m[1])-1,+m[2]); }
@@ -2871,7 +2959,7 @@ function SeminarTab(p){
   function inScope(r){ if(!inMonth(r)) return false; if(wk){ var dt=semDateOf(r); if(!dt) return false; var iw=isoWeek(dt); if(iw.year!==wk.year||iw.week!==wk.week) return false; } return true; }
 
   var eduAll = edu.filter(inScope);
-  var meetAll = meet.filter(inMonth);   // 커스회의는 날짜 미정 → 월 단위 관리
+  var meetAll = meet.filter(inScope);   // 커스회의도 날짜 있으면 주차에 걸림(없으면 월 단위)
 
   var sumEdu=function(arr){ return arr.reduce(function(a,r){ return {
     people:a.people+(+r.people||0), peopleAct:a.peopleAct+(+r.peopleAct||0),
@@ -2910,6 +2998,38 @@ function SeminarTab(p){
   }
   function delMeet(id){ if(!confirm('이 커스회의를 삭제하시겠습니까?')) return; setMeet(function(prev){ return prev.filter(function(r){ return r.id!==id; }); }); }
 
+  /* ── 세미나 전용 엑셀 다운로드/업로드 ── */
+  function semDownXlsx(){
+    if(typeof XLSX==='undefined'){ alert('엑셀 라이브러리 로딩 실패'); return; }
+    var wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(semEduToRows(edu)), '교육세미나');
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(semMeetToRows(meet)), '커스회의');
+    var d=new Date(); var ds=d.getFullYear()+('0'+(d.getMonth()+1)).slice(-2)+('0'+d.getDate()).slice(-2);
+    XLSX.writeFile(wb, '화남세미나_'+ds+'.xlsx');
+  }
+  function semUpXlsx(ev){
+    var f=ev.target.files[0]; if(!f) return;
+    if(typeof XLSX==='undefined'){ alert('엑셀 라이브러리 로딩 실패'); ev.target.value=''; return; }
+    var fr=new FileReader();
+    fr.onload=function(e){
+      try{
+        var wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
+        var eduSheet = wb.Sheets['교육세미나'] || wb.Sheets[wb.SheetNames[0]];
+        var meetSheet = wb.Sheets['커스회의'];
+        var newEdu = semRowsToEdu(eduSheet? XLSX.utils.sheet_to_json(eduSheet,{defval:''}):[]);
+        var newMeet = semRowsToMeet(meetSheet? XLSX.utils.sheet_to_json(meetSheet,{defval:''}):[]);
+        if(!newEdu.length && !newMeet.length){ alert('인식 가능한 세미나 행이 없습니다. 헤더(월·일자·구역·지역·내용 등)를 확인해 주세요.'); return; }
+        var append=(impMode==='append');
+        var modeTxt=append? '기존 데이터에 추가' : '현재 세미나 데이터를 전체 교체';
+        if(!confirm('엑셀에서 교육세미나 '+newEdu.length+'건'+(newMeet.length?(' · 커스회의 '+newMeet.length+'건'):'')+'을 불러옵니다.\n['+modeTxt+'] 방식입니다. 계속할까요?')) return;
+        if(newEdu.length) setEdu(append? function(prev){ return prev.concat(newEdu); } : newEdu);
+        if(newMeet.length) setMeet(append? function(prev){ return prev.concat(newMeet); } : newMeet);
+        alert('✅ 세미나 엑셀을 '+(append?'추가':'교체')+'했습니다.');
+      }catch(err){ alert('엑셀 읽기 실패: '+err.message); }
+    };
+    fr.readAsArrayBuffer(f); ev.target.value='';
+  }
+
   /* ── 정렬 ── */
   function handleSort(k){ setSo(function(o){ if(o.k!==k) return {k:k,d:'asc'}; if(o.d==='asc') return {k:k,d:'desc'}; return {k:null,d:'asc'}; }); }
   function sortMark(k){ return so.k!==k?'⇅':(so.d==='asc'?'▲':'▼'); }
@@ -2939,44 +3059,50 @@ function SeminarTab(p){
     h('div',{className:'segs',style:{marginBottom:'8px',border:0,padding:0,background:'none'}},
       h('span',{className:'plb'},'세미나'),
       h('div',{className:'segb',style:{marginLeft:0}},
-        [['summary','서머리'],['plan','계획'],['actual','실행'],['detail','세미나 상세'],['meet','커스회의']].map(function(t){
+        [['summary',L('서머리','摘要')],['planexec',L('계획·실행','计划·执行')],['detail',L('세미나 상세','研讨会详情')],['meet',L('커스회의','客户会议')],['custlist',L('세미나 고객발굴','研讨会客户挖掘')]].map(function(t){
           return h('button',{key:t[0],className:'sg'+(sub===t[0]?' on':''),onClick:function(){ setSub(t[0]); }}, t[1]);
         }))),
     h('div',{className:'pbar',style:{marginBottom:0}},
-      h('div',{className:'pgrp'}, h('span',{className:'plb'},'연도'),
-        h('select',{className:'sel',value:YEAR,onChange:function(){}}, h('option',{value:YEAR}, YEAR+'년'))),
-      h('div',{className:'pgrp'}, h('span',{className:'plb'},'월'),
+      h('div',{className:'pgrp'}, h('span',{className:'plb'},L('연도','年度')),
+        h('select',{className:'sel',value:YEAR,onChange:function(){}}, h('option',{value:YEAR}, YEAR+L('년','年')))),
+      h('div',{className:'pgrp'}, h('span',{className:'plb'},L('월','月')),
         h('select',{className:'sel',value:mo,onChange:function(e){ setMo(+e.target.value); setWk(null); }},
-          h('option',{value:0},'하반기 전체'),
+          h('option',{value:0},L('하반기 전체','下半年全部')),
           MONTHS.map(function(x){ return h('option',{key:x,value:x}, x+'月'); }))),
-      h('div',{className:'pgrp'}, h('span',{className:'plb'},'주'),
-        h('div',{className:'wks'}, isAll? h('span',{className:'dim',style:{fontSize:'11px'}},'월을 선택하면 주차가 표시됩니다')
+      h('div',{className:'pgrp'}, h('span',{className:'plb'},L('주','周')),
+        h('div',{className:'wks'}, isAll? h('span',{className:'dim',style:{fontSize:'11px'}},L('월을 선택하면 주차가 표시됩니다','选择月份后显示周'))
           : weeks.map(function(w){ var on=wk&&wk.week===w.week&&wk.year===w.year;
             return h('button',{key:w.week,className:'wk has'+(on?' on':''),
               onClick:function(){ setWk(on? null : {year:w.year, week:w.week}); }},
               h('b',null,'W'+w.week), h('span',null,w.sub)); }))),
-      h('div',{className:'pnav',style:{marginLeft:'auto',alignItems:'center'}},
-        wk? h('button',{className:'btn sm',onClick:function(){ setWk(null); }},'주 해제') : null,
-        h('span',{className:'dim',style:{fontSize:'11.5px',whiteSpace:'nowrap',marginLeft:'6px'}}, '세미나 '+eduAll.length+'건 · 커스회의 '+meetAll.length+'건'))));
+      h('div',{className:'pnav',style:{marginLeft:'auto',alignItems:'center',gap:'5px'}},
+        wk? h('button',{className:'btn sm',onClick:function(){ setWk(null); }}, L('주 해제','清除周')) : null,
+        h('button',{className:'btn sm',onClick:semDownXlsx,title:L('세미나·커스회의 엑셀 다운로드','导出Excel')}, L('엑셀↓','导出')),
+        h('select',{className:'sel',style:{maxWidth:'96px',fontSize:'11.5px',padding:'3px 5px'},value:impMode,onChange:function(e){ setImpMode(e.target.value); },title:L('엑셀 업로드 방식','导入方式')},
+          h('option',{value:'replace'}, L('교체','替换')), h('option',{value:'append'}, L('추가','追加'))),
+        h('label',{className:'btn sm',style:{cursor:'pointer',position:'relative',overflow:'hidden'}}, L('엑셀↑','导入'),
+          h('input',{type:'file',accept:'.xlsx,.xls',style:{position:'absolute',inset:0,opacity:0,cursor:'pointer'},onChange:semUpXlsx})),
+        h('span',{className:'dim',style:{fontSize:'11.5px',whiteSpace:'nowrap',marginLeft:'4px'}}, L('세미나','研讨会')+' '+eduAll.length+L('건','件')+' · '+L('커스회의','客户会议')+' '+meetAll.length+L('건','件')))));
 
   /* ── 지표카드 + 차트 (서머리·커스회의 외) ── */
   var metricRow=null, charts=null;
-  if(sub!=='summary' && sub!=='meet'){
+  if(sub!=='summary' && sub!=='meet' && sub!=='custlist'){
     var pRate=pct(S.peopleAct,S.people), cRate=(S.peopleAct||S.people)>0? Math.round(S.convAct/(S.peopleAct||S.people)*100):null;
     metricRow = h('div',{className:'sem3'},
-      metricCard('목표인원 → 실제','명', S.people, S.peopleAct, pRate, '달성 95% 목표', semRateCol(pRate)),
-      metricCard('전환고객 → 실제','명', S.conv, S.convAct, cRate, '전환율 최소 30%', semConvCol(cRate)),
+      metricCard(L('목표인원 → 실제','目标人数 → 实际'),L('명','人'), S.people, S.peopleAct, pRate, L('달성 95% 목표','达成95%目标'), semRateCol(pRate)),
+      metricCard(L('전환고객 → 실제','转化客户 → 实际'),L('명','人'), S.conv, S.convAct, cRate, L('전환율 최소 30%','转化率最低30%'), semConvCol(cRate)),
       budgetCard());
     charts = h('div',{className:'sem-charts'},
-      semBar('월별 세미나 건수','건', monthly,'cntP','cntA','#a8d4de','#3c9cb4','계획','실행'),
-      semBar('월별 인원 목표/실제','명', monthly,'pplP','pplA','#bfe3cf','#2e9e6b','목표','실제'),
-      semBar('월별 전환고객 목표/실제','명', monthly,'cvP','cvA','#e6d3b0','#c9962f','목표','실제'));
+      semBar(L('월별 세미나 건수','各月研讨会数'),L('건','件'), monthly,'cntP','cntA','#a8d4de','#3c9cb4',L('계획','计划'),L('실행','执行')),
+      semBar(L('월별 인원 목표/실제','各月人数 目标/实际'),L('명','人'), monthly,'pplP','pplA','#bfe3cf','#2e9e6b',L('목표','目标'),L('실제','实际')),
+      semBar(L('월별 전환고객 목표/실제','各月转化客户 目标/实际'),L('명','人'), monthly,'cvP','cvA','#e6d3b0','#c9962f',L('목표','目标'),L('실제','实际')));
   }
 
   var body;
   if(sub==='summary')      body=renderSummary();
   else if(sub==='meet')    body=renderMeet();
   else if(sub==='detail')  body=renderDetailPane();
+  else if(sub==='custlist')body=renderCustList();
   else                     body=renderTable(sub);
 
   return h('div',{className:'sem-wrap'}, head, metricRow, charts, body);
@@ -2999,12 +3125,12 @@ function SeminarTab(p){
   function budgetCard(){
     return h('div',{className:'card',style:{padding:'10px 12px'}},
       h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'4px'}},
-        h('span',{style:{fontSize:'11px',color:'var(--dim)',fontWeight:700,letterSpacing:'.04em',textTransform:'uppercase'}}, '총비용(예산)'),
+        h('span',{style:{fontSize:'11px',color:'var(--dim)',fontWeight:700,letterSpacing:'.04em',textTransform:'uppercase'}}, L('총비용(예산)','总费用(预算)')),
         h('span',{className:'sem-badge',style:{background:'var(--tl4)',color:'var(--tlD)'}}, monLabel)),
       h('div',{style:{display:'flex',alignItems:'baseline',gap:'4px'}},
         h('b',{style:{fontSize:'19px',fontWeight:800,color:'var(--tlD)',fontVariantNumeric:'tabular-nums'}}, snum(S.cost,0)),
         h('span',{className:'dim',style:{fontSize:'10px'}},'元(RMB)')),
-      h('div',{className:'dim',style:{fontSize:'10.5px',marginTop:'8px'}}, '핸즈온 '+S.hands+'건 · 강사비+세미나비 합산'));
+      h('div',{className:'dim',style:{fontSize:'10.5px',marginTop:'8px'}}, L('핸즈온 '+S.hands+'건 · 강사비+세미나비 합산','实操 '+S.hands+'件 · 讲师费+研讨会费合计')));
   }
 
   /* ---------- 서머리 (구역 / 샤롱·세미나 / 커스회의 + 그래프) ---------- */
@@ -3018,116 +3144,119 @@ function SeminarTab(p){
     });
     var salTot=edu.filter(isSalon).length, semTot=edu.length-salTot;
 
-    function pivot(keys, label, predOf, colorOf){
-      return h('div',{className:'tw',style:{marginBottom:'14px'}},
-        h('table',{className:'tbl hmt',style:{minWidth:'720px'}},
+    var REG_ZH={'광동':'广东','광서':'广西','해남':'海南'};
+    var dispReg=function(k){ return zh?(REG_ZH[k]||k):k; };
+    var dispType=function(k){ return zh?(k==='샤롱'?'沙龙':'研讨会'):k; };
+    function pivot(keys, label, predOf, colorOf, dispOf, minW){
+      return h('div',{className:'tw',style:{marginBottom:'0'}},
+        h('table',{className:'tbl hmt',style:{minWidth:(minW||720)+'px'}},
           h('thead',null, h('tr',null, h('th',null,label),
-            MONTHS.map(function(m){ return h('th',{key:m,className:'num'}, m+'月'); }), h('th',{className:'num'},'합계'))),
+            MONTHS.map(function(m){ return h('th',{key:m,className:'num'}, m+'月'); }), h('th',{className:'num'},L('합계','合计')))),
           h('tbody',null,
-            keys.map(function(k){ var pr=predOf(k);
+            keys.map(function(k){ var pr=predOf(k); var lb=dispOf?dispOf(k):k;
               return h('tr',{key:k},
-                h('td',{style:{fontWeight:600}}, colorOf? h('span',null, h('span',{style:{display:'inline-block',width:'8px',height:'8px',borderRadius:'2px',background:colorOf(k),marginRight:'5px'}}), k) : k),
+                h('td',{style:{fontWeight:600}}, colorOf? h('span',null, h('span',{style:{display:'inline-block',width:'8px',height:'8px',borderRadius:'2px',background:colorOf(k),marginRight:'5px'}}), lb) : lb),
                 MONTHS.map(function(m){ var v=edu.filter(function(r){ return monthOf(r)===m && pr(r); }).length; return h('td',{key:m,className:'num'+(v?'':' dim')}, v||'·'); }),
                 h('td',{className:'num',style:{background:'var(--tl4)',fontWeight:800}}, edu.filter(pr).length));
             }),
-            h('tr',{className:'etot'}, h('td',null,'합계'),
+            h('tr',{className:'etot'}, h('td',null,L('합계','合计')),
               MONTHS.map(function(m){ return h('td',{key:m,className:'num'}, edu.filter(function(r){return monthOf(r)===m;}).length); }),
               h('td',{className:'num',style:{background:'var(--tl3)'}}, edu.length)))));
     }
     return h('div',{className:'card wide'},
       h('div',{className:'card-h'},
-        h('h3',null,'화남 하반기 교육 서머리 · '+YEAR+'년'),
-        h('span',{className:'card-n'},'교육세미나 '+edu.length+'건 (샤롱 '+salTot+' · 세미나 '+semTot+') · 커스회의 '+meet.length+'건')),
+        h('h3',null,L('화남 하반기 교육 서머리 · ','华南下半年教育摘要 · ')+YEAR+L('년','年')),
+        h('span',{className:'card-n'},L('교육세미나 '+edu.length+'건 (샤롱 '+salTot+' · 세미나 '+semTot+') · 커스회의 '+meet.length+'건','教育研讨会 '+edu.length+'件 (沙龙 '+salTot+' · 研讨会 '+semTot+') · 客户会议 '+meet.length+'件'))),
       // 그래프
       h('div',{className:'sem-charts',style:{marginBottom:'14px'}},
-        semBar('월별 세미나 건수 (샤롱/세미나)','건', ms,'sem','sal','#3c9cb4','#c9962f','세미나','샤롱'),
-        semBar('월별 커스회의','건', ms,'mt',null,'#2e9e6b',null,'커스회의',null),
-        semBar('월별 목표 인원','명', monthly,'pplP',null,'#a8d4de',null,'목표인원',null)),
-      // 1) 구역별
-      h('div',{className:'mini-h'},'구역(省)별 × 월'),
-      pivot(regions, '구역', function(k){ return function(r){ return r.region===k; }; }, null),
-      // 2) 샤롱 / 세미나
-      h('div',{className:'mini-h'},'샤롱 / 세미나(培训班)별 × 월'),
-      pivot(['세미나','샤롱'], '유형',
+        semBar(L('월별 세미나 건수 (샤롱/세미나)','各月数量 (沙龙/研讨会)'),L('건','件'), ms,'sem','sal','#3c9cb4','#c9962f',L('세미나','研讨会'),L('샤롱','沙龙')),
+        semBar(L('월별 커스회의','各月客户会议'),L('건','件'), ms,'mt',null,'#2e9e6b',null,L('커스회의','客户会议'),null),
+        semBar(L('월별 목표 인원','各月目标人数'),L('명','人'), monthly,'pplP',null,'#a8d4de',null,L('목표인원','目标人数'),null)),
+      // [구역 | 커스회의] 한 줄
+      h('div',{className:'half'},
+        h('div',null,
+          h('div',{className:'mini-h'},L('구역(省)별 × 월','分省 × 月')),
+          pivot(regions, L('구역','省份'), function(k){ return function(r){ return r.region===k; }; }, null, dispReg, 430)),
+        h('div',null,
+          h('div',{className:'mini-h'},L('커스회의 (월 최대 10회)','客户会议 (每月最多10次)')),
+          h('div',{className:'tw'},
+            h('table',{className:'tbl hmt',style:{minWidth:'430px'}},
+              h('thead',null, h('tr',null, h('th',null,L('구역','省份')),
+                MONTHS.map(function(m){ return h('th',{key:m,className:'num'}, m+'月'); }), h('th',{className:'num'},L('합계','合计')))),
+              h('tbody',null,
+                regions.map(function(rg){
+                  return h('tr',{key:rg}, h('td',{style:{fontWeight:600}}, dispReg(rg)),
+                    MONTHS.map(function(m){ var v=meet.filter(function(r){ return monthOf(r)===m && r.region===rg; }).length; return h('td',{key:m,className:'num'+(v?'':' dim')}, v||'·'); }),
+                    h('td',{className:'num',style:{background:'var(--tl4)',fontWeight:800}}, meet.filter(function(r){return r.region===rg;}).length));
+                }),
+                h('tr',{className:'etot'}, h('td',null,L('합계','合计')),
+                  MONTHS.map(function(m){ return h('td',{key:m,className:'num'}, meet.filter(function(r){return monthOf(r)===m;}).length); }),
+                  h('td',{className:'num',style:{background:'var(--tl3)'}}, meet.length)))))) ),
+      // 샤롱 / 세미나 (맨 아래)
+      h('div',{className:'mini-h',style:{marginTop:'14px'}},L('샤롱 / 세미나(培训班)별 × 월','沙龙 / 研讨会(培训班) × 月')),
+      pivot(['세미나','샤롱'], L('유형','类型'),
         function(k){ return function(r){ return k==='샤롱'? isSalon(r) : !isSalon(r); }; },
-        function(k){ return k==='샤롱'? '#c9962f' : '#3c9cb4'; }),
-      // 3) 커스회의
-      h('div',{className:'mini-h'},'커스회의 (지역별 · 월 최대 10회)'),
-      h('div',{className:'tw'},
-        h('table',{className:'tbl hmt',style:{minWidth:'720px'}},
-          h('thead',null, h('tr',null, h('th',null,'구역'),
-            MONTHS.map(function(m){ return h('th',{key:m,className:'num'}, m+'月'); }), h('th',{className:'num'},'합계'))),
-          h('tbody',null,
-            regions.map(function(rg){
-              return h('tr',{key:rg}, h('td',{style:{fontWeight:600}}, rg),
-                MONTHS.map(function(m){ var v=meet.filter(function(r){ return monthOf(r)===m && r.region===rg; }).length; return h('td',{key:m,className:'num'+(v?'':' dim')}, v||'·'); }),
-                h('td',{className:'num',style:{background:'var(--tl4)',fontWeight:800}}, meet.filter(function(r){return r.region===rg;}).length));
-            }),
-            h('tr',{className:'etot'}, h('td',null,'합계'),
-              MONTHS.map(function(m){ return h('td',{key:m,className:'num'}, meet.filter(function(r){return monthOf(r)===m;}).length); }),
-              h('td',{className:'num',style:{background:'var(--tl3)'}}, meet.length)))) ),
+        function(k){ return k==='샤롱'? '#c9962f' : '#3c9cb4'; }, dispType, 720),
       h('p',{className:'ed-n',style:{marginTop:'8px'}},
-        '* 구역·유형(샤롱/세미나)·월별 건수는 [계획]·[실행] 데이터에서 자동 집계됩니다. 커스회의는 [커스회의] 탭에서 관리합니다. 인원 달성 목표 95% · 전환고객 최소 30%.')
+        L('* 구역·유형(샤롱/세미나)·월별 건수는 [계획]·[실행] 데이터에서 자동 집계됩니다. 커스회의는 [커스회의] 탭에서 관리합니다. 인원 달성 목표 95% · 전환고객 최소 30%.','* 分省·类型(沙龙/研讨会)·各月数量由[计划]·[执行]数据自动统计。客户会议在[客户会议]标签管理。人数达成目标95% · 转化客户最低30%。'))
     );
   }
 
   /* ---------- 계획 / 실행 상세표 ---------- */
-  function renderTable(mode){
-    var isAct=mode==='actual';
-    var rowsArr=sortRows(eduAll); var out=[];
-    if(rowsArr.length===0){ out.push(h('tr',{key:'e'}, h('td',{colSpan:12,className:'empty'}, monLabel+' 세미나가 없습니다. [+ 세미나 추가]를 사용하세요.'))); }
-    else {
-      rowsArr.forEach(function(r){
-        var open=!!exp[r.id];
-        var achieve=(+r.people>0)? Math.round((+r.peopleAct||0)/r.people*100):null;
-        var convR=((+r.peopleAct||0)>0)? Math.round((+r.convAct||0)/r.peopleAct*100):null;
-        if(!isAct){
-          out.push(h('tr',{key:r.id},
-            h('td',{className:'tde'}, edT(r,'date')), h('td',{className:'tde'}, edT(r,'region')), h('td',{className:'tde'}, edT(r,'city')),
-            h('td',{className:'tde'}, tgtBadgeEdit(r)), h('td',{className:'tde',style:{minWidth:'160px'}}, edT(r,'content')),
-            h('td',{className:'tde',style:{textAlign:'center'}}, edT(r,'hands')),
-            h('td',{className:'num tde'}, edN(r,'people',0)), h('td',{className:'num tde'}, edN(r,'conv',0)),
-            h('td',{className:'tde'}, edT(r,'lecturer')), h('td',{className:'tde'}, edT(r,'dealer')),
-            h('td',{className:'num tde'}, edN(r,'costTot',0)),
-            h('td',{className:'num'}, h('button',{className:'lnk',onClick:function(){ toggleExp(r.id); }}, open?'▾':'▸'))));
-        } else {
-          out.push(h('tr',{key:r.id},
-            h('td',{className:'tde'}, edT(r,'date')), h('td',{className:'tde'}, edT(r,'city')), h('td',{className:'tde'}, tgtBadgeEdit(r)),
-            h('td',{className:'num',style:{color:'var(--dim)'}}, snum(r.people,0)), h('td',{className:'num tde'}, edN(r,'peopleAct',0)),
-            h('td',{className:'num',style:{fontWeight:800,color:semRateCol(achieve)}}, achieve===null?'-':achieve+'%'),
-            h('td',{className:'num',style:{color:'var(--dim)'}}, snum(r.conv,0)), h('td',{className:'num tde'}, edN(r,'convAct',0)),
-            h('td',{className:'num',style:{fontWeight:800,color:semConvCol(convR)}}, convR===null?'-':convR+'%'),
-            h('td',{className:'num tde'}, edN(r,'costTot',0)),
-            h('td',{className:'num'}, h('button',{className:'lnk',onClick:function(){ toggleExp(r.id); }}, open?'▾':'▸'))));
-        }
-        if(open) out.push(expandRow(r, isAct?11:12));
-      });
-      if(!isAct){
-        out.push(h('tr',{key:'tot',className:'etot'}, h('td',{colSpan:6,style:{textAlign:'center'}}, monLabel+' 합계'),
-          h('td',{className:'num'}, snum(S.people,0)), h('td',{className:'num'}, snum(S.conv,0)), h('td',null), h('td',null), h('td',{className:'num'}, snum(S.cost,0)), h('td',null)));
-      } else {
-        out.push(h('tr',{key:'tot',className:'etot'}, h('td',{colSpan:3,style:{textAlign:'center'}}, monLabel+' 합계'),
-          h('td',{className:'num'}, snum(S.people,0)), h('td',{className:'num'}, snum(S.peopleAct,0)),
-          h('td',{className:'num',style:{color:semRateCol(pct(S.peopleAct,S.people))}}, pct(S.peopleAct,S.people)===null?'-':pct(S.peopleAct,S.people)+'%'),
-          h('td',{className:'num'}, snum(S.conv,0)), h('td',{className:'num'}, snum(S.convAct,0)),
-          h('td',{className:'num',style:{color:semConvCol(S.peopleAct>0?Math.round(S.convAct/S.peopleAct*100):null)}}, S.peopleAct>0?Math.round(S.convAct/S.peopleAct*100)+'%':'-'),
-          h('td',{className:'num'}, snum(S.cost,0)), h('td',null)));
-      }
+  function renderTable(){
+    // 계획+실행 병합 · 월별 분리(그룹) · 주요항목 정렬
+    var out=[];
+    function rowNode(r){
+      var open=!!exp[r.id];
+      var achieve=(+r.people>0)? Math.round((+r.peopleAct||0)/r.people*100):null;
+      var convR=((+r.peopleAct||0)>0)? Math.round((+r.convAct||0)/r.peopleAct*100):null;
+      out.push(h('tr',{key:r.id},
+        h('td',{className:'tde'}, edT(r,'date')), h('td',{className:'tde'}, edT(r,'region')), h('td',{className:'tde'}, edT(r,'city')),
+        h('td',{className:'tde'}, tgtBadgeEdit(r)), h('td',{className:'tde',style:{minWidth:'150px'}}, edT(r,'content')),
+        h('td',{className:'num tde'}, edN(r,'people',0)), h('td',{className:'num tde'}, edN(r,'peopleAct',0)),
+        h('td',{className:'num',style:{fontWeight:800,color:semRateCol(achieve)}}, achieve===null?'-':achieve+'%'),
+        h('td',{className:'num tde'}, edN(r,'conv',0)), h('td',{className:'num tde'}, edN(r,'convAct',0)),
+        h('td',{className:'num tde'}, edN(r,'costTot',0)),
+        h('td',{className:'num'}, h('button',{className:'lnk',onClick:function(){ toggleExp(r.id); }}, open?'▾':'▸'))));
+      if(open) out.push(expandRow(r,12));
     }
-    var headCells = !isAct
-      ? [thS('date','일자'),thS('region','구역'),thS('city','지역'),th('목표고객'),th('내용'),th('핸즈온'),thS('people','인원'),th('전환'),th('강사'),th('대리상'),th('총비용'),th('상세')]
-      : [thS('date','일자'),thS('city','지역'),th('목표고객'),th('목표인원'),th('실제인원'),th('달성%'),th('목표전환'),th('실제전환'),th('전환%'),th('비용'),th('상세')];
+    if(eduAll.length===0){ out.push(h('tr',{key:'e'}, h('td',{colSpan:12,className:'empty'}, monLabel+L(' 세미나가 없습니다. [+ 세미나 추가]를 사용하세요.',' 无研讨会。请使用[+ 添加研讨会]。')))); }
+    else if(isAll){
+      // 월별 그룹 (그룹 안에서 정렬 적용)
+      MONTHS.forEach(function(m){
+        var mr=sortRows(eduAll.filter(function(r){ return monthOf(r)===m; }));
+        if(!mr.length) return;
+        var ms=sumEdu(mr);
+        out.push(h('tr',{key:'g'+m,className:'hl'}, h('td',{colSpan:5,style:{fontWeight:800,color:'var(--tlD)'}}, m+L('月 · ','月 · ')+mr.length+L('건','件')),
+          h('td',{className:'num',style:{fontWeight:700}}, snum(ms.people,0)), h('td',{className:'num',style:{fontWeight:700}}, snum(ms.peopleAct,0)),
+          h('td',{className:'num'}, pct(ms.peopleAct,ms.people)===null?'':pct(ms.peopleAct,ms.people)+'%'),
+          h('td',{className:'num',style:{fontWeight:700}}, snum(ms.conv,0)), h('td',{className:'num',style:{fontWeight:700}}, snum(ms.convAct,0)),
+          h('td',{className:'num',style:{fontWeight:700}}, snum(ms.cost,0)), h('td',null)));
+        mr.forEach(rowNode);
+      });
+    } else {
+      sortRows(eduAll).forEach(rowNode);
+    }
+    if(eduAll.length){
+      out.push(h('tr',{key:'tot',className:'etot'}, h('td',{colSpan:5,style:{textAlign:'center'}}, monLabel+L(' 합계',' 合计')),
+        h('td',{className:'num'}, snum(S.people,0)), h('td',{className:'num'}, snum(S.peopleAct,0)),
+        h('td',{className:'num',style:{color:semRateCol(pct(S.peopleAct,S.people))}}, pct(S.peopleAct,S.people)===null?'-':pct(S.peopleAct,S.people)+'%'),
+        h('td',{className:'num'}, snum(S.conv,0)), h('td',{className:'num'}, snum(S.convAct,0)),
+        h('td',{className:'num'}, snum(S.cost,0)), h('td',null)));
+    }
+    var headCells=[thS('date',L('일자','日期')),thS('region',L('구역','省份')),thS('city',L('지역','地区')),thS('target',L('목표고객','目标客户')),th(L('내용','内容')),
+      thS('people',L('목표인원','目标人数')),th(L('실제인원','实际人数')),th(L('달성%','达成%')),th(L('목표전환','目标转化')),th(L('실제전환','实际转化')),thS('costTot',L('총비용','总费用')),th(L('상세','详情'))];
     return h('div',{className:'card wide'},
       h('div',{className:'card-h'},
-        h('h3',null,(isAct?'실행(실적 입력)':'계획')+' · '+monLabel),
-        h('button',{className:'btn pri sm',onClick:addEdu},'+ 세미나 추가')),
-      h('div',{className:'tw'}, h('table',{className:'tbl',style:{minWidth:isAct?'980px':'1100px'}},
+        h('h3',null,L('계획·실행','计划·执行')+' · '+monLabel),
+        h('button',{className:'btn pri sm',onClick:addEdu},L('+ 세미나 추가','+ 添加研讨会'))),
+      h('div',{className:'tw'}, h('table',{className:'tbl',style:{minWidth:'1120px'}},
         h('thead',null, h('tr',null, headCells)), h('tbody',null, out))),
-      h('p',{className:'ed-n',style:{marginTop:'8px'}}, isAct
-        ? '* [실행] 탭에서 실제 인원·전환·비용을 입력하면 달성%·전환%가 자동 계산됩니다(인원 목표 95% · 전환 최소 30%).'
-        : '* 셀을 더블클릭하면 바로 수정됩니다. 오른쪽 ▸ 상세에서 내용·강사·대리상·비용 세부가 펼쳐집니다. 비용 단위는 元(RMB).'));
+      h('p',{className:'ed-n',style:{marginTop:'8px'}},
+        L('* 계획(목표)과 실행(실제)을 한 표에서 관리합니다. 목표인원·실제인원·전환을 더블클릭 수정하면 달성%가 자동 계산됩니다(인원 95%·전환 30% 목표). 하반기 전체 보기에서는 월별로 그룹되고, 헤더(일자·구역·지역·목표고객·목표인원·총비용)를 클릭하면 정렬됩니다. 비용 단위 元(RMB).',
+          '* 在一张表中管理计划(目标)与执行(实际)。双击修改目标人数·实际人数·转化，达成%自动计算(人数95%·转化30%目标)。下半年全部视图按月分组，点击表头(日期·省份·地区·目标客户·目标人数·总费用)排序。费用单位 元(RMB)。')));
     function th(t){ return h('th',{key:t,className:'num'}, t); }
-    function thS(k,t){ return h('th',{key:k,className:'num',role:'button',onClick:function(){ handleSort(k); },title:'정렬'}, t,' ',h('span',{className:'dim',style:{fontSize:'9px'}}, sortMark(k))); }
+    function thS(k,t){ return h('th',{key:k,className:'num',role:'button',onClick:function(){ handleSort(k); },title:L('정렬','排序')}, t,' ',h('span',{className:'dim',style:{fontSize:'9px'}}, sortMark(k))); }
   }
   function tgtBadgeEdit(r){ return h(EdCell,{row:r,locked:false,col:{
     r:function(rr){ return tgtBadge(rr.target); },
@@ -3135,14 +3264,14 @@ function SeminarTab(p){
   function expandRow(r, span){
     return h('tr',{key:r.id+'_x',className:'sem-exp'}, h('td',{colSpan:span},
       h('div',{className:'sem-detail'},
-        df('구역', r.region||'—'), df('지역', r.city||'—'), df('목표고객', tgtBadge(r.target)),
-        df('핸즈온', h(EdCell,{row:r,locked:false,col:{r:function(rr){return rr.hands||h('span',{className:'dim'},'—');},edit:{type:'text',get:function(rr){return rr.hands||'';},set:function(rr,v){ updEdu(rr.id,'hands',v); }}}})),
-        df('강사', edT(r,'lecturer')), df('대리상', edT(r,'dealer')),
-        df('강사비용', edN(r,'costLec',0)), df('세미나비용', edN(r,'costSem',0)), df('총비용', h('b',null,snum(r.costTot,0)+' 元')),
-        df('인원(목표/실제)', h('span',null, snum(r.people,0), h('span',{className:'dim'},' / '), h('b',{style:{color:'var(--ink2)'}}, snum(r.peopleAct,0)))),
-        df('전환(목표/실제)', h('span',null, snum(r.conv,0), h('span',{className:'dim'},' / '), h('b',{style:{color:'var(--ink2)'}}, snum(r.convAct,0)))),
-        df('내용', edT(r,'content'), true)),
-      h('div',{style:{textAlign:'right',marginTop:'8px'}}, h('button',{className:'btn dg sm',onClick:function(){ delEdu(r.id); }},'세미나 삭제'))));
+        df(L('구역','省份'), r.region||'—'), df(L('지역','地区'), r.city||'—'), df(L('목표고객','目标客户'), tgtBadge(r.target)),
+        df(L('핸즈온','实操'), h(EdCell,{row:r,locked:false,col:{r:function(rr){return rr.hands||h('span',{className:'dim'},'—');},edit:{type:'text',get:function(rr){return rr.hands||'';},set:function(rr,v){ updEdu(rr.id,'hands',v); }}}})),
+        df(L('강사','讲师'), edT(r,'lecturer')), df(L('대리상','代理商'), edT(r,'dealer')),
+        df(L('강사비용','讲师费'), edN(r,'costLec',0)), df(L('세미나비용','研讨会费'), edN(r,'costSem',0)), df(L('총비용','总费用'), h('b',null,snum(r.costTot,0)+' 元')),
+        df(L('인원(목표/실제)','人数(目标/实际)'), h('span',null, snum(r.people,0), h('span',{className:'dim'},' / '), h('b',{style:{color:'var(--ink2)'}}, snum(r.peopleAct,0)))),
+        df(L('전환(목표/실제)','转化(目标/实际)'), h('span',null, snum(r.conv,0), h('span',{className:'dim'},' / '), h('b',{style:{color:'var(--ink2)'}}, snum(r.convAct,0)))),
+        df(L('내용','内容'), edT(r,'content'), true)),
+      h('div',{style:{textAlign:'right',marginTop:'8px'}}, h('button',{className:'btn dg sm',onClick:function(){ delEdu(r.id); }},L('세미나 삭제','删除研讨会')))));
   }
   function df(label, val, wide){ return h('div',{className:'sem-df'+(wide?' wide':'')}, h('span',{className:'sem-dl'},label), h('span',{className:'sem-dv'},val)); }
 
@@ -3153,22 +3282,22 @@ function SeminarTab(p){
     var selRow = list.filter(function(r){ return r.id===selId; })[0];
     // ── 표 (먼저) : 행 클릭 = 아래 카드 메모 선택 ──
     var out=[];
-    if(list.length===0){ out.push(h('tr',{key:'e'}, h('td',{colSpan:8,className:'empty'}, monLabel+' 세미나가 없습니다. [계획] 탭에서 추가하세요.'))); }
+    if(list.length===0){ out.push(h('tr',{key:'e'}, h('td',{colSpan:8,className:'empty'}, monLabel+L(' 세미나가 없습니다. [계획] 탭에서 추가하세요.',' 无研讨会。请在[计划]标签添加。')))); }
     else list.forEach(function(r){
       out.push(h('tr',{key:r.id,className:(r.id===selId?'cur':''),style:{cursor:'pointer'},onClick:function(){ setSel(r.id); }},
         h('td',{className:'tde'}, edT(r,'date')), h('td',{className:'tde'}, edT(r,'region')), h('td',{className:'tde'}, edT(r,'city')),
         h('td',null, tgtBadge(r.target)), h('td',{className:'tde',style:{minWidth:'180px'}}, edT(r,'content')),
         h('td',{className:'tde'}, edT(r,'lecturer')), h('td',{className:'num tde'}, edN(r,'costTot',0)),
-        h('td',{className:'num'}, h('span',{style:{color:(r.id===selId?'var(--tlD)':'var(--dim)'),fontWeight:800}}, r.id===selId?'▼ 열림':'메모'))));
+        h('td',{className:'num'}, h('span',{style:{color:(r.id===selId?'var(--tlD)':'var(--dim)'),fontWeight:800}}, r.id===selId?L('▼ 열림','▼ 展开'):L('메모','备注')))));
     });
     var tableCard = h('div',{className:'card wide'},
-      h('div',{className:'card-h'}, h('h3',null,'세미나 목록 · '+monLabel),
-        h('span',{className:'card-n'},'행을 클릭하면 아래 6단락 메모가 열립니다 · 표·메모는 실시간 연동')),
+      h('div',{className:'card-h'}, h('h3',null,L('세미나 목록 · ','研讨会列表 · ')+monLabel),
+        h('span',{className:'card-n'},L('행을 클릭하면 아래 6단락 메모가 열립니다 · 표·메모는 실시간 연동','点击行即可展开下方6段备注 · 表格与备注实时联动'))),
       h('div',{className:'tw'}, h('table',{className:'tbl',style:{minWidth:'980px'}},
-        h('thead',null, h('tr',null, h('th',null,'일자'),h('th',null,'구역'),h('th',null,'지역'),h('th',null,'목표고객'),h('th',null,'내용'),h('th',null,'강사'),h('th',{className:'num'},'총비용'),h('th',{className:'num'},'메모'))),
+        h('thead',null, h('tr',null, h('th',null,L('일자','日期')),h('th',null,L('구역','省份')),h('th',null,L('지역','地区')),h('th',null,L('목표고객','目标客户')),h('th',null,L('내용','内容')),h('th',null,L('강사','讲师')),h('th',{className:'num'},L('총비용','总费用')),h('th',{className:'num'},L('메모','备注')))),
         h('tbody',null, out))));
     // ── 카드 메모 (다음) ──
-    return h('div',{style:{display:'flex',flexDirection:'column',gap:'10px'}}, tableCard, selRow? memoCard(selRow) : null);
+    return h('div',{style:{display:'flex',flexDirection:'column',gap:'10px'}}, tableCard, selRow? memoCard(selRow) : null, (selRow && selRow.fu)? fuDetailCard() : null);
   }
 
   function memoCard(r){
@@ -3180,36 +3309,36 @@ function SeminarTab(p){
       h('div',{className:'sem-sec-b'}, fields)); }
     return h('div',{className:'card wide sem-memo'},
       h('div',{className:'card-h'},
-        h('h3',null,'세미나 상세 메모'),
+        h('h3',null,L('세미나 상세 메모','研讨会详情备注')),
         h('div',{style:{marginLeft:'auto',display:'flex',alignItems:'center',gap:'8px'}},
           tgtBadge(r.target),
-          h('span',{className:'card-n'}, (r.date||'일자미정')+' · '+(r.region||'')+' '+(r.city||'')))),
+          h('span',{className:'card-n'}, (r.date||L('일자미정','日期未定'))+' · '+(r.region||'')+' '+(r.city||'')))),
       h('div',{className:'sem-memo-grid'},
-        sec('1','세미나 개요', [
-          mf('세미나명', edT(r,'name'), true),
-          mf('일자', edT(r,'date')), mf('시간', edT(r,'time')),
-          mf('구역', edT(r,'region')), mf('지역', edT(r,'city')),
-          mf('장소', edT(r,'venue'), true) ]),
-        sec('2','개최 목적', [
-          mf('목적', edT(r,'purpose'), true),
-          h('div',{className:'sem-hint'},'예: 제품 진입 · 신규 고객 개발 · DSO 공략 · 기존 고객 유지 등') ]),
-        sec('3','대상 및 목표', [
-          mf('참석 대상', edT(r,'audience'), true),
-          mf('목표 인원', edN(r,'people',0)), mf('초청 고객 유형', tgtBadgeEdit(r)) ]),
-        sec('4','강연자 정보', [
-          mf('강연자명', edT(r,'lecturer')), mf('소속', edT(r,'lecAffil')),
-          mf('직함', edT(r,'lecTitle')), mf('주요 전문 분야', edT(r,'lecField')) ]),
-        sec('5','교육 내용', [
-          mf('강의 주제', edT(r,'content'), true),
-          mf('세부 일정', edT(r,'schedule'), true),
-          mf('Hands-on/케이스', edT(r,'hands'), true) ]),
-        sec('6','성과 및 F/U', [
-          mf('참석 인원', h('span',null, edN(r,'peopleAct',0), achieve!==null? h('span',{className:'dim',style:{marginLeft:'6px'}},'(목표 '+snum(r.people,0)+' · 달성 '+achieve+'%)'):null)),
-          mf('신규 고객', h('span',null, edN(r,'convAct',0), convR!==null? h('span',{className:'dim',style:{marginLeft:'6px'}},'(전환율 '+convR+'%)'):null)),
-          mf('관심 제품', edT(r,'fuProduct'), true),
-          mf('샘플 제공', edT(r,'fuSample')), mf('구매 전환', edT(r,'fuPurchase')),
-          mf('후속 방문 계획', edT(r,'fuFollow'), true) ], 'var(--grn)')),
-      h('p',{className:'ed-n',style:{marginTop:'10px'}},'* 각 항목을 더블클릭하면 그 자리에서 수정되고 즉시 저장됩니다. 위 표의 값과 실시간으로 연동됩니다(한쪽을 고치면 다른 쪽도 바뀝니다).'));
+        sec('1',L('세미나 개요','研讨会概要'), [
+          mf(L('세미나명','研讨会名称'), edT(r,'name'), true),
+          mf(L('일자','日期'), edT(r,'date')), mf(L('시간','时间'), edT(r,'time')),
+          mf(L('구역','省份'), edT(r,'region')), mf(L('지역','地区'), edT(r,'city')),
+          mf(L('장소','地点'), edT(r,'venue'), true) ]),
+        sec('2',L('개최 목적','举办目的'), [
+          mf(L('목적','目的'), edT(r,'purpose'), true),
+          h('div',{className:'sem-hint'},L('예: 제품 진입 · 신규 고객 개발 · DSO 공략 · 기존 고객 유지 등','例: 产品导入 · 新客户开发 · DSO攻略 · 老客户维护 等')) ]),
+        sec('3',L('대상 및 목표','对象及目标'), [
+          mf(L('참석 대상','参加对象'), edT(r,'audience'), true),
+          mf(L('목표 인원','目标人数'), edN(r,'people',0)), mf(L('초청 고객 유형','邀请客户类型'), tgtBadgeEdit(r)) ]),
+        sec('4',L('강연자 정보','讲师信息'), [
+          mf(L('강연자명','讲师姓名'), edT(r,'lecturer')), mf(L('소속','单位'), edT(r,'lecAffil')),
+          mf(L('직함','职务'), edT(r,'lecTitle')), mf(L('주요 전문 분야','主要专业领域'), edT(r,'lecField')) ]),
+        sec('5',L('교육 내용','教育内容'), [
+          mf(L('강의 주제','讲课主题'), edT(r,'content'), true),
+          mf(L('세부 일정','详细日程'), edT(r,'schedule'), true),
+          mf(L('Hands-on/케이스','实操/病例'), edT(r,'hands'), true) ]),
+        sec('6',L('성과 및 F/U','成果及F/U'), [
+          mf(L('참석 인원','参加人数'), h('span',null, edN(r,'peopleAct',0), achieve!==null? h('span',{className:'dim',style:{marginLeft:'6px'}},'('+L('목표','目标')+' '+snum(r.people,0)+' · '+L('달성','达成')+' '+achieve+'%)'):null)),
+          mf(L('신규 고객','新客户'), h('span',null, edN(r,'convAct',0), convR!==null? h('span',{className:'dim',style:{marginLeft:'6px'}},'('+L('전환율','转化率')+' '+convR+'%)'):null)),
+          mf(L('관심 제품','关注产品'), edT(r,'fuProduct'), true),
+          mf(L('샘플 제공','样品提供'), edT(r,'fuSample')), mf(L('구매 전환','购买转化'), edT(r,'fuPurchase')),
+          mf(L('후속 방문 계획','后续拜访计划'), edT(r,'fuFollow'), true) ], 'var(--grn)')),
+      h('p',{className:'ed-n',style:{marginTop:'10px'}},L('* 각 항목을 더블클릭하면 그 자리에서 수정되고 즉시 저장됩니다. 위 표의 값과 실시간으로 연동됩니다(한쪽을 고치면 다른 쪽도 바뀝니다).','* 双击每个项目即可就地修改并即时保存。与上方表格实时联动(改一处，另一处同步)。')));
   }
 
   /* ---------- 커스회의 ---------- */
@@ -3218,21 +3347,95 @@ function SeminarTab(p){
     rowsArr.forEach(function(r){ var m=monthOf(r); (byMonth[m]=byMonth[m]||[]).push(r); });
     var monthsShown=isAll? MONTHS : [mo]; var out=[];
     monthsShown.forEach(function(m){ var arr=byMonth[m]||[];
-      out.push(h('tr',{key:'m'+m,className:'hl'}, h('td',{colSpan:9,style:{fontWeight:800,color:'var(--tlD)'}}, m+'月 · '+arr.length+'회')));
-      if(arr.length===0) out.push(h('tr',{key:'m'+m+'e'}, h('td',{colSpan:9,className:'dim',style:{textAlign:'center',padding:'8px'}},'계획 없음')));
+      out.push(h('tr',{key:'m'+m,className:'hl'}, h('td',{colSpan:9,style:{fontWeight:800,color:'var(--tlD)'}}, m+'月 · '+arr.length+L('회','次'))));
+      if(arr.length===0) out.push(h('tr',{key:'m'+m+'e'}, h('td',{colSpan:9,className:'dim',style:{textAlign:'center',padding:'8px'}},L('계획 없음','暂无计划'))));
       arr.forEach(function(r){ out.push(h('tr',{key:r.id},
         h('td',{style:{fontWeight:700}}, r.round||''), h('td',{className:'tde'}, meetCell(r,'date')), h('td',{className:'tde'}, meetCell(r,'region')),
         h('td',{className:'tde'}, meetCell(r,'city')), h('td',{className:'tde'}, meetCell(r,'clinic')), h('td',{className:'tde'}, meetCell(r,'system')),
         h('td',{className:'tde'}, meetCell(r,'dealer')), h('td',{className:'num tde'}, meetCellN(r,'people')), h('td',{className:'tde'}, meetCell(r,'lecturer')))); });
     });
     return h('div',{className:'card wide'},
-      h('div',{className:'card-h'}, h('h3',null,'지역별 커스회의 · '+monLabel), h('button',{className:'btn pri sm',onClick:addMeet},'+ 회차 추가')),
+      h('div',{className:'card-h'}, h('h3',null,L('지역별 커스회의 · ','分地区客户会议 · ')+monLabel), h('button',{className:'btn pri sm',onClick:addMeet},L('+ 회차 추가','+ 添加场次'))),
       h('div',{className:'tw'}, h('table',{className:'tbl',style:{minWidth:'900px'}},
-        h('thead',null, h('tr',null, h('th',null,'회차'),h('th',null,'날짜'),h('th',null,'구역'),h('th',null,'지역'),h('th',null,'치과명'),h('th',null,'시스템'),h('th',null,'대리상'),h('th',{className:'num'},'인원'),h('th',null,'강사'))),
+        h('thead',null, h('tr',null, h('th',null,L('회차','场次')),h('th',null,L('날짜','日期')),h('th',null,L('구역','省份')),h('th',null,L('지역','地区')),h('th',null,L('치과명','诊所名')),h('th',null,L('시스템','系统')),h('th',null,L('대리상','代理商')),h('th',{className:'num'},L('인원','人数')),h('th',null,L('강사','讲师')))),
         h('tbody',null, out))),
-      h('p',{className:'ed-n',style:{marginTop:'8px'}},'* 지역별 커스회의는 월 최대 10회 배분입니다(기본 강사 林芳扬). 셀을 더블클릭해 치과명·시스템·대리상·인원을 채워 넣으세요.'));
+      h('p',{className:'ed-n',style:{marginTop:'8px'}},L('* 지역별 커스회의는 월 최대 10회 배분입니다(기본 강사 林芳扬). 셀을 더블클릭해 치과명·시스템·대리상·인원을 채워 넣으세요.','* 分地区客户会议每月最多10次(默认讲师 林芳扬)。双击单元格填写诊所名·系统·代理商·人数。')));
     function meetCell(r,f){ return h(EdCell,{row:r,locked:false,col:{ r:function(rr){ return rr[f]? rr[f] : h('span',{className:'dim'},'—'); }, edit:{type:'text',get:function(rr){return rr[f]||'';},set:function(rr,v){ updMeet(rr.id,f,v); }}}}); }
     function meetCellN(r,f){ return h(EdCell,{row:r,locked:false,col:{ r:function(rr){ return rr[f]?snum(rr[f],0):h('span',{className:'dim'},'—'); }, edit:{type:'num',get:function(rr){return rr[f]||0;},set:function(rr,v){ updMeet(rr.id,f,v); }}}}); }
+  }
+
+  /* ---------- 세미나 고객발굴 (CEO沙龙 FU 명단 · 계획 연동) ---------- */
+  function updFu(id, field, val){
+    setFu(function(prev){ return prev.map(function(r){ if(r.id!==id) return r;
+      var fv=(field==='usage')?(String(val).replace(/[^0-9.]/g,'')||''):val; var nr=Object.assign({},r); nr[field]=fv; return nr; }); });
+  }
+  function addFu(){
+    setFu(function(prev){ return prev.concat([{ id:'fu_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
+      no:String(prev.length+1), kind:'民营', name:'', clinic:'', dealer:'', sales:'', usage:'', join:'', isMega:'', attend:'', visitDate:'', inviteHO:'', deal:'' }]); });
+  }
+  function delFu(id){ if(!confirm('이 고객을 삭제하시겠습니까?')) return; setFu(function(prev){ return prev.filter(function(r){ return r.id!==id; }); }); }
+  function yes(v){ v=String(v||'').trim(); return v==='是'||v==='Y'||v==='y'||v==='유'||v==='O'||v==='예'; }
+  function fuKit(){
+    var COLS=[
+      ['no',L('No','序号'),1,'num'], ['kind',L('구분','区分'),1,''], ['name',L('이름','名字'),1,''],
+      ['clinic',L('단위(치과)','单位'),1,''], ['dealer',L('대리상','代理商'),1,''], ['sales',L('담당','负责'),1,''],
+      ['usage',L('연사용량','年使用量'),1,'num'], ['join',L('참여','参与'),0,''], ['isMega',L('메가젠고객','美格真客户'),1,''],
+      ['attend',L('실제참가','实际参加'),1,''], ['visitDate',L('후속방문일','拜访日期'),0,''], ['inviteHO',L('실습반초청','邀请实操'),0,''], ['deal',L('성사','成交'),1,'']
+    ];
+    var tot=fu.length;
+    var att=fu.filter(function(r){return yes(r.attend);}).length;
+    var mega=fu.filter(function(r){return yes(r.isMega);}).length;
+    var deals=fu.filter(function(r){return String(r.deal||'').trim()!=='';}).length;
+    var visited=fu.filter(function(r){return String(r.visitDate||'').trim()!=='';}).length;
+    var rate=function(a,b){ return b>0? Math.round(a/b*100):null; };
+    var rowsArr=fu.slice();
+    if(fso.k){ rowsArr.sort(function(a,b){ var av=(a[fso.k]==null?'':a[fso.k]).toString(), bv=(b[fso.k]==null?'':b[fso.k]).toString(); var c=av.localeCompare(bv,'ko',{numeric:true}); return fso.d==='asc'?c:-c; }); }
+    function fSort(k){ setFso(function(o){ if(o.k!==k) return {k:k,d:'asc'}; if(o.d==='asc') return {k:k,d:'desc'}; return {k:null,d:'asc'}; }); }
+    function fMark(k){ return fso.k!==k?'⇅':(fso.d==='asc'?'▲':'▼'); }
+    var kpi=h('div',{className:'kpis kpis-5',style:{marginBottom:'10px'}},
+      h(KPI,{label:L('명단 인원','名单人数'),value:nf(tot),unit:L('명','人')}),
+      h(KPI,{label:L('실제 참가','实际参加'),value:nf(att),unit:L('명','人'),sub:rate(att,tot)!=null?rate(att,tot)+'%':null,hero:1}),
+      h(KPI,{label:L('메가젠 고객','美格真客户'),value:nf(mega),unit:L('명','人'),sub:rate(mega,tot)!=null?rate(mega,tot)+'%':null}),
+      h(KPI,{label:L('후속 방문','已拜访'),value:nf(visited),unit:L('명','人')}),
+      h(KPI,{label:L('성사','成交'),value:nf(deals),unit:L('명','人'),sub:rate(deals,att)!=null?L('참가대비 ','参加比 ')+rate(deals,att)+'%':null}));
+    var head=h('tr',null, COLS.map(function(c){
+      return c[2]? h('th',{key:c[0],className:(c[3]||'')+' ',role:'button',onClick:function(){ fSort(c[0]); },title:L('정렬','排序')}, c[1],' ',h('span',{className:'dim',style:{fontSize:'9px'}},fMark(c[0])))
+        : h('th',{key:c[0],className:c[3]||''}, c[1]);
+    }).concat([h('th',{key:'x',className:'num'},L('삭제','删除'))]));
+    var body=rowsArr.length? rowsArr.map(function(r){
+      return h('tr',{key:r.id},
+        COLS.map(function(c){
+          var isYesCol=(c[0]==='attend'||c[0]==='isMega'||c[0]==='join');
+          return h('td',{key:c[0],className:(c[3]||'')+' tde'},
+            h(EdCell,{row:r,locked:false,col:{
+              r:function(rr){ var v=rr[c[0]]; if(v==null||v==='') return h('span',{className:'dim'},'—');
+                if(isYesCol && yes(v)) return h('span',{style:{color:'var(--grn)',fontWeight:800}}, L('○ 예','是'));
+                return v; },
+              edit:{type:'text',get:function(rr){ return rr[c[0]]||''; },set:function(rr,val){ updFu(rr.id,c[0],val); }} }}));
+        }).concat([h('td',{key:'x',className:'num'}, h('button',{className:'lnk',style:{color:'var(--red)'},onClick:function(){ delFu(r.id); }},'×'))]));
+    }) : [h('tr',{key:'e'}, h('td',{colSpan:14,className:'empty'}, L('명단이 없습니다.','暂无名单。')))];
+    var table=h('div',{className:'tw'}, h('table',{className:'tbl sem-fu-tbl',style:{minWidth:'1180px'}}, h('thead',null, head), h('tbody',null, body)));
+    return {kpi:kpi, table:table};
+  }
+  function renderCustList(){
+    var k=fuKit();
+    return h('div',{className:'sem-wrap'},
+      h('div',{className:'card wide'},
+        h('div',{className:'card-h'},
+          h('h3',null,L('세미나 고객발굴 · CEO沙龙 명단','研讨会客户挖掘 · CEO沙龙名单')),
+          h('div',{style:{marginLeft:'auto',display:'flex',gap:'6px',alignItems:'center'}},
+            h('span',{className:'card-n'}, L('7/13 深圳 CEO沙龙 연동 · 자동집계','7/13 深圳 CEO沙龙联动 · 自动统计')),
+            h('button',{className:'btn pri sm',onClick:addFu},L('+ 고객 추가','+ 添加客户')))),
+        k.kpi, k.table,
+        h('p',{className:'ed-n',style:{marginTop:'8px'}}, L('* CEO沙龙(7/13 深圳) 참석·초청 명단입니다. 셀 더블클릭으로 수정하면 즉시 저장되고 위 집계(참가·메가젠·성사)가 자동 계산됩니다. 주요 항목(구분·이름·단위·대리상·담당·실제참가·성사 등)은 헤더 클릭으로 정렬됩니다.','* CEO沙龙(7/13 深圳)参加·邀请名单。双击单元格修改即时保存，上方统计(参加·美格真·成交)自动计算。主要列(区分·名字·单位·代理商·负责·实际参加·成交等)点击表头排序。'))));
+  }
+  function fuDetailCard(){
+    var k=fuKit();
+    return h('div',{className:'card wide'},
+      h('div',{className:'card-h'},
+        h('h3',null,L('CEO沙龙 참석자 명단 (계획 연동)','CEO沙龙参加名单 (计划联动)')),
+        h('span',{className:'card-n'}, L('상세와 연동 · 자동집계','与详情联动 · 自动统计'))),
+      k.kpi, k.table);
   }
 }
 
@@ -3277,14 +3480,25 @@ function App(){
   var _m=useState(getCloudUrl); var gurl=_m[0], setGurl=_m[1];
   var _n=useState(false); var cfg=_n[0], setCfg=_n[1];
   var _p=useState({mgr:'',dealer:'',cust:'',weekly:'',inact:''}); var tprov=_p[0], setTprov=_p[1];
+  var _cv=useState('active'); var custView=_cv[0], setCustView=_cv[1];   // 고객 탭 하위: active|inact
   function setTP(k,v){ setTprov(function(o){ var n=Object.assign({},o); n[k]=v; return n; }); }
   var fileRef=useRef(null);
 
   // ── 세미나(화남 하반기) 상태 — 독립 저장 ──
   var _se=useState(function(){ return semLoad('edu', SEM_EDU_SEED); });   var semEdu=_se[0], setSemEdu=_se[1];
   var _sm=useState(function(){ return semLoad('meet', SEM_MEET_SEED); }); var semMeet=_sm[0], setSemMeet=_sm[1];
+  var _sfu=useState(function(){ return semLoad('fu', SEM_FU_SEED); });    var semFu=_sfu[0], setSemFu=_sfu[1];
+  var _org=useState(function(){ try{ var r=localStorage.getItem('hncrm_org_v1'); return r?JSON.parse(r):ORG_SEED; }catch(e){ return ORG_SEED; } });
+  var org=_org[0], setOrg=_org[1];
+  useEffect(function(){ try{ localStorage.setItem('hncrm_org_v1', JSON.stringify(org)); }catch(e){} },[org]);
   useEffect(function(){ semSave('edu', semEdu); },[semEdu]);
   useEffect(function(){ semSave('meet', semMeet); },[semMeet]);
+  useEffect(function(){ semSave('fu', semFu); },[semFu]);
+
+  // ── 언어(한국어/중문) ──
+  var _lg=useState(function(){ try{ return localStorage.getItem('hncrm_lang')||'ko'; }catch(e){ return 'ko'; } });
+  var lang=_lg[0], setLang=_lg[1];
+  useEffect(function(){ try{ localStorage.setItem('hncrm_lang', lang); }catch(e){} },[lang]);
 
   var notes=db.notes||{};
   var hidden=db.hidden||{};
@@ -3687,11 +3901,11 @@ function App(){
   // ---- cloud ----
   function payloadNow(){
     return {rows:rows, notes:notes, snaps:db.snaps||[], hidden:hidden,
-            acts:acts, iss:issOv, staff:staff, plans:plans};
+            acts:acts, iss:issOv, staff:staff, plans:plans, semEdu:semEdu, semMeet:semMeet};
   }
   function payloadNow(){
     return {rows:rows, notes:notes, snaps:db.snaps||[], hidden:hidden,
-            acts:acts, iss:issOv, staff:staff, plans:plans};
+            acts:acts, iss:issOv, staff:staff, plans:plans, semEdu:semEdu, semMeet:semMeet};
   }
   // 저장 시 자동으로 붙는 주차 라벨 (엑셀 기준일 = 최신 스냅샷, 없으면 오늘)
   function curWeekKey(){
@@ -3770,8 +3984,10 @@ function App(){
     }
     setDb({notes:o.notes||{}, snaps:sortSnaps(o.snaps||[]), hidden:o.hidden||{}, acts:o.acts||null,
       iss:o.iss||{hq:null,mgr:{},deal:{}}, staff:o.staff||{}, plans:o.plans||{}});
+    if(o.semEdu) setSemEdu(o.semEdu);
+    if(o.semMeet) setSemMeet(o.semMeet);
     setPick(null);
-    setMsg({t:'ok',m:'불러왔습니다 · '+nf(r.rows)+'개소 (저장 '+(r.at? String(r.at).slice(0,16).replace('T',' '):'-')+')'});
+    setMsg({t:'ok',m:'불러왔습니다 · '+nf(r.rows)+'개소'+(o.semEdu?(' · 세미나 '+o.semEdu.length+'건'):'')+' (저장 '+(r.at? String(r.at).slice(0,16).replace('T',' '):'-')+')'});
   }
 
   // 주차별 보관본에서 불러오기
@@ -3796,10 +4012,10 @@ function App(){
   }
 
   function exportJson(){
-    var blob=new Blob([JSON.stringify({rows:rows,notes:notes,snaps:db.snaps||[],hidden:hidden,acts:acts,iss:issOv,staff:staff,plans:plans,at:new Date().toISOString()},null,1)],{type:'application/json'});
+    var blob=new Blob([JSON.stringify({rows:rows,notes:notes,snaps:db.snaps||[],hidden:hidden,acts:acts,iss:issOv,staff:staff,plans:plans,semEdu:semEdu,semMeet:semMeet,at:new Date().toISOString()},null,1)],{type:'application/json'});
     var u=URL.createObjectURL(blob),a=document.createElement('a');
     a.href=u; a.download='화남CRM_백업_'+today()+'_'+rows.length+'개소.json'; a.click(); URL.revokeObjectURL(u);
-    setMsg({t:'ok',m:'백업 파일을 저장했습니다 · '+nf(rows.length)+'개소'});
+    setMsg({t:'ok',m:'백업 파일을 저장했습니다 · '+nf(rows.length)+'개소 · 세미나 '+semEdu.length+'건'});
   }
   function importJson(f){
     if(!f) return;
@@ -3815,8 +4031,10 @@ function App(){
         }
         setDb({notes:o.notes||{}, snaps:sortSnaps(o.snaps||[]), hidden:o.hidden||{}, acts:o.acts||null,
           iss:o.iss||{hq:null,mgr:{},deal:{}}, staff:o.staff||{}, plans:o.plans||{}});
+        if(o.semEdu) setSemEdu(o.semEdu);
+        if(o.semMeet) setSemMeet(o.semMeet);
         setPick(null);
-        setMsg({t:'ok',m:'백업을 복원했습니다.'});
+        setMsg({t:'ok',m:'백업을 복원했습니다.'+(o.semEdu?(' 세미나 '+o.semEdu.length+'건 포함.'):'')});
       }catch(err){ setMsg({t:'err',m:'백업 파일이 올바르지 않습니다.'}); }
     };
     fr.readAsText(f);
@@ -3838,6 +4056,9 @@ function App(){
     });
     var ws=XLSX.utils.json_to_sheet(data), wb=XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb,ws,'화남현황');
+    // 세미나·커스회의 시트 동봉
+    if((semEdu||[]).length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(semEduToRows(semEdu)),'교육세미나');
+    if((semMeet||[]).length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(semMeetToRows(semMeet)),'커스회의');
     XLSX.writeFile(wb,'화남_현황_'+(pick?(pick.y+'_'+pick.label):today())+'.xlsx');
   }
   function setNote(id,k,v){
@@ -3849,64 +4070,75 @@ function App(){
     });
   }
 
-  var TABS=[['overview','월별현황'],['weekly','주간현황'],['mgr','담당자'],['dealer','대리상'],['cust','고객'],['inact','비활성화 고객'],['sem','세미나 계획·실행']];
+  var TABS=[['overview','월별현황'],['weekly','주간현황'],['mgr','담당자'],['dealer','대리상'],['cust','고객'],['sem','세미나 계획·실행']];
+  var isInact = (tab==='inact') || (tab==='cust' && custView==='inact');  // 비활성화 = 고객 탭 하위
   var lastS=snaps.length? snaps[snaps.length-1] : null;
   var TITLE={overview:'월별현황',weekly:'주간현황',mgr:'담당자별 실적',dealer:'대리상별 실적',cust:'고객 목록',inact:'비활성화 고객',sem:'세미나 계획·실행'};
+  var TAB_ZH={overview:'月度概况',weekly:'周概况',mgr:'负责人',dealer:'代理商',cust:'客户',inact:'停滞客户',sem:'研讨会计划·执行'};
+  var TITLE_ZH={overview:'月度概况',weekly:'周概况',mgr:'负责人业绩',dealer:'代理商业绩',cust:'客户列表',inact:'停滞客户',sem:'研讨会计划·执行'};
+  var zh=(lang==='zh');
+  UI_LANG=lang;
+  var tTab=function(k,ko){ return zh? (TAB_ZH[k]||ko) : ko; };
+  var Ln=function(ko,cn){ return zh?cn:ko; };
   var hidCount=Object.keys(hidden).length;
 
   return h('div',{className:'shell'},
     /* ===== dark rail ===== */
     h('aside',{className:'rail'},
       h('div',{className:'rail-b'},
-        h('h1',null,'화남 CRM 현황판'),
-        h('p',null,'华南本部 · '+nf(rows.length)+'개 고객')),
+        h('h1',null, Ln('화남 CRM 현황판','华南 CRM 看板')),
+        h('p',null,'华南本部 · '+nf(rows.length)+Ln('개 고객','家客户'))),
 
       h('div',{className:'rail-s'},
-        h('h4',null,'메뉴'),
+        h('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'7px'}},
+          h('h4',{style:{marginBottom:0}}, zh?'菜单':'메뉴'),
+          h('button',{className:'rbtn',style:{width:'auto',margin:0,padding:'3px 9px',fontSize:'11.5px'},
+            title:'한국어/中文 전환',
+            onClick:function(){ setLang(zh?'ko':'zh'); }}, zh?'한국어':'中文')),
         h('nav',{className:'rnav'}, TABS.map(function(t){
           return h('button',{key:t[0],className:'rb'+(tab===t[0]?' on':''),
-            onClick:function(){setTab(t[0]);}}, t[1]);
+            onClick:function(){setTab(t[0]);}}, tTab(t[0],t[1]));
         }))),
 
       h('div',{className:'rail-s'},
-        h('h4',null,'필터'),
-        h('input',{className:'rsel',placeholder:'고객명·편코드 검색',value:q,
+        h('h4',null, Ln('필터','筛选')),
+        h('input',{className:'rsel',placeholder:Ln('고객명·편코드 검색','客户名·编码搜索'),value:q,
           onChange:function(e){setQ(e.target.value);}}),
         h('select',{className:'rsel',value:flt.prov,onChange:function(e){setFlt(Object.assign({},flt,{prov:e.target.value,mgr:''}));}},
-          h('option',{value:''},'전체 지역'),provs.map(function(x){return h('option',{key:x,value:x},x);})),
+          h('option',{value:''},Ln('전체 지역','全部地区')),provs.map(function(x){return h('option',{key:x,value:x},x);})),
         h('select',{className:'rsel',value:flt.mgr,onChange:function(e){setFlt(Object.assign({},flt,{mgr:e.target.value}));}},
-          h('option',{value:''},'전체 담당자'),mgrs.map(function(x){return h('option',{key:x,value:x},x);})),
+          h('option',{value:''},Ln('전체 담당자','全部负责人')),mgrs.map(function(x){return h('option',{key:x,value:x},x);})),
         h('select',{className:'rsel',value:flt.dealer,onChange:function(e){setFlt(Object.assign({},flt,{dealer:e.target.value}));}},
-          h('option',{value:''},'전체 대리상'),h('option',{value:'__none'},'(미배정)'),
+          h('option',{value:''},Ln('전체 대리상','全部代理商')),h('option',{value:'__none'},Ln('(미배정)','(未分配)')),
           dealers.map(function(x){return h('option',{key:x,value:x},x);})),
         h('select',{className:'rsel',value:flt.type,onChange:function(e){setFlt(Object.assign({},flt,{type:e.target.value}));}},
-          h('option',{value:''},'전체 유형'),types.map(function(x){return h('option',{key:x,value:x},x);})),
+          h('option',{value:''},Ln('전체 유형','全部类型')),types.map(function(x){return h('option',{key:x,value:x},x);})),
         h('select',{className:'rsel',value:flt.flag,onChange:function(e){setFlt(Object.assign({},flt,{flag:e.target.value}));}},
-          h('option',{value:''},'특별선택'),
-          h('option',{value:'bd'},'BD고객'),
-          h('option',{value:'zero'},'실적없음')),
-        filtered? h('button',{className:'rbtn',onClick:function(){setFlt({prov:'',mgr:'',dealer:'',type:'',flag:''});setQ('');}},'필터 초기화'):null,
-        hidCount? h('button',{className:'rbtn',onClick:function(){ setDb(Object.assign({},db,{hidden:{}})); }},'숨긴 카드 '+hidCount+'개 모두 보기'):null),
+          h('option',{value:''},Ln('특별선택','特别筛选')),
+          h('option',{value:'bd'},Ln('BD고객','BD客户')),
+          h('option',{value:'zero'},Ln('실적없음','无业绩'))),
+        filtered? h('button',{className:'rbtn',onClick:function(){setFlt({prov:'',mgr:'',dealer:'',type:'',flag:''});setQ('');}},Ln('필터 초기화','清除筛选')):null,
+        hidCount? h('button',{className:'rbtn',onClick:function(){ setDb(Object.assign({},db,{hidden:{}})); }},Ln('숨긴 카드 '+hidCount+'개 모두 보기','显示隐藏卡片 '+hidCount+' 个')):null),
 
       h('div',{className:'rail-s'},
-        h('h4',null,'데이터'),
+        h('h4',null, Ln('데이터','数据')),
         h('div',{className:'rgrid'},
-          h('button',{className:'rbtn pri',onClick:function(){fileRef.current.click();},disabled:busy},'엑셀 불러오기'),
-          h('button',{className:'rbtn',onClick:doCloudSave,disabled:busy},'클라우드 저장'),
-          h('button',{className:'rbtn',onClick:doCloudLoad,disabled:busy},'클라우드 불러오기'),
-          h('button',{className:'rbtn',onClick:doCloudWeeks,disabled:busy,title:'주차별 영구 보관본에서 불러오기'},'주차별 불러오기'),
-          h('button',{className:'rbtn',onClick:exportXlsx,disabled:busy},'엑셀 다운로드'),
-          h('button',{className:'rbtn',onClick:exportJson,disabled:busy},'백업'),
-          h('label',{className:'rbtn fl'},'복원',
+          h('button',{className:'rbtn pri',onClick:function(){fileRef.current.click();},disabled:busy},Ln('엑셀 불러오기','导入Excel')),
+          h('button',{className:'rbtn',onClick:doCloudSave,disabled:busy},Ln('클라우드 저장','云端保存')),
+          h('button',{className:'rbtn',onClick:doCloudLoad,disabled:busy},Ln('클라우드 불러오기','云端读取')),
+          h('button',{className:'rbtn',onClick:doCloudWeeks,disabled:busy,title:Ln('주차별 영구 보관본에서 불러오기','按周读取存档')},Ln('주차별 불러오기','按周读取')),
+          h('button',{className:'rbtn',onClick:exportXlsx,disabled:busy},Ln('엑셀 다운로드','导出Excel')),
+          h('button',{className:'rbtn',onClick:exportJson,disabled:busy},Ln('백업','备份')),
+          h('label',{className:'rbtn fl'},Ln('복원','还原'),
             h('input',{type:'file',accept:'.json',onChange:function(e){importJson(e.target.files[0]); e.target.value='';}})),
           h('button',{className:'rbtn'+(cfg?' on':''),onClick:function(){
             var next=!cfg; setCfg(next);
             if(next){ try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); } }
-          }},'설정'))),
+          }},Ln('설정','设置')))),
 
       h('div',{className:'rfoot'},
-        '메모 '+Object.keys(notes).length+'건 · 스냅샷 '+snaps.length+'개',h('br'),
-        '이 기기에 저장'+(gurl?' · 클라우드 연결됨':''),h('br'),
+        Ln('메모 '+Object.keys(notes).length+'건 · 스냅샷 '+snaps.length+'개','备注 '+Object.keys(notes).length+' · 快照 '+snaps.length),h('br'),
+        Ln('이 기기에 저장'+(gurl?' · 클라우드 연결됨':''),'本机保存'+(gurl?' · 已连云端':'')),h('br'),
         '华南本部 · MEGAGEN'),
 
       h('input',{ref:fileRef,type:'file',accept:'.xlsx,.xls',style:{display:'none'},
@@ -3917,16 +4149,16 @@ function App(){
     h('main',{className:'main'},
       h('div',{className:'mhead'},
         h('div',null,
-          h('h2',null,TITLE[tab]),
-          h('div',{className:'sub'}, tab==='sem'? '화남 하반기 교육계획 · 광동·광서·해남 · 인원 달성 95% · 전환 최소 30%'
-            : (pick? ('과거 주차 시점 — '+pick.y+'-'+pick.label)
-            : ('단위: 임플란트 개 · 1~'+pm+'月 누계 (엑셀 기준)')))),
+          h('h2',null, zh?(TITLE_ZH[tab]||TITLE[tab]):TITLE[tab]),
+          h('div',{className:'sub'}, tab==='sem'? Ln('화남 하반기 교육계획 · 광동·광서·해남 · 인원 달성 95% · 전환 최소 30%','华南下半年教育计划 · 广东·广西·海南 · 人数达成95% · 转化最低30%')
+            : (pick? (Ln('과거 주차 시점 — ','历史周 — ')+pick.y+'-'+pick.label)
+            : (Ln('단위: 임플란트 개 · 1~','单位: 种植体 个 · 1~')+pm+Ln('月 누계 (엑셀 기준)','月累计 (以Excel为准)'))))),
         h('div',{className:'mmeta'},
-          tab==='sem'? h('b',{className:'vw'},'화남 하반기')
-            : (pick? h('b',{className:'vw'},pick.y+'-'+pick.label+' 시점 보기') : '데이터 기준일: 2026. 07. 15'),
+          tab==='sem'? h('b',{className:'vw'},Ln('화남 하반기','华南下半年'))
+            : (pick? h('b',{className:'vw'},pick.y+'-'+pick.label+Ln(' 시점 보기',' 时点查看')) : Ln('데이터 기준일: 2026. 07. 15','数据基准日: 2026. 07. 15')),
           h('br'),
-          tab==='sem'? '세미나 '+semEdu.length+'건 · 커스회의 '+semMeet.length+'건'
-            : (snaps.length? ('스냅샷 '+snaps.length+'개 · 최근 '+lastS.y+'-'+lastS.label) : '스냅샷 없음'))),
+          tab==='sem'? Ln('세미나 ','研讨会 ')+semEdu.length+Ln('건 · 커스회의 ','件 · 客户会议 ')+semMeet.length+Ln('건','件')
+            : (snaps.length? (Ln('스냅샷 ','快照 ')+snaps.length+Ln('개 · 최근 ','个 · 最近 ')+lastS.y+'-'+lastS.label) : Ln('스냅샷 없음','无快照')))),
 
       cfg? h('div',{className:'cfg'},
         h('div',{className:'np-l'},'Google Apps Script 웹앱 URL (유아님 전용 — 이 기기에만 저장됩니다)'),
@@ -3942,11 +4174,11 @@ function App(){
       ):null,
 
       (!rows.length && tab!=='sem')? h('div',{className:'empty-b'},
-        h('b',null,'데이터가 없습니다'),
-        h('div',null,'왼쪽 ',h('b',null,'「엑셀 불러오기」'),'로 CRM 파일을 올리거나, ',
-          h('b',null,'「클라우드 불러오기」'),' / ',h('b',null,'「복원」'),'으로 저장된 데이터를 가져오세요.'),
+        h('b',null,Ln('데이터가 없습니다','暂无数据')),
+        h('div',null,Ln('왼쪽 ','左侧 '),h('b',null,Ln('「엑셀 불러오기」','「导入Excel」')),Ln('로 CRM 파일을 올리거나, ','上传CRM文件，或用 '),
+          h('b',null,Ln('「클라우드 불러오기」','「云端读取」')),' / ',h('b',null,Ln('「복원」','「还原」')),Ln('으로 저장된 데이터를 가져오세요.','读取已保存数据。')),
         h('div',{className:'ed-n',style:{marginTop:'6px'}},
-          '※ 이 배포본에는 고객 데이터가 포함되어 있지 않습니다.')
+          Ln('※ 이 배포본에는 고객 데이터가 포함되어 있지 않습니다.','※ 本发布版不含客户数据。'))
       ) : null,
 
       msg? h('div',{className:'toast '+msg.t,role:'status'},msg.m):null,
@@ -3954,32 +4186,32 @@ function App(){
 
       tab==='sem'? null : h(PeriodBar,{snaps:snaps,cur:pick,y:py,m:pm,onYear:pickYear,onMonth:pickMonth,onPick:setPick}),
 
-      tab==='sem'? null : (tab==='inact')? h(InactKpi,{rows:kview, pm:pm, prevRows:rows}) :
+      tab==='sem'? null : isInact? h(InactKpi,{rows:kview, pm:pm, prevRows:rows}) :
       h('div',{className:'kpis kpis-5'},
-        h(KPI,{label:'고객수',value:nf(A.n),unit:'개소',
-          sub:(filtered||tabProv)?('전체 '+nf(baseRows.length)+'개 중'):null,prev:pv,delta:pv?A.n-pv.n:null}),
-        h(KPI,{label:'거래 고객',value:nf(A.act),unit:'개소',sub:'1~'+pm+'月 누적',prev:pv,delta:pv?A.act-pv.act:null}),
-        h(KPI,{label:MON[pm-1]+' 신규 고객',value:nf(NEW.cur),unit:'개소',
-          sub:'2026년 누적 '+nf(NEW.cum)+'개소',
+        h(KPI,{label:Ln('고객수','客户数'),value:nf(A.n),unit:Ln('개소','家'),
+          sub:(filtered||tabProv)?Ln('전체 '+nf(baseRows.length)+'개 중','共 '+nf(baseRows.length)+' 家中'):null,prev:pv,delta:pv?A.n-pv.n:null}),
+        h(KPI,{label:Ln('거래 고객','成交客户'),value:nf(A.act),unit:Ln('개소','家'),sub:'1~'+pm+Ln('月 누적','月累计'),prev:pv,delta:pv?A.act-pv.act:null}),
+        h(KPI,{label:MON[pm-1]+Ln(' 신규 고객','新客户'),value:nf(NEW.cur),unit:Ln('개소','家'),
+          sub:Ln('2026년 누적 '+nf(NEW.cum)+'개소','2026年累计 '+nf(NEW.cum)+' 家'),
           prev:NEW.prev!==null?{}:null, delta:NEW.prev!==null? NEW.cur-NEW.prev : null}),
-        h(KPI,{label:'3개월 미구매',value:nf(R3.no),unit:'개소',warn:R3.no>0,
-          sub:'중단 '+nf(R3.churn)+' + 미개시 '+nf(R3.never),
+        h(KPI,{label:Ln('3개월 미구매','3个月未购'),value:nf(R3.no),unit:Ln('개소','家'),warn:R3.no>0,
+          sub:Ln('중단 '+nf(R3.churn)+' + 미개시 '+nf(R3.never),'中断 '+nf(R3.churn)+' + 未开始 '+nf(R3.never)),
           prev:R3p?{}:null, delta:R3p? R3.no-R3p.no : null, invert:1}),
-        h(KPI,{label:'실구매율',value:pf(R3.rate),sub:MON[R3.lo]+'~'+MON[R3.hi-1]+' 구매 '+nf(R3.yes)+'개소',
+        h(KPI,{label:Ln('실구매율','实购率'),value:pf(R3.rate),sub:MON[R3.lo]+'~'+MON[R3.hi-1]+Ln(' 구매 ','购买 ')+nf(R3.yes)+Ln('개소','家'),
           prev:R3p?{}:null, delta:R3p? R3.rate-R3p.rate : null, pct:1}),
-        h(KPI,{label:'고객당 평균구매수',value:A.avg.toFixed(1),unit:'개',prev:pv,delta:pv?A.avg-pv.avg:null,dec:1})),
+        h(KPI,{label:Ln('고객당 평균구매수','客均购买数'),value:A.avg.toFixed(1),unit:Ln('개','个'),prev:pv,delta:pv?A.avg-pv.avg:null,dec:1})),
 
-      (tab!=='inact' && tab!=='sem' && pm===NM)? h('div',{className:'note-w'},
-        '※ '+MON[NM-1]+'은 진행 중인 달입니다(15일 기준). 3개월 창에 미완 월이 포함되어 미구매·실구매율이 실제보다 나쁘게 보일 수 있습니다.'
+      (!isInact && tab!=='sem' && pm===NM)? h('div',{className:'note-w'},
+        Ln('※ '+MON[NM-1]+'은 진행 중인 달입니다(15일 기준). 3개월 창에 미완 월이 포함되어 미구매·실구매율이 실제보다 나쁘게 보일 수 있습니다.','※ '+MON[NM-1]+'为进行中月份(以15日为准)。3个月窗口含未完月，未购·实购率可能显得比实际差。')
       ) : null,
 
-      (tab==='inact'||tab==='sem')? null : h('div',{className:'kpis kpis-s'},
+      (isInact||tab==='sem')? null : h('div',{className:'kpis kpis-s'},
         SYS.map(function(sn,i){
           var v=A.sys[i], sh=A.total? v/A.total*100 : 0;
-          return h(KPI,{key:i,label:sn,value:nf(v),unit:'개',sub:A.total? pf(sh)+' 비중':null,
+          return h(KPI,{key:i,label:sn,value:nf(v),unit:Ln('개','个'),sub:A.total? pf(sh)+Ln(' 비중',' 占比'):null,
             prev:pv&&pv.sys?pv:null, delta:(pv&&pv.sys)? v-(pv.sys[i]||0) : null});
         }),
-        h(KPI,{label:'총 판매수량',value:nf(A.total),unit:'개',hero:1,sub:'AO+AR+ST+BD+ARi',
+        h(KPI,{label:Ln('총 판매수량','总销量'),value:nf(A.total),unit:Ln('개','个'),hero:1,sub:'AO+AR+ST+BD+ARi',
           prev:pv,delta:pv?A.total-pv.total:null})),
 
       tab==='sem'? null : h('div',{className:'snaps'},
@@ -4004,12 +4236,14 @@ function App(){
         autoActs:function(){ return autoIssues(rows,pm); }}):null,
       tab==='weekly'? h(WeeklyTab,{snaps:snaps,rows:tabRows('weekly'),prev:prev,notes:notes,C:C,
         provs:provs, prov:tprov.weekly, onProv:function(v){ setTP('weekly',v); }, counts:provCounts}):null,
-      tab==='mgr'? h(MgrTab,{by:groupOf(tabRows('mgr'),'mgr'),C:C,rows:tabRows('mgr'),pm:pm,
+      tab==='mgr'? h('div',null,
+        h(OrgChart,{org:org,setOrg:setOrg,lang:lang}),
+        h(MgrTab,{by:groupOf(tabRows('mgr'),'mgr'),C:C,rows:tabRows('mgr'),pm:pm,
         provs:provs, prov:tprov.mgr, onProv:function(v){ setTP('mgr',v); }, counts:provCounts,
         mergeIss:function(a){ return mergeIss(a,'mgr'); },
         onIssEdit:function(k,j,v){ grpEdit('mgr',k,j,v); },
         onIssDel:function(k,j){ grpDel('mgr',k,j); },
-        onIssAdd:function(k){ grpAdd('mgr',k); }}):null,
+        onIssAdd:function(k){ grpAdd('mgr',k); }})):null,
       tab==='dealer'? h(DealTab,{by:groupOf(tabRows('dealer'),'dealer'),C:C,rows:tabRows('dealer'),pm:pm,
         staff:staff, onStaff:setStaff, locked:!!pick,
         provs:provs, prov:tprov.dealer, onProv:function(v){ setTP('dealer',v); }, counts:provCounts,
@@ -4018,13 +4252,20 @@ function App(){
         onIssDel:function(k,j){ grpDel('deal',k,j); },
         onIssAdd:function(k){ grpAdd('deal',k); },
         staff:staff, onStaff:setStaff}):null,
-      tab==='cust'? h(CustTab,{view:tabRows('cust'),notes:notes,setNote:setNote,sort:sort,setSort:setSort,sel:sel,setSel:setSel,
-        prev:prev,pick:pick,C:C,onEdit:editField,onCell:editCell,locked:!!pick,dealers:dealers,types:types,mgrs:mgrs,pm:pm,
-        provs:provs, prov:tprov.cust, onProv:function(v){ setTP('cust',v); }, counts:provCounts}):null,
-      tab==='inact'? h(InactiveTab,{rows:tabRows('inact'),pm:pm,onEdit:editField,C:C,locked:!!pick,
-        dealers:dealers, types:types,
-        provs:provs, prov:tprov.inact, onProv:function(v){ setTP('inact',v); }, counts:provCounts}):null,
-      tab==='sem'? h(SeminarTab,{edu:semEdu,setEdu:setSemEdu,meet:semMeet,setMeet:setSemMeet}):null
+      tab==='cust'? h('div',null,
+        h('div',{className:'segs',style:{marginBottom:'10px'}},
+          h('span',{className:'plb'}, zh?'客户':'고객'),
+          h('div',{className:'segb',style:{marginLeft:0}},
+            h('button',{className:'sg'+(custView==='active'?' on':''),onClick:function(){ setCustView('active'); }}, zh?'现有客户列表':'현재 고객목록'),
+            h('button',{className:'sg'+(custView==='inact'?' on':''),onClick:function(){ setCustView('inact'); }}, zh?'停滞客户':'비활성화 고객'))),
+        custView==='active'
+          ? h(CustTab,{view:tabRows('cust'),notes:notes,setNote:setNote,sort:sort,setSort:setSort,sel:sel,setSel:setSel,
+              prev:prev,pick:pick,C:C,onEdit:editField,onCell:editCell,locked:!!pick,dealers:dealers,types:types,mgrs:mgrs,pm:pm,
+              provs:provs, prov:tprov.cust, onProv:function(v){ setTP('cust',v); }, counts:provCounts})
+          : h(InactiveTab,{rows:tabRows('cust'),pm:pm,onEdit:editField,C:C,locked:!!pick,
+              dealers:dealers, types:types,
+              provs:provs, prov:tprov.cust, onProv:function(v){ setTP('cust',v); }, counts:provCounts})):null,
+      tab==='sem'? h(SeminarTab,{edu:semEdu,setEdu:setSemEdu,meet:semMeet,setMeet:setSemMeet,fu:semFu,setFu:setSemFu,lang:lang}):null
     )
   );
 }
