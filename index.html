@@ -501,6 +501,9 @@ td.tde{position:relative}
 .sem-fu-tbl{font-size:13.5px}
 .sem-fu-tbl th{font-size:12px}
 .sem-fu-tbl td{padding:6px 8px}
+.sem-pe{font-size:13.5px}
+.sem-pe th{font-size:11.5px}
+.sem-pe td{padding:6px 8px}
 /* 조직도 */
 .org-top{display:flex;justify-content:center;align-items:center;gap:40px;margin:8px 0 18px;flex-wrap:wrap}
 .org-box{background:#2f4f7f;color:#fff;border-radius:4px;padding:8px 16px;font-weight:800;font-size:14px;text-align:center;min-width:96px}
@@ -1022,10 +1025,13 @@ function cloudSaveIndex(url, weeks){
   return cloudSave(url, {weeks:weeks, rows:[], _idx:1}, 'index');
 }
 
-var ZH_DICT={"현황 분석 / 이슈사항": "现状分析 / 问题", "현황 분석 · 영업 액션": "现状分析 · 销售行动", "화남본부 현황 분석 · 이슈사항": "华南本部现状分析 · 问题", "담당자별 이슈사항": "负责人问题", "대리상별 이슈사항": "代理商问题", "담당자별 실적": "负责人业绩", "대리상별 실적": "代理商业绩", "고객 목록": "客户列表", "시스템별 구성": "各系统构成", "월별 판매수량": "各月销量", "시스템별 판매수량": "各系统销量", "담당자별 판매수량": "各负责人销量", "대리상별 시스템 수량": "各代理商系统数量", "담당자별 시스템 수량": "各负责人系统数量", "판매개수 누적추세": "销量累计趋势", "방문 누계 추세": "拜访累计趋势", "가동률 추세": "活跃率趋势", "지역별 비중 추이": "各地区占比趋势", "신규 고객 추이": "新客户趋势", "증가 TOP 10": "增长 TOP 10", "월별 시스템 수량": "各月系统数量", "월별 이슈 액션플랜": "各月问题行动计划", "액션 플랜": "行动计划", "개선사항 (더블클릭 수정)": "改进事项 (双击修改)", "영업 액션 (더블클릭 수정)": "销售行动 (双击修改)", "직접 입력한 이슈": "手动录入的问题", "자동 분석 다시": "重新自动分析", "현황 분석": "现状分析", "이슈사항": "问题", "월별 누계 (엑셀)": "各月累计 (Excel)", "월별현황": "月度概况", "주간현황": "周概况", "고객명": "客户名", "담당자": "负责人", "대리상": "代理商", "유형": "类型", "방문": "拜访", "판매": "销售", "증감": "增减", "시스템": "系统", "첫 거래": "首次成交", "신규 등록": "新登记", "판매수량": "销量", "방문 메모": "拜访备注", "메가젠 담당": "美格真负责", "대리상 직원": "代理商员工", "진할수록 많음": "颜色越深越多", "100% 기준": "100%基准", "구역": "省份", "지역": "地区", "합계": "合计", "전체": "全部", "현재": "当前", "이전": "上期", "목표": "目标", "실제": "实际", "비용": "费用", "인원": "人数", "치과": "诊所", "치과명": "诊所名", "회차": "场次", "장소": "地点", "소속": "单位", "직함": "职务", "시간": "时间", "목적": "目的", "내용": "内容", "날짜": "日期", "일자": "日期", "강사": "讲师", "전환": "转化", "달성": "达成", "비중": "占比", "실적": "业绩", "상세": "详情", "메모": "备注", "삭제": "删除", "추가": "添加", "저장": "保存", "설정": "设置", "정렬": "排序", "상위": "前列", "당월": "当月", "증가": "增长", "신규": "新", "누계": "累计", "누적": "累计", "편중": "集中", "미지정": "未指定", "미배정": "未分配", "정상 구매": "正常购买", "소량 구매": "少量购买", "정체 고객": "停滞客户", "BD고객": "BD客户", "실적없음": "无业绩", "거래 끊김": "交易中断", "신규 거래 개시": "新开始交易", "당월 증가": "当月增长", "당월 신규": "当月新增", "미구매": "未购", "거래 고객": "成交客户", "고객수": "客户数", "거래": "交易", "고객": "客户", "기초고객": "基础客户", "정상": "正常", "양호": "良好", "주의": "注意", "하락": "下降", "현황": "现状", "숨기기": "隐藏", "펼치기": "展开", "▸ 보기": "▸ 查看", "▼ 열림": "▼ 展开", "▾ 숨김": "▾ 收起", "+ 항목 추가": "+ 添加项", "최신으로": "回到最新", "닫기": "关闭", "더하기": "相加", "덮어쓰기": "覆盖", "완료": "完成", "참고": "参考", "해당": "对应", "5개 이하": "5个以下", "전체 고객": "全部客户", "전체 고객수": "全部客户数", "이슈가 없습니다.": "暂无问题", "정체 고객이 없습니다.": "暂无停滞客户", "증가한 고객이 없습니다.": "暂无增长客户", "신규 거래 개시 고객이 없습니다.": "暂无新开始交易客户", "표시할 데이터가 없습니다.": "暂无可显示数据", "해당하는 고객이 없습니다.": "暂无符合客户", "특이사항 없음": "无特殊事项", "변동 없음": "无变动", "설명을 입력하세요": "请输入说明", "대응 방안을 더블클릭해 작성하세요": "双击填写应对方案", "액션을 더블클릭해 작성하세요": "双击填写行动", "광동": "广东", "광서": "广西", "해남": "海南", "데이터": "数据", "필터": "筛选", "메뉴": "菜单", "스냅샷 없음": "无快照", "고객유형별": "按客户类型", "개선사항": "改进事项", "영업 액션": "销售行动", "현황 분석 · 이슈사항": "现状分析 · 问题", "연도":"年度","월":"月","주":"周","1월":"1月","2월":"2月","3월":"3月","4월":"4月","5월":"5月","6월":"6月","7월":"7月","8월":"8月","9월":"9月","10월":"10月","11월":"11月","12월":"12月","스냅샷 저장 시 증감 표시":"保存快照后显示增减","1月은 비교 대상이 없습니다":"1月无可比较对象","이전 스냅샷이 있어야 증감이 표시됩니다":"需有上一快照才显示增减"};
+var ZH_DICT={"현황 분석 / 이슈사항": "现状分析 / 问题", "현황 분석 · 영업 액션": "现状分析 · 销售行动", "화남본부 현황 분석 · 이슈사항": "华南本部现状分析 · 问题", "담당자별 이슈사항": "负责人问题", "대리상별 이슈사항": "代理商问题", "담당자별 실적": "负责人业绩", "대리상별 실적": "代理商业绩", "고객 목록": "客户列表", "시스템별 구성": "各系统构成", "월별 판매수량": "各月销量", "시스템별 판매수량": "各系统销量", "담당자별 판매수량": "各负责人销量", "대리상별 시스템 수량": "各代理商系统数量", "담당자별 시스템 수량": "各负责人系统数量", "판매개수 누적추세": "销量累计趋势", "방문 누계 추세": "拜访累计趋势", "가동률 추세": "活跃率趋势", "지역별 비중 추이": "各地区占比趋势", "신규 고객 추이": "新客户趋势", "증가 TOP 10": "增长 TOP 10", "월별 시스템 수량": "各月系统数量", "월별 이슈 액션플랜": "各月问题行动计划", "액션 플랜": "行动计划", "개선사항 (더블클릭 수정)": "改进事项 (双击修改)", "영업 액션 (더블클릭 수정)": "销售行动 (双击修改)", "직접 입력한 이슈": "手动录入的问题", "자동 분석 다시": "重新自动分析", "현황 분석": "现状分析", "이슈사항": "问题", "월별 누계 (엑셀)": "各月累计 (Excel)", "월별현황": "月度概况", "주간현황": "周概况", "고객명": "客户名", "담당자": "负责人", "대리상": "代理商", "유형": "类型", "방문": "拜访", "판매": "销售", "증감": "增减", "시스템": "系统", "첫 거래": "首次成交", "신규 등록": "新登记", "판매수량": "销量", "방문 메모": "拜访备注", "메가젠 담당": "美格真负责", "대리상 직원": "代理商员工", "진할수록 많음": "颜色越深越多", "100% 기준": "100%基准", "구역": "省份", "지역": "地区", "합계": "合计", "전체": "全部", "현재": "当前", "이전": "上期", "목표": "目标", "실제": "实际", "비용": "费用", "인원": "人数", "치과": "诊所", "치과명": "诊所名", "회차": "场次", "장소": "地点", "소속": "单位", "직함": "职务", "시간": "时间", "목적": "目的", "내용": "内容", "날짜": "日期", "일자": "日期", "강사": "讲师", "전환": "转化", "달성": "达成", "비중": "占比", "실적": "业绩", "상세": "详情", "메모": "备注", "삭제": "删除", "추가": "添加", "저장": "保存", "설정": "设置", "정렬": "排序", "상위": "前列", "당월": "当月", "증가": "增长", "신규": "新", "누계": "累计", "누적": "累计", "편중": "集中", "미지정": "未指定", "미배정": "未分配", "정상 구매": "正常购买", "소량 구매": "少量购买", "정체 고객": "停滞客户", "BD고객": "BD客户", "실적없음": "无业绩", "거래 끊김": "交易中断", "신규 거래 개시": "新开始交易", "당월 증가": "当月增长", "당월 신규": "当月新增", "미구매": "未购", "거래 고객": "成交客户", "고객수": "客户数", "거래": "交易", "고객": "客户", "기초고객": "基础客户", "정상": "正常", "양호": "良好", "주의": "注意", "하락": "下降", "현황": "现状", "숨기기": "隐藏", "펼치기": "展开", "▸ 보기": "▸ 查看", "▼ 열림": "▼ 展开", "▾ 숨김": "▾ 收起", "+ 항목 추가": "+ 添加项", "최신으로": "回到最新", "닫기": "关闭", "더하기": "相加", "덮어쓰기": "覆盖", "완료": "完成", "참고": "参考", "해당": "对应", "5개 이하": "5个以下", "전체 고객": "全部客户", "전체 고객수": "全部客户数", "이슈가 없습니다.": "暂无问题", "정체 고객이 없습니다.": "暂无停滞客户", "증가한 고객이 없습니다.": "暂无增长客户", "신규 거래 개시 고객이 없습니다.": "暂无新开始交易客户", "표시할 데이터가 없습니다.": "暂无可显示数据", "해당하는 고객이 없습니다.": "暂无符合客户", "특이사항 없음": "无特殊事项", "변동 없음": "无变动", "설명을 입력하세요": "请输入说明", "대응 방안을 더블클릭해 작성하세요": "双击填写应对方案", "액션을 더블클릭해 작성하세요": "双击填写行动", "광동": "广东", "광서": "广西", "해남": "海南", "데이터": "数据", "필터": "筛选", "메뉴": "菜单", "스냅샷 없음": "无快照", "고객유형별": "按客户类型", "개선사항": "改进事项", "영업 액션": "销售行动", "현황 분석 · 이슈사항": "现状分析 · 问题", "연도":"年度","월":"月","주":"周","1월":"1月","2월":"2月","3월":"3月","4월":"4月","5월":"5月","6월":"6月","7월":"7月","8월":"8月","9월":"9月","10월":"10月","11월":"11月","12월":"12月","스냅샷 저장 시 증감 표시":"保存快照后显示增减","1月은 비교 대상이 없습니다":"1月无可比较对象","이전 스냅샷이 있어야 증감이 표시됩니다":"需有上一快照才显示增减","시급":"紧急","주의":"注意","참고":"参考","숨김":"收起","보기":"查看"};
 var UI_LANG='ko';
+var ZH_FRAG=[["담당처에 AO·AR 교차판매 제안 — 단일 의존 리스크 완화", "负责客户开展AO·AR交叉销售 — 缓解单一依赖风险"], ["화남 3개 지역 전체 · 신규 발굴 없이는 성장 한계", "华南3地整体 · 无新开发难增长"], ["개소 재방문 계획 수립 — 담당자별 주간 목표 배정", "家再访计划制定 — 按负责人分配周目标"], [" 담당자 미팅 — 재고·가격·동행 방문 협의", " 负责人会谈 — 库存·价格·陪同拜访协商"], ["소수 대형 거래처 의존 — 이탈 시 타격 큼", "依赖少数大客户 — 流失打击大"], ["곳 — 원인 면담 후 이번 주 방문 배정", "家 — 面谈原因后本周安排拜访"], ["개소 — 과거 거래처인데 3개월 판매 0", "家 — 过去客户但3个月销售0"], ["개소 우선 접촉 — 접촉 여부부터 확인", "家优先接触 — 先确认是否接触"], ["거래는 있으나 물량 미미 — 이탈 위험", "有交易但量少 — 流失风险"], ["개소 — 누적으로도 구매 이력 없음", "家 — 累计也无购买记录"], ["방문 기록 0 — CRM 미입력 (", "拜访记录0 — CRM未录入 ("], ["개 중 대부분이 ST 단일 시스템", "个中大部分为ST单一系统"], ["공급 경로 불명 — 관리 사각지대", "供货渠道不明 — 管理盲区"], ["개소 대상 판촉·제품 교육 제안", "家开展促销·产品培训建议"], ["개소 대리상 확인 후 배정 완료", "家确认代理商后完成分配"], ["단일 시스템 의존 · ARi ", "单一系统依赖 · ARi "], [" — 거래처 절반 이상 미개시", " — 半数以上客户未开始"], ["미구매 중 방문 기록 0 — ", "未购中拜访记录0 — "], ["개소 — 데이터 신뢰도 문제", "家 — 数据可信度问题"], [" 집중 — 의존도 관리 필요", " 集中 — 需管理依赖度"], ["액션을 더블클릭해 작성하세요", "双击填写行动"], ["새 이슈 — 더블클릭해 수정", "新问题 — 双击修改"], ["개소 (3개월 5개 이하)", "家 (3个月5个以下)"], ["실적 대비 과다 방문 — ", "相对业绩过多拜访 — "], ["방문 효율 우수 — 회당 ", "拜访效率优秀 — 每次 "], ["CRM 방문 기록 입력률 ", "CRM拜访记录录入率 "], ["개소 · 대리상 미배정 ", "家 · 代理商未分配 "], ["상위 10개소가 전체의 ", "前10家占整体的 "], [" 기준 · 누적 구매율 ", " 基准 · 累计购买率 "], [" 판매 0 · 실구매율 ", " 销售0 · 实购率 "], ["실적 우수 — 평균의 ", "业绩优秀 — 平均的 "], ["개소) — 최근 구매 ", "家) — 最近购买 "], ["방문 기록 0인 고객 ", "拜访记录0客户 "], ["개소 (담당자당 평균 ", "家 (人均 "], ["개 (신제품 미진입)", "个 (新品未进入)"], ["실적 부진 — 평균 ", "业绩不振 — 平均 "], [" — 거래 개시 부진", " — 交易开始不振"], ["개 — 사실상 휴면", "个 — 实为休眠"], [" — 교차판매 필요", " — 需交叉销售"], [" (3개월 미구매 ", " (3个月未购 "], ["곳 3개월 판매 0", "家3个月销售0"], [" · 진행 중인 달", " · 进行中月份"], ["개소인데 고객당 ", "家但客均 "], ["개 — 침투 얕음", "个 — 渗透浅"], ["개 — 물량 미미", "个 — 量少"], ["개소 대비 판매 ", "家相对销售 "], ["방문 기록 0인 ", "拜访记录0的 "], ["직접 입력한 이슈", "手动录入的问题"], ["설명을 입력하세요", "请输入说明"], ["3개월 미구매 ", "3个月未购 "], ["대리상 미배정 ", "代理商未分配 "], ["누적 구매율 ", "累计购买率 "], ["특이사항 없음", "无特殊事项"], ["구매 중단 ", "购买中断 "], ["소량 구매 ", "少量购买 "], ["개소 담당)", "家负责)"], ["회로 회당 ", "次每次 "], [" 미구매율 ", " 未购率 "], ["곳 판매 0", "家销售0"], ["기초고객 ", "基础客户 "], ["실구매율 ", "实购率 "], ["개 대비 ", "个相对 "], ["거래처 ", "客户 "], ["전체의 ", "整体的 "], [" 편중 ", " 集中 "], ["미배정 ", "未分配 "], ["미구매 ", "未购 "], ["곳 중 ", "家中 "], ["개소의 ", "家的 "], ["고객 ", "客户 "], ["전달 ", "上月 "], ["개소뿐", "家而已"], ["소량 ", "少量 "], ["담당 ", "负责 "], ["개의 ", "个的 "], [" 완료", " 完成"], ["판매 ", "销售 "], [" 격차", " 差距"], ["와 ", "与 "], ["개소", "家"], ["곳", "家"], ["개", "个"]];
+var HAN_RE=/[\uAC00-\uD7A3]/;
+function zhFrag(s){ for(var i=0;i<ZH_FRAG.length;i++){ var p=ZH_FRAG[i]; if(s.indexOf(p[0])>=0) s=s.split(p[0]).join(p[1]); } return s; }
 var _hReact = React.createElement;
-var h = function(){ if(UI_LANG!=='zh') return _hReact.apply(null, arguments); var a=arguments, args=new Array(a.length); for(var i=0;i<a.length;i++){ var v=a[i]; if(i>=2 && typeof v==='string'){ var t=ZH_DICT[v]; if(t!==undefined) v=t; } args[i]=v; } return _hReact.apply(null, args); };
+var h = function(){ if(UI_LANG!=='zh') return _hReact.apply(null, arguments); var a=arguments, args=new Array(a.length); for(var i=0;i<a.length;i++){ var v=a[i]; if(i>=2 && typeof v==='string'){ var t=ZH_DICT[v]; if(t!==undefined){ v=t; } else if(HAN_RE.test(v)){ v=zhFrag(v); } } args[i]=v; } return _hReact.apply(null, args); };
 var useState = React.useState, useMemo = React.useMemo, useEffect = React.useEffect, useRef = React.useRef;
 var MON = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
 // 데이터가 실제로 존재하는 마지막 월 (엑셀이 갱신되면 자동 확장)
@@ -2508,6 +2514,82 @@ function WeeklyTab(p){
   ));
 }
 
+// ---- 현황: 그래프별 탭 뷰 ----
+function OverviewTabs(p){
+  var _g=useState('analysis'); var gt=_g[0], setGt=_g[1];
+  var C=p.C, A=p.A, pm=p.pm||NM, zh=(p.lang==='zh');
+  var all=p.rows||[], snaps=p.snaps||[], prev=p.prev;
+  var rows=useMemo(function(){ return p.prov? all.filter(function(r){return r.prov===p.prov;}) : all; },[all,p.prov]);
+  var multi=useMemo(function(){
+    function ptsFor(rs){ var o=[]; for(var m=1;m<=NM;m++){ o.push({label:m+'月',major:true,val:aggUpto(rs,m).total}); } return o; }
+    var out=[{prov:null,label:'전체',color:'#5f5e5a',pts:ptsFor(all)}];
+    (p.provs||[]).forEach(function(x){ out.push({prov:x,label:provKo(x),color:PROV_COL[x]||'#888',pts:ptsFor(all.filter(function(r){return r.prov===x;}))}); });
+    return out;
+  },[all,p.provs]);
+  var series=useMemo(function(){
+    var out=[]; for(var m=1;m<=NM;m++){ var a=aggUpto(rows,m); out.push({key:'M'+m,label:m+'月',mo:m,major:true,total:a.total,rate:a.rate,vis:a.vis,act:a.act,n:a.n,sys:a.sys}); }
+    var mTot=out.length? out[out.length-1].total:0;
+    var wk=snaps.filter(function(s){ return (s.mo||0)===NM && s.total!==mTot; }).sort(function(a,b){return a.w-b.w;});
+    wk.forEach(function(s){ out.push({key:'W'+s.w,label:s.label,mo:s.mo,major:false,total:s.total,rate:s.rate,vis:s.vis,act:s.act,n:s.n,sys:s.sys||[]}); });
+    return out;
+  },[rows,snaps]);
+  var mDelta=useMemo(function(){ var out=[]; for(var m=1;m<=NM;m++){ var cur=aggUpto(rows,m), pre=m>1?aggUpto(rows,m-1):null; out.push({label:m+'月',total:cur.total,d:pre?cur.total-pre.total:cur.total,act:cur.act,rate:cur.rate,ad:pre?cur.act-pre.act:cur.act,rd:pre?cur.rate-pre.rate:0}); } return out; },[rows]);
+  var movers=useMemo(function(){
+    if(!prev||!prev.per) return null; var pp=prev.per;
+    var a=rows.map(function(r){ var cur=sum(r.m), old=(pp[r.id]&&pp[r.id].t)||0; return {r:r,cur:cur,old:old,d:cur-old}; });
+    return { up:a.filter(function(x){return x.d>0;}).sort(function(x,y){return y.d-x.d;}).slice(0,10),
+      newAct:a.filter(function(x){return x.old===0&&x.cur>0;}).sort(function(x,y){return y.cur-x.cur;}),
+      stall:a.filter(function(x){return x.old>0&&x.d===0;}).sort(function(x,y){return y.old-x.old;}).slice(0,10) };
+  },[rows,prev]);
+
+  var GT=[['analysis','분석·이슈'],['sales','월별 판매'],['prov','지역별'],['type','고객유형별'],['newc','신규 고객'],['heat','월별 시스템'],['sysmix','시스템 구성'],['trend','누적 추세'],['stack','지역 비중'],['rate','가동률'],['visit','방문 추세'],['mdelta','월별 증감']];
+  var GT_ZH={analysis:'分析·问题',sales:'各月销量',prov:'分地区',type:'客户类型',newc:'新客户',heat:'各月系统',sysmix:'系统构成',trend:'累计趋势',stack:'地区占比',rate:'活跃率',visit:'拜访趋势',mdelta:'各月增减'};
+  function big(title,node){ return h(Card,Object.assign({title:title,wide:true},C('ovg_'+gt)), node); }
+  var body;
+  if(gt==='analysis'){
+    body=h('div',{className:'lay'},
+      h(Card,Object.assign({title:'화남본부 현황 분석 · 이슈사항',note:MON[pm-1]+' 기준 · 더블클릭 수정'},C('ov_hq')),
+        h(HqCard,{rows:p.hq||[],onEdit:p.onHqEdit,onDel:p.onHqDel,onAdd:p.onHqAdd,onReset:p.onHqReset})),
+      h(Card,Object.assign({title:'월별 이슈 액션플랜',note:'이슈에 대응하는 실행 계획 · 더블클릭 수정'},C('ov_act')),
+        h(IssueActions,{items:p.acts||[],auto:p.autoActs,onChange:p.onActs,compact:true})));
+  }
+  else if(gt==='sales') body=big('월별 판매수량', h(MonthChart,{mo:A.mo}));
+  else if(gt==='prov') body=big('지역별 판매수량', h(Bars,{data:p.byProv.map(function(g){return{label:provKo(g.key),value:g.total,sub:' · '+nf(g.n)+'개소'};})}));
+  else if(gt==='type') body=big('고객유형별 판매수량', h(Bars,{data:p.byType.map(function(g){return{label:g.key,value:g.total,zh:1,sub:' · '+nf(g.n)+'개소'};})}));
+  else if(gt==='newc') body=big('신규 고객 추이', h(NewCustCard,{data:newCustomers(p.view,pm),pm:pm}));
+  else if(gt==='heat') body=big('월별 시스템 수량', h('div',null, h('div',{className:'agg-n'},'※ 수정은 「고객」 탭에서 월을 고르고 수량을 더블클릭하세요.'), h(Heat,{rowLabel:'월',cols:SYS,rows:MON.slice(0,NM).map(function(m,i){return{key:m,cells:A.ms[i],total:A.mo[i]};})})));
+  else if(gt==='sysmix') body=big('시스템별 구성', h('div',null, h(SysBar,{sys:A.sys}), h('div',{className:'mini-h',style:{marginTop:'12px'}},'시스템별 판매수량'), h(Bars,{data:SYS.map(function(sn,i){return{label:sn,value:A.sys[i],sub:A.total?' · '+pf(A.sys[i]/A.total*100):''};})})));
+  else if(gt==='trend') body=big('판매개수 누적추세', h(TrendChart,{snaps:series,k:'total',zero:1}));
+  else if(gt==='stack') body=big('지역별 비중 추이', h(StackArea,{series:multi}));
+  else if(gt==='rate') body=big('가동률 추세', h(TrendChart,{snaps:series,k:'rate',pct:1}));
+  else if(gt==='visit') body=big('방문 누계 추세', h(TrendChart,{snaps:series,k:'vis',zero:1}));
+  else if(gt==='mdelta') body=h('div',null,
+      h(Card,Object.assign({title:'월별 증감',note:'엑셀 기준 · 당월 판매수량',wide:true},C('ovg_md')),
+        h(Table,{cols:[
+          {t:'월',k:'label',r:function(r){return h('b',null,r.label);}},
+          {t:'누계',k:'total',num:1,r:function(r){return h('b',null,nf(r.total));}},
+          {t:'당월',k:'d',num:1,r:function(r){return h('span',{className:'dv '+(r.d>0?'up':(r.d<0?'dn':'fl'))},sgn(r.d));}},
+          {t:'거래 고객',k:'act',num:1,r:function(r){return nf(r.act);}},
+          {t:'당월 증가',k:'ad',num:1,r:function(r){return h('span',{className:'dv '+(r.ad>0?'up':'fl')},sgn(r.ad));}},
+          {t:'가동률',k:'rate',num:1,r:function(r){return pf(r.rate);}},
+          {t:'증감',k:'rd',num:1,r:function(r){return h('span',{className:'dv '+(r.rd>0?'up':(r.rd<0?'dn':'fl'))},sgp(r.rd));}}
+        ],rows:mDelta})),
+      movers? h(Card,Object.assign({title:'증가 TOP 10',wide:true},C('ovg_up')),
+        movers.up.length? h(Table,{cols:[
+          {t:'고객명',k:'n',w:'160px',r:function(x){return h('div',null,h('b',{className:'zh'},x.r.name),h('div',{className:'sm2 zh'},x.r.prov+' · '+x.r.mgr));}},
+          {t:'이전',k:'o',num:1,r:function(x){return nf(x.old);}},
+          {t:'현재',k:'c',num:1,r:function(x){return h('b',null,nf(x.cur));}},
+          {t:'증감',k:'d',num:1,r:function(x){return h('span',{className:'dv up'},sgn(x.d));}}
+        ],rows:movers.up}) : h('div',{className:'empty'},'증가한 고객이 없습니다.')):null);
+
+  return h('div',null,
+    h('div',{className:'segs',style:{marginBottom:'10px'}},
+      h('span',{className:'plb'}, zh?'图表':'그래프'),
+      h('div',{className:'segb',style:{marginLeft:0}}, GT.map(function(t){
+        return h('button',{key:t[0],className:'sg'+(gt===t[0]?' on':''),onClick:function(){ setGt(t[0]); }}, zh?GT_ZH[t[0]]:t[1]); }))),
+    body);
+}
+
 function MgrTab(p){
   var cols=[
     {t:'담당자',k:'key',r:function(r){return h('b',{className:'zh'},r.key);}},
@@ -3250,7 +3332,7 @@ function SeminarTab(p){
       h('div',{className:'card-h'},
         h('h3',null,L('계획·실행','计划·执行')+' · '+monLabel),
         h('button',{className:'btn pri sm',onClick:addEdu},L('+ 세미나 추가','+ 添加研讨会'))),
-      h('div',{className:'tw'}, h('table',{className:'tbl',style:{minWidth:'1120px'}},
+      h('div',{className:'tw'}, h('table',{className:'tbl sem-pe',style:{minWidth:'1120px'}},
         h('thead',null, h('tr',null, headCells)), h('tbody',null, out))),
       h('p',{className:'ed-n',style:{marginTop:'8px'}},
         L('* 계획(목표)과 실행(실제)을 한 표에서 관리합니다. 목표인원·실제인원·전환을 더블클릭 수정하면 달성%가 자동 계산됩니다(인원 95%·전환 30% 목표). 하반기 전체 보기에서는 월별로 그룹되고, 헤더(일자·구역·지역·목표고객·목표인원·총비용)를 클릭하면 정렬됩니다. 비용 단위 元(RMB).',
@@ -3374,7 +3456,8 @@ function SeminarTab(p){
       no:String(prev.length+1), kind:'民营', name:'', clinic:'', dealer:'', sales:'', usage:'', join:'', isMega:'', attend:'', visitDate:'', inviteHO:'', deal:'' }]); });
   }
   function delFu(id){ if(!confirm('이 고객을 삭제하시겠습니까?')) return; setFu(function(prev){ return prev.filter(function(r){ return r.id!==id; }); }); }
-  function yes(v){ v=String(v||'').trim(); return v==='是'||v==='Y'||v==='y'||v==='유'||v==='O'||v==='예'; }
+  function yes(v){ v=String(v||'').trim(); return v==='是'||v==='Y'||v==='y'||v==='유'||v==='O'||v==='o'||v==='예'||v==='○'; }
+  function no(v){ v=String(v||'').trim(); return v==='否'||v==='N'||v==='n'||v==='x'||v==='X'||v==='아니요'||v==='无'||v==='✗'; }
   function fuKit(){
     var COLS=[
       ['no',L('No','序号'),1,'num'], ['kind',L('구분','区分'),1,''], ['name',L('이름','名字'),1,''],
@@ -3409,7 +3492,8 @@ function SeminarTab(p){
           return h('td',{key:c[0],className:(c[3]||'')+' tde'},
             h(EdCell,{row:r,locked:false,col:{
               r:function(rr){ var v=rr[c[0]]; if(v==null||v==='') return h('span',{className:'dim'},'—');
-                if(isYesCol && yes(v)) return h('span',{style:{color:'var(--grn)',fontWeight:800}}, L('○ 예','是'));
+                if(isYesCol && yes(v)) return h('span',{style:{color:'var(--grn)',fontWeight:800,fontSize:'15px'}}, 'O');
+                if(isYesCol && no(v))  return h('span',{style:{color:'var(--red)',fontWeight:800,fontSize:'15px'}}, 'X');
                 return v; },
               edit:{type:'text',get:function(rr){ return rr[c[0]]||''; },set:function(rr,val){ updFu(rr.id,c[0],val); }} }}));
         }).concat([h('td',{key:'x',className:'num'}, h('button',{className:'lnk',style:{color:'var(--red)'},onClick:function(){ delFu(r.id); }},'×'))]));
@@ -3481,6 +3565,8 @@ function App(){
   var _n=useState(false); var cfg=_n[0], setCfg=_n[1];
   var _p=useState({mgr:'',dealer:'',cust:'',weekly:'',inact:''}); var tprov=_p[0], setTprov=_p[1];
   var _cv=useState('active'); var custView=_cv[0], setCustView=_cv[1];   // 고객 탭 하위: active|inact
+  var _ov=useState('month');  var ovView=_ov[0], setOvView=_ov[1];        // 월별현황 하위: month|week
+  var _mv=useState('status'); var mgrView=_mv[0], setMgrView=_mv[1];      // 담당자 하위: status|org
   function setTP(k,v){ setTprov(function(o){ var n=Object.assign({},o); n[k]=v; return n; }); }
   var fileRef=useRef(null);
 
@@ -4070,8 +4156,9 @@ function App(){
     });
   }
 
-  var TABS=[['overview','월별현황'],['weekly','주간현황'],['mgr','담당자'],['dealer','대리상'],['cust','고객'],['sem','세미나 계획·실행']];
+  var TABS=[['overview','월별현황'],['mgr','담당자'],['dealer','대리상'],['cust','고객'],['sem','세미나 계획·실행']];
   var isInact = (tab==='inact') || (tab==='cust' && custView==='inact');  // 비활성화 = 고객 탭 하위
+  var orgOnly = (tab==='mgr' && mgrView==='org');   // 조직도 단독 뷰 = 상단 고객 KPI 숨김
   var lastS=snaps.length? snaps[snaps.length-1] : null;
   var TITLE={overview:'월별현황',weekly:'주간현황',mgr:'담당자별 실적',dealer:'대리상별 실적',cust:'고객 목록',inact:'비활성화 고객',sem:'세미나 계획·실행'};
   var TAB_ZH={overview:'月度概况',weekly:'周概况',mgr:'负责人',dealer:'代理商',cust:'客户',inact:'停滞客户',sem:'研讨会计划·执行'};
@@ -4173,7 +4260,7 @@ function App(){
           lastCloudSave()? h('span',null,h('br'),'· 마지막 클라우드 저장: '+lastCloudSave().slice(0,16).replace('T',' ')) : null)
       ):null,
 
-      (!rows.length && tab!=='sem')? h('div',{className:'empty-b'},
+      (!rows.length && tab!=='sem' && !orgOnly)? h('div',{className:'empty-b'},
         h('b',null,Ln('데이터가 없습니다','暂无数据')),
         h('div',null,Ln('왼쪽 ','左侧 '),h('b',null,Ln('「엑셀 불러오기」','「导入Excel」')),Ln('로 CRM 파일을 올리거나, ','上传CRM文件，或用 '),
           h('b',null,Ln('「클라우드 불러오기」','「云端读取」')),' / ',h('b',null,Ln('「복원」','「还原」')),Ln('으로 저장된 데이터를 가져오세요.','读取已保存数据。')),
@@ -4184,9 +4271,9 @@ function App(){
       msg? h('div',{className:'toast '+msg.t,role:'status'},msg.m):null,
       busy? h('div',{className:'toast ok'},'처리 중입니다…'):null,
 
-      tab==='sem'? null : h(PeriodBar,{snaps:snaps,cur:pick,y:py,m:pm,onYear:pickYear,onMonth:pickMonth,onPick:setPick}),
+      (tab==='sem'||orgOnly)? null : h(PeriodBar,{snaps:snaps,cur:pick,y:py,m:pm,onYear:pickYear,onMonth:pickMonth,onPick:setPick}),
 
-      tab==='sem'? null : isInact? h(InactKpi,{rows:kview, pm:pm, prevRows:rows}) :
+      (tab==='sem'||orgOnly)? null : isInact? h(InactKpi,{rows:kview, pm:pm, prevRows:rows}) :
       h('div',{className:'kpis kpis-5'},
         h(KPI,{label:Ln('고객수','客户数'),value:nf(A.n),unit:Ln('개소','家'),
           sub:(filtered||tabProv)?Ln('전체 '+nf(baseRows.length)+'개 중','共 '+nf(baseRows.length)+' 家中'):null,prev:pv,delta:pv?A.n-pv.n:null}),
@@ -4201,11 +4288,11 @@ function App(){
           prev:R3p?{}:null, delta:R3p? R3.rate-R3p.rate : null, pct:1}),
         h(KPI,{label:Ln('고객당 평균구매수','客均购买数'),value:A.avg.toFixed(1),unit:Ln('개','个'),prev:pv,delta:pv?A.avg-pv.avg:null,dec:1})),
 
-      (!isInact && tab!=='sem' && pm===NM)? h('div',{className:'note-w'},
+      (!isInact && tab!=='sem' && !orgOnly && pm===NM)? h('div',{className:'note-w'},
         Ln('※ '+MON[NM-1]+'은 진행 중인 달입니다(15일 기준). 3개월 창에 미완 월이 포함되어 미구매·실구매율이 실제보다 나쁘게 보일 수 있습니다.','※ '+MON[NM-1]+'为进行中月份(以15日为准)。3个月窗口含未完月，未购·实购率可能显得比实际差。')
       ) : null,
 
-      (isInact||tab==='sem')? null : h('div',{className:'kpis kpis-s'},
+      (isInact||tab==='sem'||orgOnly)? null : h('div',{className:'kpis kpis-s'},
         SYS.map(function(sn,i){
           var v=A.sys[i], sh=A.total? v/A.total*100 : 0;
           return h(KPI,{key:i,label:sn,value:nf(v),unit:Ln('개','个'),sub:A.total? pf(sh)+Ln(' 비중',' 占比'):null,
@@ -4214,7 +4301,7 @@ function App(){
         h(KPI,{label:Ln('총 판매수량','总销量'),value:nf(A.total),unit:Ln('개','个'),hero:1,sub:'AO+AR+ST+BD+ARi',
           prev:pv,delta:pv?A.total-pv.total:null})),
 
-      tab==='sem'? null : h('div',{className:'snaps'},
+      (tab==='sem'||orgOnly)? null : h('div',{className:'snaps'},
         pv? h('span',{className:'pchip'},
               prevLabel(pick||{mo:lastS&&lastS.mo}, pv)+' = ',
               h('b',null, pv._excel? pv.label : ((pv.mo? pv.mo+'月 ':'')+pv.label)))
@@ -4227,23 +4314,25 @@ function App(){
             h('button',{className:'x',onClick:function(){delSnap(x);},title:'삭제'},'×'));
         })),
 
-      tab==='weekly'? h(IssueActions,{items:acts||autoA, auto:function(){ return autoIssues(rows,pm); },
-        onChange:function(n){ setDb(function(pv){ return Object.assign({},pv,{acts:n}); }); }}) : null,
-
-      tab==='overview'? h(Overview,{A:A,view:view,byProv:byProv,byType:byType,pick:pick,C:C,
-        hq:hqList(), pm:pm, onHqEdit:hqEdit, onHqDel:hqDel, onHqAdd:hqAdd, onHqReset:hqReset,
+      tab==='overview'? h(OverviewTabs,{A:A,view:view,byProv:byProv,byType:byType,pm:pm,C:C,lang:lang,
+        hq:hqList(), onHqEdit:hqEdit, onHqDel:hqDel, onHqAdd:hqAdd, onHqReset:hqReset,
         acts:acts||autoA, onActs:function(n){ setDb(function(pv){ return Object.assign({},pv,{acts:n}); }); },
-        autoActs:function(){ return autoIssues(rows,pm); }}):null,
-      tab==='weekly'? h(WeeklyTab,{snaps:snaps,rows:tabRows('weekly'),prev:prev,notes:notes,C:C,
-        provs:provs, prov:tprov.weekly, onProv:function(v){ setTP('weekly',v); }, counts:provCounts}):null,
+        autoActs:function(){ return autoIssues(rows,pm); },
+        rows:tabRows('weekly'), snaps:snaps, prev:prev, provs:provs, prov:tprov.weekly}):null,
       tab==='mgr'? h('div',null,
-        h(OrgChart,{org:org,setOrg:setOrg,lang:lang}),
-        h(MgrTab,{by:groupOf(tabRows('mgr'),'mgr'),C:C,rows:tabRows('mgr'),pm:pm,
-        provs:provs, prov:tprov.mgr, onProv:function(v){ setTP('mgr',v); }, counts:provCounts,
-        mergeIss:function(a){ return mergeIss(a,'mgr'); },
-        onIssEdit:function(k,j,v){ grpEdit('mgr',k,j,v); },
-        onIssDel:function(k,j){ grpDel('mgr',k,j); },
-        onIssAdd:function(k){ grpAdd('mgr',k); }})):null,
+        h('div',{className:'segs',style:{marginBottom:'10px'}},
+          h('span',{className:'plb'}, zh?'负责人':'담당'),
+          h('div',{className:'segb',style:{marginLeft:0}},
+            h('button',{className:'sg'+(mgrView==='org'?' on':''),onClick:function(){ setMgrView('org'); }}, zh?'组织图':'조직도'),
+            h('button',{className:'sg'+(mgrView==='status'?' on':''),onClick:function(){ setMgrView('status'); }}, zh?'负责人现况':'담당현황'))),
+        mgrView==='org'
+          ? h(OrgChart,{org:org,setOrg:setOrg,lang:lang})
+          : h(MgrTab,{by:groupOf(tabRows('mgr'),'mgr'),C:C,rows:tabRows('mgr'),pm:pm,
+              provs:provs, prov:tprov.mgr, onProv:function(v){ setTP('mgr',v); }, counts:provCounts,
+              mergeIss:function(a){ return mergeIss(a,'mgr'); },
+              onIssEdit:function(k,j,v){ grpEdit('mgr',k,j,v); },
+              onIssDel:function(k,j){ grpDel('mgr',k,j); },
+              onIssAdd:function(k){ grpAdd('mgr',k); }})):null,
       tab==='dealer'? h(DealTab,{by:groupOf(tabRows('dealer'),'dealer'),C:C,rows:tabRows('dealer'),pm:pm,
         staff:staff, onStaff:setStaff, locked:!!pick,
         provs:provs, prov:tprov.dealer, onProv:function(v){ setTP('dealer',v); }, counts:provCounts,
