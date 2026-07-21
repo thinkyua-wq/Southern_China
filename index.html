@@ -2542,9 +2542,9 @@ function OverviewTabs(p){
       stall:a.filter(function(x){return x.old>0&&x.d===0;}).sort(function(x,y){return y.old-x.old;}).slice(0,10) };
   },[rows,prev]);
 
-  var GT=[['analysis','분석·이슈'],['sales','월별 판매'],['prov','지역별'],['type','고객유형별'],['newc','신규 고객'],['heat','월별 시스템'],['sysmix','시스템 구성'],['trend','누적 추세'],['stack','지역 비중'],['rate','가동률'],['visit','방문 추세'],['mdelta','월별 증감']];
-  var GT_ZH={analysis:'分析·问题',sales:'各月销量',prov:'分地区',type:'客户类型',newc:'新客户',heat:'各月系统',sysmix:'系统构成',trend:'累计趋势',stack:'地区占比',rate:'活跃率',visit:'拜访趋势',mdelta:'各月增减'};
-  function big(title,node){ return h(Card,Object.assign({title:title,wide:true},C('ovg_'+gt)), node); }
+  var GT=[['analysis','분석·이슈'],['sales','판매·지역'],['type','유형·신규'],['system','시스템'],['trend','판매·방문추세'],['ratio','비중·가동률'],['mdelta','월별 증감']];
+  var GT_ZH={analysis:'分析·问题',sales:'销量·地区',type:'类型·新客',system:'系统',trend:'销量·拜访趋势',ratio:'占比·活跃率',mdelta:'各月增减'};
+  function card(title,note,node,key){ return h(Card,Object.assign({title:title,note:note},C(key)), node); }
   var body;
   if(gt==='analysis'){
     body=h('div',{className:'lay'},
@@ -2553,16 +2553,21 @@ function OverviewTabs(p){
       h(Card,Object.assign({title:'월별 이슈 액션플랜',note:'이슈에 대응하는 실행 계획 · 더블클릭 수정'},C('ov_act')),
         h(IssueActions,{items:p.acts||[],auto:p.autoActs,onChange:p.onActs,compact:true})));
   }
-  else if(gt==='sales') body=big('월별 판매수량', h(MonthChart,{mo:A.mo}));
-  else if(gt==='prov') body=big('지역별 판매수량', h(Bars,{data:p.byProv.map(function(g){return{label:provKo(g.key),value:g.total,sub:' · '+nf(g.n)+'개소'};})}));
-  else if(gt==='type') body=big('고객유형별 판매수량', h(Bars,{data:p.byType.map(function(g){return{label:g.key,value:g.total,zh:1,sub:' · '+nf(g.n)+'개소'};})}));
-  else if(gt==='newc') body=big('신규 고객 추이', h(NewCustCard,{data:newCustomers(p.view,pm),pm:pm}));
-  else if(gt==='heat') body=big('월별 시스템 수량', h('div',null, h('div',{className:'agg-n'},'※ 수정은 「고객」 탭에서 월을 고르고 수량을 더블클릭하세요.'), h(Heat,{rowLabel:'월',cols:SYS,rows:MON.slice(0,NM).map(function(m,i){return{key:m,cells:A.ms[i],total:A.mo[i]};})})));
-  else if(gt==='sysmix') body=big('시스템별 구성', h('div',null, h(SysBar,{sys:A.sys}), h('div',{className:'mini-h',style:{marginTop:'12px'}},'시스템별 판매수량'), h(Bars,{data:SYS.map(function(sn,i){return{label:sn,value:A.sys[i],sub:A.total?' · '+pf(A.sys[i]/A.total*100):''};})})));
-  else if(gt==='trend') body=big('판매개수 누적추세', h(TrendChart,{snaps:series,k:'total',zero:1}));
-  else if(gt==='stack') body=big('지역별 비중 추이', h(StackArea,{series:multi}));
-  else if(gt==='rate') body=big('가동률 추세', h(TrendChart,{snaps:series,k:'rate',pct:1}));
-  else if(gt==='visit') body=big('방문 누계 추세', h(TrendChart,{snaps:series,k:'vis',zero:1}));
+  else if(gt==='sales') body=h('div',{className:'lay'},
+    card('월별 판매수량',null, h(MonthChart,{mo:A.mo}),'ovg_sales'),
+    card('지역별 판매수량',null, h(Bars,{data:p.byProv.map(function(g){return{label:provKo(g.key),value:g.total,sub:' · '+nf(g.n)+'개소'};})}),'ovg_prov'));
+  else if(gt==='type') body=h('div',{className:'lay'},
+    card('고객유형별 판매수량',null, h(Bars,{data:p.byType.map(function(g){return{label:g.key,value:g.total,zh:1,sub:' · '+nf(g.n)+'개소'};})}),'ovg_type'),
+    card('신규 고객 추이','新增合作时间 기준', h(NewCustCard,{data:newCustomers(p.view,pm),pm:pm}),'ovg_new'));
+  else if(gt==='system') body=h('div',null,
+    card('시스템별 구성','AO·AR·ST·BD·ARi', h('div',null, h(SysBar,{sys:A.sys}), h('div',{className:'mini-h',style:{marginTop:'12px'}},'시스템별 판매수량'), h(Bars,{data:SYS.map(function(sn,i){return{label:sn,value:A.sys[i],sub:A.total?' · '+pf(A.sys[i]/A.total*100):''};})})),'ovg_sysmix'),
+    card('월별 시스템 수량','진할수록 많음 · 자동 집계', h('div',null, h('div',{className:'agg-n'},'※ 수정은 「고객」 탭에서 월을 고르고 수량을 더블클릭하세요.'), h(Heat,{rowLabel:'월',cols:SYS,rows:MON.slice(0,NM).map(function(m,i){return{key:m,cells:A.ms[i],total:A.mo[i]};})})),'ovg_heat'));
+  else if(gt==='trend') body=h('div',{className:'lay'},
+    card('판매개수 누적추세','1~'+NM+'月', h(TrendChart,{snaps:series,k:'total',zero:1}),'ovg_trend'),
+    card('방문 누계 추세',null, h(TrendChart,{snaps:series,k:'vis',zero:1}),'ovg_visit'));
+  else if(gt==='ratio') body=h('div',{className:'lay'},
+    card('지역별 비중 추이','100% 기준', h(StackArea,{series:multi}),'ovg_stack'),
+    card('가동률 추세',null, h(TrendChart,{snaps:series,k:'rate',pct:1}),'ovg_rate'));
   else if(gt==='mdelta') body=h('div',null,
       h(Card,Object.assign({title:'월별 증감',note:'엑셀 기준 · 당월 판매수량',wide:true},C('ovg_md')),
         h(Table,{cols:[
