@@ -138,8 +138,8 @@ option,select,
 .snap.cur{border-color:var(--tl);background:var(--tl4)}
 
 /* ---- cards ---- */
-.lay{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.card{background:var(--pn);border:1px solid var(--ln);border-radius:var(--rd);padding:11px 12px}
+.lay{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.card{background:var(--pn);border:1px solid var(--ln);border-radius:var(--rd);padding:11px 12px;min-width:0}
 .card.wide{grid-column:1/-1}
 .card-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;
   padding-bottom:6px;border-bottom:1px solid var(--ln);gap:8px}
@@ -156,6 +156,8 @@ option,select,
 .bar-lb{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink2);font-weight:600}
 .bar-tr{background:#eee;height:14px;border-radius:2px;overflow:hidden}
 .bar-fi{background:var(--tl);height:100%;transition:width .35s}
+.bars.grad .bar-fi{background:linear-gradient(90deg,#7cc4d4 0%,#3c9cb4 55%,#1d5f70 100%)}
+.bars.grad .bar-fi.hl{background:linear-gradient(90deg,#f0b46b 0%,#e0902f 100%)}
 .bar-fi.hl{background:var(--amb)}
 .bar-vl{font-variant-numeric:tabular-nums;font-weight:800;min-width:52px;text-align:right;white-space:nowrap}
 .bar-sb{font-weight:500;color:var(--dim);font-size:11px}
@@ -514,6 +516,7 @@ td.tde{position:relative}
 .hu-detail .tbl td{font-size:13px;white-space:normal;word-break:break-word;overflow-wrap:anywhere;line-height:1.5;vertical-align:middle}
 .hu-detail .tbl td.hu-c{text-align:center}
 .hu-detail .tbl td.hu-name{text-align:left}
+.hu-detail .tbl td.hu-memo{text-align:left;vertical-align:top;white-space:normal;word-break:break-word}
 .hu-detail .tbl td.num,.hu-detail .tbl th.num{text-align:center}
 .hu-detail .tbl td *{color:#000}
 .hu-detail .tbl th, .hu-detail .tbl th *{color:#fff}
@@ -675,7 +678,7 @@ td.tde{position:relative}
 .pill.in{background:#DCFCE7;color:#166534}.pill.out{background:#FEE2E2;color:#991B1B}
 .dso-ach{font-weight:900}.dso-ach.g{color:#16A34A}.dso-ach.a{color:#D97706}.dso-ach.r{color:#DC2626}
 /* DSO 차트 한 줄 배치 */
-.lay3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:start;margin-top:12px}
+.lay3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start;margin-top:12px}
 @media(max-width:1100px){.lay3{grid-template-columns:1fr}}
 /* DSO 표 본문 글자색 무조건 검정 (헤더는 진회색+흰색 유지) */
 .dso-wrap .tbl td{color:#000}
@@ -695,6 +698,7 @@ td.tde{position:relative}
 .dv-detail .tbl th{font-size:13.5px}
 .dv-detail .tbl td{font-size:13.5px;white-space:normal;word-break:break-word;overflow-wrap:anywhere;line-height:1.5}
 .dv-detail .tbl td.dv-memo{white-space:normal;word-break:break-word}
+.dv-detail .tbl thead th:last-child{text-align:center}
 .dv-detail .tbl td *{color:#000}
 .dv-detail .tbl th, .dv-detail .tbl th *{color:#fff}
 .dv-exp{cursor:pointer;color:#2456a6;font-weight:900;margin-right:3px;user-select:none;font-size:12px}
@@ -706,12 +710,14 @@ td.tde{position:relative}
 .dv-extbl{max-width:460px;background:#fff}
 .dv-extbl th{font-size:12px}
 .dv-extbl td{font-size:12.5px}
+.dv-pager{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 2px;font-size:12.5px}
+.dv-pinfo{font-weight:700;color:var(--ink2);padding:0 6px;white-space:nowrap}
 /* 직원별 요약표: 헤더 13pt Bold·본문 13pt · 가운데 정렬(비고만 좌상단) · 비고 자동 줄바꿈 */
 .dev-sum .tbl th{font-size:13px;font-weight:800;text-align:center}
 .dev-sum .tbl td{font-size:13px;text-align:center;vertical-align:middle}
 .dev-sum .tbl th.num,.dev-sum .tbl td.num{text-align:center}
 .dev-sum .tbl td.sum-memo{text-align:left;vertical-align:top;white-space:normal;word-break:break-word;line-height:1.5}
-.dev-sum .tbl td.ic{background:#EFF3FF}
+.dev-sum .tbl td{background:#fff}
 /* 가격동향 협상 우선순위 배지 */
 .ng-bdg{display:inline-block;font-size:11px;font-weight:800;padding:2px 9px;border-radius:5px;color:#000}
 .ng-bdg.ng-h{background:#f6cfc7}.ng-bdg.ng-m{background:#fdf3cf}.ng-bdg.ng-l{background:#d7f2e1}
@@ -737,6 +743,7 @@ td.tde{position:relative}
 .prc-lg{display:flex;gap:16px;margin-top:9px;font-size:11px;font-weight:700;color:#333}
 .prc-lg i{display:inline-block;width:13px;height:13px;border-radius:3px;margin-right:5px;vertical-align:-2px}
 .price-wrap .card-h h3{color:#2456a6}
+.price-wrap .tbl tr.hl td{background:rgba(36,86,166,0.09)!important}
 .price-wrap .card{border-color:#e6e9f0}
 .dso-fbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:2px 0 12px}
 .dso-fbar .sel,.dso-fbar input{border:1px solid var(--bd);border-radius:6px;padding:6px 9px;font-size:12.5px}
@@ -1288,6 +1295,7 @@ function calcNM(rows){
   return Math.max(1, last);
 }
 var SYS = ['AO','AR','ST','BD','ARi'];   // 메가젠 시스템
+var MEGA_SYS = SYS;   // 목표제품 선택 = 메가젠 제품만
 var NS = 5;
 var LS_KEY = 'hnCrmDash_v4';   // v4: SEED 버전 스탬프 도입
 // SEED가 바뀌면 저장된 rows를 자동 폐기합니다(옛 데이터가 새 파일을 덮는 문제 방지).
@@ -1777,7 +1785,7 @@ function KPI(p){
 function Bars(p){
   var max=0; p.data.forEach(function(d){ if(d.value>max) max=d.value; });
   if(max<=0) max=1;
-  return h('div',{className:'bars'}, p.data.map(function(d,i){
+  return h('div',{className:'bars'+(p.grad?' grad':'')}, p.data.map(function(d,i){
     return h('div',{className:'bar-row', key:i},
       h('div',{className:'bar-lb'+(d.zh?' zh':''), title:d.label}, d.label),
       h('div',{className:'bar-tr'}, h('div',{className:'bar-fi'+(d.hl?' hl':''), style:{width:(d.value/max*100)+'%'}})),
@@ -3267,10 +3275,23 @@ function weeksOfMonthSem(year, mo){ var seen={}, out=[], last=new Date(year, mo,
 /* ===== 공용 연/월/주 기간 선택 바 (표준 · 첨부 이미지 형태) ===== */
 function periodKey(y,m,w){ if(w) return y+'-W'+w; if(m) return y+'-'+(m<10?'0'+m:m); return ''+y; }
 function periodLabel(y,m,w,zh){ var s=y+(zh?'年':'년'); if(m) s+=' '+m+(zh?'月':'월'); if(w) s+=' W'+w; if(!m&&!w) s+=(zh?' 全年':' 연간'); return s; }
+// 다음 주 / 다음 달 계산
+function nextWeek(y,w){ var mon=mondayOfWeekSem(y,w); var nx=new Date(mon.getTime()+7*86400000);
+  var iw=isoWeekSem(new Date(nx.getUTCFullYear(),nx.getUTCMonth(),nx.getUTCDate()));
+  var m1=nx.getUTCMonth()+1; return {y:iw.year, m:m1, w:iw.week}; }
+function nextMonth(y,m){ var nm=(m||1)+1, ny=y; if(nm>12){ nm=1; ny=y+1; } return {y:ny, m:nm}; }
+// PgBar 안에서 쓸 복사 버튼(다음 주·다음 달). onCopyWeek/onCopyMonth 콜백을 주면 노출.
 function PgBar(p){
   var zh=p.zh, L=function(ko,cn){ return zh?cn:ko; };
   var years=p.years||[2024,2025,2026];
   var weeks=(p.m? weeksOfMonthSem(p.y, p.m):[]);
+  var copyBtns=[];
+  if(p.onCopyWeek) copyBtns.push(h('button',{key:'cw',className:'btn sm',disabled:!p.w,title:L('현재 주 내용을 다음 주로 복사','复制本周到下周'),onClick:function(){ if(p.w) p.onCopyWeek(); }}, L('다음주 복사','复制到下周')));
+  if(p.onCopyMonth) copyBtns.push(h('button',{key:'cm',className:'btn sm',disabled:!p.m,title:L('현재 달 내용을 다음 달로 복사','复制本月到下月'),onClick:function(){ if(p.m) p.onCopyMonth(); }}, L('다음달 복사','复制到下月')));
+  var right=[];
+  if(p.w) right.push(h('button',{key:'cl',className:'btn sm',onClick:function(){ p.onW(null); }}, L('주 해제','清除周')));
+  copyBtns.forEach(function(b){ right.push(b); });
+  if(p.right) right.push(p.right);
   return h('div',{className:'pbar',style:{marginBottom:'10px'}},
     h('div',{className:'pgrp'}, h('span',{className:'plb'},L('연도','年度')),
       h('select',{className:'sel',value:p.y,onChange:function(e){ p.onY(+e.target.value); }},
@@ -3284,9 +3305,7 @@ function PgBar(p){
           return h('button',{key:w.week,className:'wk has'+(on?' on':''),
             onClick:function(){ p.onW(on?null:w.week); }},
             h('b',null,'W'+w.week), h('span',null,w.sub)); }))),
-    (p.w||p.right)? h('div',{className:'pnav',style:{marginLeft:'auto',alignItems:'center',gap:'6px'}},
-      p.w? h('button',{className:'btn sm',onClick:function(){ p.onW(null); }}, L('주 해제','清除周')):null,
-      p.right||null):null);
+    right.length? h('div',{className:'pnav',style:{marginLeft:'auto',alignItems:'center',gap:'6px',flexWrap:'wrap'}}, right):null);
 }
 
 /* ===== 세미나 엑셀 컬럼 매핑 (업/다운 라운드트립) ===== */
@@ -3321,6 +3340,13 @@ function NoticeTab(p){
   function add(){ setList(function(a){ return a.concat([{t:'',k:L('새 문서','新文档'),u:'',ic:'📄', y:py, m:pm||0, w:pw||0}]); }); }
   function addAlways(){ setList(function(a){ return a.concat([{t:'',k:L('상시 문서','常设文档'),u:'',ic:'📌'}]); }); }
   function del(i){ setList(function(a){ return a.filter(function(_,j){ return j!==i; }); }); }
+  // 현재 기간의 (기간지정) 공지를 다음 주/달로 복사
+  function copyNotices(ny,nm,nw){ setList(function(a){
+    var src=a.filter(function(x){ return x.y && inPeriod(x); });
+    var cloned=src.map(function(x){ return Object.assign({},x,{y:ny,m:nm||0,w:nw||0}); });
+    return a.concat(cloned); }); }
+  function copyWeek(){ if(!pw) return; var nk=nextWeek(py,pw); copyNotices(nk.y,nk.m,nk.w); setPy(nk.y); setPm(nk.m); setPw(nk.w); }
+  function copyMonth(){ if(!pm) return; var nk=nextMonth(py,pm); copyNotices(nk.y,nk.m,null); setPy(nk.y); setPm(nk.m); setPw(null); }
   function cell(getV,setV,ph,cls){ return h(EdCell,{row:{},locked:false,col:{
     r:function(){ var v=getV(); return (v===''||v==null)? h('span',{className:'ds-ph'}, ph||' ') : h('span',{className:(cls||'')+' zh'},v); },
     edit:{type:'text',get:getV,set:function(_,val){ setV(val); }} }}); }
@@ -3334,7 +3360,8 @@ function NoticeTab(p){
     h('div',{className:'kpi'}, h('div',{className:'kpi-l'}, L('전체 등록','全部登记')), h('div',{className:'kpi-v'}, nf(list.length)+L('건','份'))),
     h('div',{className:'kpi'}, h('div',{className:'kpi-l'}, L('플랫폼','平台')), h('div',{className:'kpi-v'}, 'WPS'), h('div',{className:'kpi-s'}, L('金山文档 클라우드','金山文档云'))));
   var pdBadge=function(x){ return h('span',{className:'nt-pd'+(x.y?'':' al')}, x.y? periodLabel(x.y,x.m,x.w,zh) : L('상시','常设')); };
-  var bar=h(PgBar,{zh:zh,y:py,m:pm,w:pw,onY:function(v){ setPy(v); },onM:function(v){ setPm(v); setPw(null); },onW:function(v){ setPw(v); }});
+  var bar=h(PgBar,{zh:zh,y:py,m:pm,w:pw,onY:function(v){ setPy(v); },onM:function(v){ setPm(v); setPw(null); },onW:function(v){ setPw(v); },
+    onCopyWeek:copyWeek, onCopyMonth:copyMonth});
   return h('div',null,
     bar,
     kpis,
@@ -3370,6 +3397,9 @@ var DevRow = React.memo(function(pr){
   function dEd(k,cls){ return h(EdCell,{row:r,locked:locked,col:{
     r:function(rr){ var v=rr[k]; return (v===''||v==null)? h('span',{className:'dv-blank'}) : h('span',{className:cls||''},v); },
     edit:{type:'text',get:function(rr){return rr[k]||'';},set:function(rr,v){ editD(r.id,k,v); }} }}); }
+  function dSel(k,opts,cls){ return h(EdCell,{row:r,locked:locked,col:{
+    r:function(rr){ var v=rr[k]; return (v===''||v==null)? h('span',{className:'dv-blank'}) : h('span',{className:cls||''},v); },
+    edit:{type:'sel',opts:[''].concat(opts||[]),get:function(rr){return rr[k]||'';},set:function(rr,v){ editD(r.id,k,v); }} }}); }
   var nameCell=h(EdCell,{row:r,locked:locked,col:{
     r:function(rr){ return h('div',null, rr.name? h('b',{className:'zh'},rr.name): h('span',{className:'dv-blank'}), rr.dec? h('div',{className:'sm2 zh'},rr.dec):null); },
     edit:{type:'text',get:function(rr){return rr.name||'';},set:function(rr,v){ editD(r.id,'name',v); }} }});
@@ -3386,22 +3416,22 @@ var DevRow = React.memo(function(pr){
     pr.price? h('span',null, h('b',null,nf(pr.price)), h('span',{className:'sm2'},' RMB')) : h('span',{className:'dv-blank'}));
   var main=h('tr',null,
     h('td',{className:'num'}, h('span',{className:'dim'},pr.no)),
-    h('td',null, dEd('region','zh')),
-    h('td',null, dEd('mgr','zh dk')),
-    h('td',null, dEd('city','zh')),
+    h('td',null, dSel('mgr', pr.mgrOpts, 'zh dk')),
+    h('td',null, dSel('region', pr.regOpts, 'zh')),
+    h('td',null, dSel('city', pr.cityOpts, 'zh')),
     h('td',null, nameCell),
     h('td',{className:'num'}, dEd('stores','zh')),
     h('td',{className:'num'}, impCell),
     h('td',{className:'num'}, priceCell),
     h('td',null, progCell),
-    h('td',null, dEd('target','zh b')),
+    h('td',null, dSel('target', MEGA_SYS, 'zh b')),
     h('td',{className:'dv-memo'}, dEd('memo','zh')));
   if(!open) return main;
   var ex=h('tr',{className:'dv-exrow'}, h('td',{colSpan:11},
     h('div',{className:'dv-exwrap'},
-      h('div',{className:'dv-extit'}, L('제품별 연간 사용 수량 · 단가 (RMB)','各产品 年用量 · 单价 (RMB)')),
+      h('div',{className:'dv-extit'}, L('제품별 연간 사용 수량 · 환자수가 (RMB)','各产品 年用量 · 患者收费 (RMB)')),
       h('table',{className:'tbl dv-extbl'},
-        h('thead',null,h('tr',null, h('th',null,L('제품','产品')), h('th',{className:'num'},L('연간 수량','年用量')), h('th',{className:'num'},L('단가 (RMB)','单价(RMB)')), h('th',{className:'num',style:{width:'34px'}},''))),
+        h('thead',null,h('tr',null, h('th',null,L('제품','产品')), h('th',{className:'num'},L('연간 수량','年用量')), h('th',{className:'num'},L('환자수가 (RMB)','患者收费(RMB)')), h('th',{className:'num',style:{width:'34px'}},''))),
         h('tbody',null, (r.prods||[]).map(function(pp,pi){ return h('tr',{key:pi},
           h('td',null, h(EdCell,{row:{},locked:locked,col:{ r:function(){ return pp.p? h('b',{className:'zh'},pp.p): h('span',{className:'dv-blank'}); }, edit:{type:'text',get:function(){return pp.p||'';},set:function(_,v){ editProd(r.id,pi,'p',v); }} }})),
           h('td',{className:'num'}, h(EdCell,{row:{},locked:locked,col:{ r:function(){ return pp.q? nf(pp.q): h('span',{className:'dv-blank'}); }, edit:{type:'num',get:function(){return pp.q||0;},set:function(_,v){ editProd(r.id,pi,'q',v); }} }})),
@@ -3413,14 +3443,28 @@ var DevRow = React.memo(function(pr){
 }, function(a,b){ return a.r===b.r && a.open===b.open && a.locked===b.locked && a.zh===b.zh && a.no===b.no && a.price===b.price; });
 function DevTab(p){
   var zh=(p.lang==='zh'); var L=function(ko,cn){ return zh?cn:ko; };
-  var data=p.data||{summary:[],detail:[]};
-  var setData=p.setData;
+  // ── 연/월/주 기간 관리(기간별 분리 저장 + 다음주/다음달 복사) ──
+  var store=p.data, setStore=p.setData;
+  var _py=useState(2026); var py=_py[0], setPy=_py[1];
+  var _pm=useState(0); var pm=_pm[0], setPm=_pm[1];
+  var _pw=useState(null); var pw=_pw[0], setPw=_pw[1];
+  var DBASE='2026', pkey=periodKey(py,pm,pw), ykey=periodKey(py);
+  function dResolve(o){ if(o&&o.periods){ return o.periods[pkey]||o.periods[ykey]||o.periods[DBASE]||{summary:[],detail:[]}; } return o||{summary:[],detail:[]}; }
+  var data=dResolve(store);
+  var isSnapV=!(store&&store.periods) || !!store.periods[pkey];
+  function setData(fn){ setStore(function(o){ var ps,base; if(o&&o.periods){ ps=Object.assign({},o.periods); base=ps[pkey]||ps[ykey]||ps[DBASE]||{summary:[],detail:[]}; } else { base=o||{summary:[],detail:[]}; ps={}; ps[DBASE]=base; } ps[pkey]=fn(base); return {periods:ps}; }); }
+  function dCopy(tkey){ setStore(function(o){ var ps,base; if(o&&o.periods){ ps=Object.assign({},o.periods); base=ps[pkey]||ps[ykey]||ps[DBASE]||{summary:[],detail:[]}; } else { base=o||{summary:[],detail:[]}; ps={}; ps[DBASE]=base; } ps[tkey]=JSON.parse(JSON.stringify(base)); return {periods:ps}; }); }
+  function dCopyWeek(){ if(!pw) return; var nk=nextWeek(py,pw); dCopy(periodKey(nk.y,nk.m,nk.w)); setPy(nk.y); setPm(nk.m); setPw(nk.w); }
+  function dCopyMonth(){ if(!pm) return; var nk=nextMonth(py,pm); dCopy(periodKey(nk.y,nk.m,null)); setPy(nk.y); setPm(nk.m); setPw(null); }
   var det=data.detail||[], summ=data.summary||[];
   var _s=useState({k:'prog',d:1}); var sort=_s[0], setSort=_s[1];
   var _fm=useState(''); var fmgr=_fm[0], setFmgr=_fm[1];
   var _fr=useState(''); var freg=_fr[0], setFreg=_fr[1];
   var _fp=useState(''); var fprog=_fp[0], setFprog=_fp[1];
   var _q=useState(''); var q=_q[0], setQ=_q[1];
+  var _pg=useState(1); var page=_pg[0], setPage=_pg[1];         // 상세표 페이지(성능·먹통 방지)
+  var _pz=useState(50); var pageSize=_pz[0], setPageSize=_pz[1];
+  useEffect(function(){ setPage(1); },[fmgr,freg,fprog,q]);      // 필터 바뀌면 1쪽으로
   function S(a){ return a.reduce(function(x,y){ return x+(y||0); },0); }
   var _ex=useState({}); var exp=_ex[0], setExp=_ex[1];
   function toggle(id){ setExp(function(o){ var n=Object.assign({},o); if(n[id]) delete n[id]; else n[id]=1; return n; }); }
@@ -3432,6 +3476,7 @@ function DevTab(p){
   function editS(id,k,v){ setData(function(o){ var n=Object.assign({},o); n.summary=(o.summary||[]).map(function(r){ if(r.id!==id) return r; var m=Object.assign({},r); m[k]=v; if(k==='n'||k==='a'||k==='b'||k==='c'||k==='d') m[k]=parseInt(String(v).replace(/[^0-9]/g,''),10)||0; return m; }); return n; }); }
   var mgrs=uniq(det.map(function(r){return r.mgr;})).filter(Boolean);
   var regs=uniq(det.map(function(r){return r.region;})).filter(Boolean);
+  var cities=uniq(det.map(function(r){return r.city;})).filter(Boolean);
   var baseF=det.filter(function(r){
     if(fmgr && r.mgr!==fmgr) return false;
     if(freg && r.region!==freg) return false;
@@ -3476,7 +3521,7 @@ function DevTab(p){
     {t:L('번호','序号'),k:'_no',num:1,w:'46px',r:function(r){ return r._no? h('span',{className:'dim'},r._no) : h('span',{className:'dv-blank'}); }},
     {t:L('담당 직원','负责员工'),k:'mgr',w:'120px',r:function(r){ return r.mgr? h('b',{className:'zh dk'},r.mgr): h('span',{className:'dv-blank'}); },
       edit:{type:'text',get:function(r){return r.mgr||'';},set:function(r,v){ editS(r.id,'mgr',v); }}},
-    {t:L('고객수','客户数'),k:'n',num:1,cls:'ic',r:function(r){ return h('b',null,nf(r.n)); },
+    {t:L('고객수','客户数'),k:'n',num:1,r:function(r){ return h('b',null,nf(r.n)); },
       edit:{type:'num',get:function(r){return r.n||0;},set:function(r,v){ editS(r.id,'n',v); }}},
     {t:L('진도 A','进度A'),k:'a',num:1,r:function(r){ return h('span',{className:'dev-ac'},nf(r.a)); },
       edit:{type:'num',get:function(r){return r.a||0;},set:function(r,v){ editS(r.id,'a',v); }}},
@@ -3503,10 +3548,15 @@ function DevTab(p){
     if(typeof xa==='string'||typeof ya==='string') return String(xa||'').localeCompare(String(ya||''),'zh')*d;
     return ((xa||0)-(ya||0))*d; });
   listRows.forEach(function(r,i){ r._no=i+1; });
-  var DHEAD=[['_no','#'],['region',L('지역','地区')],['mgr',L('담당','负责')],['city',L('도시','城市')],
+  var DHEAD=[['_no','#'],['mgr',L('담당','负责')],['region',L('지역','地区')],['city',L('도시','城市')],
     ['name',L('고객사명','客户名')],['stores',L('문점','门店')],['imp',L('임플란트/년','种植/年')],
-    ['price',L('가격(평균)','价格(平均)')],['prog',L('진도','进度')],['target',L('목표제품','目标产品')],['memo',L('메모','备注')]];
-  var DWID=['40px','66px','92px','64px','160px','52px','92px','98px','54px','80px','200px'];
+    ['price',L('환자수가(평균)','患者收费(平均)')],['prog',L('진도','进度')],['target',L('목표제품','目标产品')],['memo',L('메모','备注')]];
+  var DWID=['40px','92px','66px','64px','160px','52px','92px','104px','54px','80px','200px'];
+  // ── 페이지네이션(먹통 방지: 한 번에 pageSize 행만 렌더) ──
+  var totalRows=listRows.length;
+  var totalPages=Math.max(1, Math.ceil(totalRows/pageSize));
+  var curPage=Math.min(page, totalPages);
+  var pageRows=listRows.slice((curPage-1)*pageSize, curPage*pageSize);
   function detTable(){
     return h('div',{className:'tw dv-detail'}, h('table',{className:'tbl'},
       h('colgroup',null, DWID.map(function(w,i){ return h('col',{key:i,style:{width:w}}); })),
@@ -3515,13 +3565,29 @@ function DevTab(p){
         return h('th',{key:c[0],className:(['_no','stores','imp','price'].indexOf(c[0])>=0?'num':''),
           role:'button',tabIndex:0,onClick:function(){ onSort(c[0]); }},
           c[1], on? h('span',{className:'sar'}, sort.d>0?'▲':'▼'):null); }))),
-      h('tbody',null, listRows.slice(0,600).map(function(r){
+      h('tbody',null, pageRows.map(function(r){
         return h(DevRow,{key:r.id, r:r, no:r._no, price:r._price, open:!!exp[r.id], locked:!!p.locked, zh:zh,
+          mgrOpts:mgrs, regOpts:regs, cityOpts:cities,
           editD:editD, editProd:editProd, addProd:addProd, delProd:delProd, toggle:toggle}); }))
     ));
   }
+  function pager(){
+    return h('div',{className:'dv-pager'},
+      h('span',{className:'plb'}, L('페이지당','每页')),
+      h('select',{className:'sel',value:pageSize,onChange:function(e){ setPageSize(+e.target.value); setPage(1); }},
+        [30,50,100,200].map(function(n){ return h('option',{key:n,value:n}, n+L('개','条')); })),
+      h('button',{className:'btn sm',disabled:curPage<=1,onClick:function(){ setPage(1); }},'«'),
+      h('button',{className:'btn sm',disabled:curPage<=1,onClick:function(){ setPage(curPage-1); }},'‹'),
+      h('span',{className:'dv-pinfo'}, curPage+' / '+totalPages+L(' 쪽',' 页')+' · '+nf((curPage-1)*pageSize+1)+'~'+nf(Math.min(curPage*pageSize,totalRows))+' / '+nf(totalRows)),
+      h('button',{className:'btn sm',disabled:curPage>=totalPages,onClick:function(){ setPage(curPage+1); }},'›'),
+      h('button',{className:'btn sm',disabled:curPage>=totalPages,onClick:function(){ setPage(totalPages); }},'»'));
+  }
   var C=p.C;
+  var pgBar=h(PgBar,{zh:zh,y:py,m:pm,w:pw,onY:function(v){ setPy(v); },onM:function(v){ setPm(v); setPw(null); },onW:function(v){ setPw(v); },
+    onCopyWeek:dCopyWeek, onCopyMonth:dCopyMonth,
+    right:h('span',{className:'card-n'}, isSnapV? L('저장본','已存') : L('상속','继承'))});
   return h('div',{className:'dso-wrap'},
+    pgBar,
     kpis,
     h('div',{className:'dso-fbar'},
       h('span',{className:'plb'}, L('담당','负责')),
@@ -3543,11 +3609,12 @@ function DevTab(p){
       h(Card,Object.assign({title:L('지역별 타겟','各地区目标'),note:nf(n)+L('개','家')},C('dev_reg')),
         regDist.length? h(Bars,{data:regDist}) : h('div',{className:'empty'},L('데이터 없음','无数据'))),
       h(Card,Object.assign({title:L('개발 타겟 상세 리스트','开发目标明细'),
-        note:nf(listRows.length)+L('개 · 헤더 클릭 정렬 · ▸ 클릭 시 제품별 수량·단가 · 더블클릭 수정','家 · 点表头排序 · ▸展开产品用量·单价 · 双击修改'),wide:true},C('dev_list')),
-        h('div',{className:'agg-n'}, L('※ 「임플란트/년」 또는 「가격」의 ▸ 를 누르면 그 고객의 제품별 연간 수량과 단가(RMB)가 펼쳐집니다. 모든 칸은 더블클릭 수정 → 즉시 저장되고, 진도·수량 편집 시 위 KPI·요약도 자동 반영됩니다.',
-          '※ 点「种植/年」或「价格」的 ▸ 展开该客户各产品的年用量与单价(RMB)。所有单元格双击修改→即时保存，修改进度·用量时上方KPI·摘要自动反映。')),
+        note:nf(listRows.length)+L('개 · 헤더 클릭 정렬 · ▸ 클릭 시 제품별 수량·환자수가 · 더블클릭 수정','家 · 点表头排序 · ▸展开产品用量·患者收费 · 双击修改'),wide:true},C('dev_list')),
+        h('div',{className:'agg-n'}, L('※ 담당·지역·도시·진도·목표제품(메가젠)은 선택식입니다. 「임플란트/년」 또는 「환자수가」의 ▸ 를 누르면 제품별 연간 수량과 환자수가(RMB)가 펼쳐지고, 다시 누르면 접힙니다. 모든 칸은 더블클릭 수정 → 즉시 저장됩니다.',
+          '※ 点「种植/年」或「价格」的 ▸ 展开该客户各产品的年用量与单价(RMB)，再点收起。所有单元格双击修改→即时保存，修改进度·用量时上方KPI·摘要自动反映。')),
+        pager(),
         detTable(),
-        listRows.length>600? h('div',{className:'ed-n'}, L('※ 600개까지 표시합니다.','※ 最多显示600家。')):null)),
+        pager())),
     h('p',{className:'ed-n',style:{marginTop:'10px'}}, L('* 첨부 「华南本部客户开发目标」 담당 직원별 고객 개발 타겟팅(요약 '+summ.length+'명 · 상세 '+det.length+'건)을 반영했습니다. 모든 값은 브라우저에 자동 저장됩니다.',
       '* 已按附件「华南本部客户开发目标」员工客户开发目标(摘要'+summ.length+'人·明细'+det.length+'家)构建。所有值自动保存在浏览器。')));
 }
@@ -3556,7 +3623,15 @@ function DevTab(p){
 function huYes(v){ v=String(v||'').trim(); return v==='是'||v==='Y'||v==='y'||v==='유'||v==='O'||v==='o'||v==='예'||v==='○'; }
 function HuananTab(p){
   var zh=(p.lang==='zh'); var L=function(ko,cn){ return zh?cn:ko; };
-  var rows=p.rows||[], dso=p.dso||[], fu=p.fu||[]; var pm=p.pm||NM;
+  var rows=p.rows||[], fu=p.fu||[];
+  // ── 연/월/주 기간 관리 (조회 기준) ──
+  var _y=useState(2026); var py=_y[0], setPy=_y[1];
+  var _m=useState(p.pm||NM); var pmSel=_m[0], setPmSel=_m[1];
+  var _w=useState(null); var pw=_w[0], setPw=_w[1];
+  var pm = pmSel||NM;                 // 현재/비활성 판정 기준 월
+  // DSO는 기간 키로 저장될 수 있으므로 해당 기간 배열로 해석
+  var dstore=p.dso; var dkey=periodKey(py,pmSel,pw), dyk=periodKey(py);
+  var dso = (dstore&&dstore.periods)? (dstore.periods[dkey]||dstore.periods[dyk]||dstore.periods['2026']||[]) : (Array.isArray(dstore)?dstore:[]);
   var _f=useState('all'); var flt=_f[0], setFlt=_f[1];
   var _q=useState(''); var q=_q[0], setQ=_q[1];
   var _s=useState({k:'src',d:1}); var sort=_s[0], setSort=_s[1];
@@ -3565,13 +3640,13 @@ function HuananTab(p){
   var uni=[];
   rows.forEach(function(r){ var t=rtot(r), rc=rrec(r);
     var st= rc>0? L('거래중','交易中') : (t>0? L('구매중단','购买中断') : L('미개시','未开始'));
-    uni.push({origin:'rows', _id:r.id, src:(rc>0?'cur':'inact'), name:r.name||'', region:r.prov||'', mgr:r.mgr||'', dealer:r.dealer||'', type:r.type||'', status:st, qty:t, person:''}); });
-  dso.forEach(function(d){ uni.push({origin:'dso', _id:d.id, src:'dso', name:String(d.name||'').replace(/\n/g,' '), region:d.area||d.div||'', mgr:d.mgr||'', dealer:d.dealer||'', type:'DSO', status:d.status||d.grade||'', qty:(+d.a26||+d.implants||0), person:d.city||''}); });
-  fu.forEach(function(f){ if(!f.clinic && !f.name) return; uni.push({origin:'sem', _id:f.id, src:'sem', name:String(f.clinic||'').replace(/\n/g,' '), region:'', mgr:f.sales||'', dealer:f.dealer||'', type:f.kind||'', status:(huYes(f.attend)?L('세미나 참가','已参加'):L('발굴','挖掘')), qty:(+String(f.usage||'').replace(/[^0-9.]/g,'')||0), person:f.name||''}); });
-  // 인라인 수정 → 원본 소스에 반영(자동 저장)
-  var FMAP={rows:{name:'name',region:'prov',mgr:'mgr',dealer:'dealer',type:'type'},
-            dso:{name:'name',region:'area',mgr:'mgr',dealer:'dealer'},
-            sem:{name:'clinic',mgr:'sales',dealer:'dealer',type:'kind'}};
+    uni.push({origin:'rows', _id:r.id, src:(rc>0?'cur':'inact'), name:r.name||'', region:r.prov||'', mgr:r.mgr||'', dealer:r.dealer||'', type:r.type||'', status:st, statusOv:r.statusOv||'', qty:t, memo:r.memo||'', person:''}); });
+  dso.forEach(function(d){ uni.push({origin:'dso', _id:d.id, src:'dso', name:String(d.name||'').replace(/\n/g,' '), region:d.area||d.div||'', mgr:d.mgr||'', dealer:d.dealer||'', type:'DSO', status:d.status||d.grade||'', statusOv:d.statusOv||'', qty:(+d.a26||+d.implants||0), memo:d.memo||'', person:d.city||''}); });
+  fu.forEach(function(f){ if(!f.clinic && !f.name) return; uni.push({origin:'sem', _id:f.id, src:'sem', name:String(f.clinic||'').replace(/\n/g,' '), region:'', mgr:f.sales||'', dealer:f.dealer||'', type:f.kind||'', status:(huYes(f.attend)?L('세미나 참가','已参加'):L('발굴','挖掘')), statusOv:f.statusOv||'', qty:(+String(f.usage||'').replace(/[^0-9.]/g,'')||0), memo:f.memo||'', person:f.name||''}); });
+  // 인라인 수정 → 원본 소스에 반영(자동 저장). 상태·수량·비고 포함.
+  var FMAP={rows:{name:'name',region:'prov',mgr:'mgr',dealer:'dealer',type:'type',statusOv:'statusOv',memo:'memo'},
+            dso:{name:'name',region:'area',mgr:'mgr',dealer:'dealer',statusOv:'statusOv',memo:'memo',qty:'a26'},
+            sem:{name:'clinic',mgr:'sales',dealer:'dealer',type:'kind',statusOv:'statusOv',memo:'memo',qty:'usage'}};
   function editUni(x, field, val){
     if(p.locked) return; var f=(FMAP[x.origin]||{})[field]; if(!f) return;
     if(x.origin==='rows'){ if(p.onEditRow) p.onEditRow(x._id, f, val); }
@@ -3582,6 +3657,15 @@ function HuananTab(p){
     return h(EdCell,{row:x,locked:!editable,col:{
       r:function(rr){ var v=rr[field]; return (v===''||v==null)? h('span',{className:'hu-bl'}) : h('span',{className:cls||''},v); },
       edit:{type:'text',get:function(rr){return rr[field]||'';},set:function(rr,v){ editUni(x, field, v); }} }}); }
+  // 상태(오버라이드 우선 표시) · 수량(숫자) 편집 셀
+  function huStatus(x){ var editable=!p.locked;
+    return h(EdCell,{row:x,locked:!editable,col:{
+      r:function(rr){ var v=rr.statusOv||rr.status; return v? h('span',{className:'zh'},v): h('span',{className:'hu-bl'}); },
+      edit:{type:'text',get:function(rr){return rr.statusOv||rr.status||'';},set:function(rr,v){ editUni(x,'statusOv',v); }} }}); }
+  function huQty(x){ var editable=!p.locked && (FMAP[x.origin]||{}).qty;
+    return h(EdCell,{row:x,locked:!editable,col:{ num:1,
+      r:function(rr){ return rr.qty? h('b',null,nf(rr.qty)): h('span',{className:'hu-bl'}); },
+      edit:{type:'num',get:function(rr){return rr.qty||0;},set:function(rr,v){ editUni(x,'qty',v); }} }}); }
   var nCur=0,nInact=0,nDso=0,nSem=0,nMega=0, un={};
   uni.forEach(function(x){ if(x.src==='cur')nCur++; else if(x.src==='inact')nInact++; else if(x.src==='dso')nDso++; else nSem++; if(x.name)un[x.name]=1; });
   fu.forEach(function(f){ if(huYes(f.isMega)) nMega++; });
@@ -3601,8 +3685,8 @@ function HuananTab(p){
     if(k==='src'){ xa=srcO[a.src]; ya=srcO[b.src]; } else { xa=a[k]; ya=b[k]; }
     if(typeof xa==='string'||typeof ya==='string') return String(xa||'').localeCompare(String(ya||''),'zh')*d;
     return ((xa||0)-(ya||0))*d; });
-  var HEAD=[['_no','#'],['src',L('구분','区分')],['name',L('치과명','诊所名')],['region',L('지역','地区')],['mgr',L('담당','负责')],['dealer',L('대리상','代理商')],['type',L('유형','类型')],['status',L('상태','状态')],['qty',L('수량/연사용','量/年用')]];
-  var HWID=['44px','78px','','96px','96px','','86px','96px','96px'];
+  var HEAD=[['_no','#'],['src',L('구분','区分')],['name',L('치과명','诊所名')],['region',L('지역','地区')],['mgr',L('담당','负责')],['dealer',L('대리상','代理商')],['type',L('유형','类型')],['status',L('상태','状态')],['qty',L('수량/연사용','量/年用')],['memo',L('비고','备注')]];
+  var HWID=['40px','74px','','88px','88px','','80px','92px','90px',''];
   var C=p.C;
   var table=h('div',{className:'tw hu-detail'}, h('table',{className:'tbl'},
     h('colgroup',null, HWID.map(function(w,i){ return h('col',{key:i,style:w?{width:w}:null}); })),
@@ -3618,11 +3702,15 @@ function HuananTab(p){
         h('td',{className:'hu-c'}, huEd(x,'mgr','zh')),
         h('td',null, huEd(x,'dealer','zh')),
         h('td',{className:'hu-c'}, huEd(x,'type','zh')),
-        h('td',{className:'hu-c'}, x.status? h('span',{className:'zh'},x.status): h('span',{className:'hu-bl'})),
-        h('td',{className:'num'}, x.qty? h('b',null,nf(x.qty)): h('span',{className:'hu-bl'})));
+        h('td',{className:'hu-c'}, huStatus(x)),
+        h('td',{className:'num'}, huQty(x)),
+        h('td',{className:'hu-memo'}, huEd(x,'memo','zh')));
     }))
   ));
+  var pgBar=h(PgBar,{zh:zh,y:py,m:pmSel,w:pw,onY:function(v){ setPy(v); },onM:function(v){ setPmSel(v); setPw(null); },onW:function(v){ setPw(v); },
+    right:h('span',{className:'card-n'}, L('조회 기준: ','查看基准: ')+periodLabel(py,pmSel,pw,zh))});
   return h('div',{className:'dso-wrap'},
+    pgBar,
     kpis,
     h('div',{className:'segs',style:{margin:'12px 0 10px'}},
       h('span',{className:'plb'}, L('구분','区分')),
@@ -3648,7 +3736,7 @@ var PRICE_SEED = {
   trend:[170,172,169,175,180,178],
   bubble:[{dso:'麦芽口腔',price:245,qty:35000,p:'BD'},{dso:'瑞尔集团',price:235,qty:22000,p:'ST'},{dso:'格伦菲尔口腔',price:190,qty:38000,p:'BD'},{dso:'爱康健齿科',price:185,qty:12000,p:'ARi'},{dso:'美维口腔',price:175,qty:18000,p:'AO'}],
   nego:[{no:1,dental:'XX Dental',product:'ST',price:150,vs:'-35 (-20%)',pri:'높음',action:'즉시 협상'},{no:2,dental:'YY Dental',product:'AO',price:170,vs:'-15 (-8%)',pri:'높음',action:'인상 가능'},{no:3,dental:'ZZ Dental',product:'ARi',price:220,vs:'+20 (+10%)',pri:'보통',action:'유지'},{no:4,dental:'AA Dental',product:'BD',price:260,vs:'+40 (+18%)',pri:'보통',action:'유지'},{no:5,dental:'BB Dental',product:'ST',price:185,vs:'+0 (0%)',pri:'낮음',action:'모니터링'}],
-  "brandCmp":[{"brand":"아스트라","avg":8667,"lo":8000,"hi":9000,"cust":17,"qty":4050},{"brand":"노벨","avg":7178,"lo":4480,"hi":10000,"cust":67,"qty":11790},{"brand":"스트라우만","avg":7024,"lo":100,"hi":12000,"cust":195,"qty":68580},{"brand":"안소지르","avg":5951,"lo":3680,"hi":12000,"cust":26,"qty":3740},{"brand":"메가젠","avg":4639,"lo":2980,"hi":8000,"cust":92,"qty":15720},{"brand":"덴티움","avg":3858,"lo":300,"hi":6500,"cust":83,"qty":57350},{"brand":"오스템","avg":3336,"lo":600,"hi":6500,"cust":126,"qty":84740},{"brand":"DIO","avg":2416,"lo":1380,"hi":4500,"cust":12,"qty":6950},{"brand":"기타","avg":4396,"lo":300,"hi":9800,"cust":91,"qty":70835}],"brandTrend":{"months":["1月","2月","3月","4月","5月","6月","7月"],"series":[{"brand":"스트라우만","v":[7024,7024,7024,7024,7024,7024,7024]},{"brand":"오스템","v":[3336,3336,3336,3336,3336,3336,3336]},{"brand":"메가젠","v":[4639,4639,4639,4639,4639,4639,4639]},{"brand":"기타","v":[4396,4396,4396,4396,4396,4396,4396]},{"brand":"덴티움","v":[3858,3858,3858,3858,3858,3858,3858]}]}
+  "brandCmp":[{"brand":"오스템","qty":84740,"fee":3336,"supply":273,"lo":600,"hi":6500,"clinics":83},{"brand":"기타","qty":70835,"fee":4396,"supply":171,"lo":300,"hi":9800,"clinics":55},{"brand":"스트라우만","qty":68580,"fee":7024,"supply":1054,"lo":100,"hi":12000,"clinics":131},{"brand":"덴티움","qty":57350,"fee":3858,"supply":209,"lo":300,"hi":6500,"clinics":62},{"brand":"메가젠","qty":15720,"fee":4639,"supply":0,"lo":2980,"hi":8000,"clinics":71},{"brand":"노벨","qty":11790,"fee":7178,"supply":0,"lo":4480,"hi":10000,"clinics":38},{"brand":"DIO","qty":6950,"fee":2416,"supply":213,"lo":1380,"hi":4500,"clinics":9},{"brand":"아스트라","qty":4050,"fee":8667,"supply":0,"lo":8000,"hi":9000,"clinics":10},{"brand":"안소지르","qty":3740,"fee":5951,"supply":0,"lo":3680,"hi":12000,"clinics":15}],"comp2":[{"brand":"오스템","qty":84740,"fee":3336,"supply":273,"lo":600,"hi":6500,"clinics":83},{"brand":"기타","qty":70835,"fee":4396,"supply":171,"lo":300,"hi":9800,"clinics":55},{"brand":"스트라우만","qty":68580,"fee":7024,"supply":1054,"lo":100,"hi":12000,"clinics":131},{"brand":"덴티움","qty":57350,"fee":3858,"supply":209,"lo":300,"hi":6500,"clinics":62},{"brand":"노벨","qty":11790,"fee":7178,"supply":0,"lo":4480,"hi":10000,"clinics":38},{"brand":"DIO","qty":6950,"fee":2416,"supply":213,"lo":1380,"hi":4500,"clinics":9},{"brand":"아스트라","qty":4050,"fee":8667,"supply":0,"lo":8000,"hi":9000,"clinics":10},{"brand":"안소지르","qty":3740,"fee":5951,"supply":0,"lo":3680,"hi":12000,"clinics":15}],"megaRank":[{"no":1,"clinic":"谢荣希口腔","region":"粤东","sys":"","qty":60,"price":8000},{"no":2,"clinic":"毓坤口腔","region":"粤东","sys":"","qty":20,"price":8000},{"no":3,"clinic":"尊雅口腔","region":"粤东","sys":"","qty":150,"price":6500},{"no":4,"clinic":"心艺口腔","region":"粤东","sys":"","qty":50,"price":6500},{"no":5,"clinic":"健英口腔","region":"粤东","sys":"","qty":50,"price":6500},{"no":6,"clinic":"永光口腔","region":"粤东","sys":"","qty":50,"price":6500},{"no":7,"clinic":"美加臻口腔","region":"粤东","sys":"","qty":30,"price":6500},{"no":8,"clinic":"深圳壹方口腔","region":"广州","sys":"","qty":50,"price":6000},{"no":9,"clinic":"深圳壹方口腔","region":"深圳","sys":"","qty":50,"price":6000},{"no":10,"clinic":"杨乐荣口腔","region":"粤东","sys":"","qty":40,"price":6000},{"no":11,"clinic":"继灵口腔","region":"粤东","sys":"","qty":30,"price":6000},{"no":12,"clinic":"康德口腔","region":"粤东","sys":"","qty":30,"price":6000},{"no":13,"clinic":"黄时山口腔","region":"粤东","sys":"","qty":20,"price":6000},{"no":14,"clinic":"东橙口腔","region":"粤东","sys":"","qty":100,"price":5500},{"no":15,"clinic":"谦仁口腔","region":"粤东","sys":"","qty":100,"price":5500},{"no":16,"clinic":"尚康源口腔","region":"粤东","sys":"","qty":90,"price":5500},{"no":17,"clinic":"臻齐口腔","region":"粤东","sys":"","qty":60,"price":5500},{"no":18,"clinic":"树芽口腔","region":"粤东","sys":"","qty":50,"price":5500},{"no":19,"clinic":"陈荣洁口腔","region":"粤东","sys":"","qty":30,"price":5500},{"no":20,"clinic":"第一健康口腔","region":"粤东","sys":"","qty":30,"price":5500},{"no":21,"clinic":"深圳柏齿康口腔","region":"广州","sys":"","qty":200,"price":5000},{"no":22,"clinic":"深圳柏齿康口腔","region":"深圳","sys":"","qty":200,"price":5000},{"no":23,"clinic":"永生口腔","region":"粤东","sys":"","qty":80,"price":5000},{"no":24,"clinic":"正皓口腔","region":"广州","sys":"AR","qty":60,"price":5000},{"no":25,"clinic":"缪忠存口腔","region":"广州","sys":"","qty":50,"price":5000},{"no":26,"clinic":"瑞文口腔","region":"粤东","sys":"","qty":50,"price":5000},{"no":27,"clinic":"嘉诚口腔","region":"广西","sys":"BD/ARi","qty":50,"price":5000},{"no":28,"clinic":"实肯口腔","region":"粤东","sys":"","qty":40,"price":5000},{"no":29,"clinic":"则武口腔","region":"粤东","sys":"","qty":30,"price":5000},{"no":30,"clinic":"陈哲口腔","region":"粤东","sys":"","qty":20,"price":5000},{"no":31,"clinic":"爱牙口腔","region":"粤东","sys":"","qty":20,"price":5000},{"no":32,"clinic":"嘉叶口腔","region":"粤东","sys":"","qty":20,"price":5000},{"no":33,"clinic":"许氏口腔","region":"粤东","sys":"","qty":20,"price":5000},{"no":34,"clinic":"陆志鹏口腔","region":"粤东","sys":"","qty":10,"price":5000},{"no":35,"clinic":"锦益口腔","region":"粤东","sys":"","qty":10,"price":5000},{"no":36,"clinic":"爱康健口腔","region":"广州","sys":"","qty":3000,"price":4980},{"no":37,"clinic":"爱康健口腔","region":"深圳","sys":"","qty":3000,"price":4980},{"no":38,"clinic":"致远齿科","region":"粤东","sys":"","qty":200,"price":4890},{"no":39,"clinic":"文深口腔","region":"粤东","sys":"","qty":30,"price":4800},{"no":40,"clinic":"深圳瑞吉口腔诊所","region":"广州","sys":"","qty":300,"price":4500},{"no":41,"clinic":"深圳瑞吉口腔诊所","region":"深圳","sys":"","qty":300,"price":4500},{"no":42,"clinic":"刘医生口腔","region":"广西","sys":"ST","qty":300,"price":4500},{"no":43,"clinic":"缪兴口腔","region":"广州","sys":"","qty":250,"price":4500},{"no":44,"clinic":"缪兴口腔","region":"深圳","sys":"","qty":250,"price":4500},{"no":45,"clinic":"承恩口腔","region":"广西","sys":"BD","qty":200,"price":4500},{"no":46,"clinic":"全心全意口腔","region":"广西","sys":"BD/ARi","qty":200,"price":4500},{"no":47,"clinic":"常乐口腔","region":"粤东","sys":"","qty":100,"price":4500},{"no":48,"clinic":"邓娟口腔","region":"广西","sys":"BD/ARi","qty":70,"price":4500},{"no":49,"clinic":"深圳天华口腔","region":"广州","sys":"","qty":50,"price":4500},{"no":50,"clinic":"壹口好牙","region":"广州","sys":"","qty":50,"price":4500},{"no":51,"clinic":"深圳天华口腔","region":"深圳","sys":"","qty":50,"price":4500},{"no":52,"clinic":"星皓口腔","region":"广西","sys":"BD/ARi","qty":50,"price":4500},{"no":53,"clinic":"弦月口腔","region":"广西","sys":"BD/ARi","qty":50,"price":4500},{"no":54,"clinic":"罗会斌口腔","region":"粤东","sys":"","qty":30,"price":4500},{"no":55,"clinic":"郑毓坤口腔","region":"粤东","sys":"","qty":20,"price":4500},{"no":56,"clinic":"培鑫口腔","region":"粤东","sys":"","qty":10,"price":4500},{"no":57,"clinic":"中瑞口腔","region":"广西","sys":"ST","qty":200,"price":4000},{"no":58,"clinic":"华齿口腔","region":"广西","sys":"ST","qty":200,"price":4000},{"no":59,"clinic":"龙祥社区卫生服务中心","region":"广西","sys":"BD/ARi","qty":200,"price":4000},{"no":60,"clinic":"深圳潘波口腔","region":"广州","sys":"","qty":80,"price":4000},{"no":61,"clinic":"深圳潘波口腔","region":"深圳","sys":"","qty":80,"price":4000},{"no":62,"clinic":"深圳品一口腔","region":"广州","sys":"","qty":30,"price":4000},{"no":63,"clinic":"深圳品一口腔","region":"深圳","sys":"","qty":30,"price":4000},{"no":64,"clinic":"深圳何维兴口腔诊所","region":"广州","sys":"","qty":400,"price":3980},{"no":65,"clinic":"深圳何维兴口腔诊所","region":"深圳","sys":"","qty":400,"price":3980},{"no":66,"clinic":"深圳新沙同步口腔诊所","region":"广州","sys":"","qty":150,"price":3980},{"no":67,"clinic":"深圳新沙同步口腔诊所","region":"深圳","sys":"","qty":150,"price":3980},{"no":68,"clinic":"深圳仁赞口腔","region":"广州","sys":"","qty":100,"price":3980},{"no":69,"clinic":"深圳仁赞口腔","region":"深圳","sys":"","qty":100,"price":3980},{"no":70,"clinic":"深圳徐莉口腔诊所","region":"广州","sys":"","qty":50,"price":3980},{"no":71,"clinic":"深圳金牙福口腔门诊部","region":"广州","sys":"","qty":50,"price":3980},{"no":72,"clinic":"深圳徐莉口腔诊所","region":"深圳","sys":"","qty":50,"price":3980},{"no":73,"clinic":"深圳金牙福口腔门诊部","region":"深圳","sys":"","qty":50,"price":3980},{"no":74,"clinic":"银杏口腔","region":"广西","sys":"BD/ARi","qty":100,"price":3800},{"no":75,"clinic":"益君口腔","region":"粤东","sys":"","qty":40,"price":3800},{"no":76,"clinic":"洋紫荆口腔","region":"广西","sys":"ST","qty":300,"price":3680},{"no":77,"clinic":"深圳来恩口腔","region":"广州","sys":"","qty":50,"price":3500},{"no":78,"clinic":"深圳芽嘉都口腔","region":"广州","sys":"","qty":50,"price":3500},{"no":79,"clinic":"深圳来恩口腔","region":"深圳","sys":"","qty":50,"price":3500},{"no":80,"clinic":"深圳芽嘉都口腔","region":"深圳","sys":"","qty":50,"price":3500},{"no":81,"clinic":"深圳粤口口腔","region":"广州","sys":"","qty":500,"price":3200},{"no":82,"clinic":"深圳粤口口腔","region":"深圳","sys":"","qty":500,"price":3200},{"no":83,"clinic":"深圳亮明珠口腔门诊部","region":"广州","sys":"","qty":200,"price":2980},{"no":84,"clinic":"深圳禾田口腔","region":"广州","sys":"","qty":200,"price":2980},{"no":85,"clinic":"深圳亮明珠口腔门诊部","region":"深圳","sys":"","qty":200,"price":2980},{"no":86,"clinic":"深圳禾田口腔","region":"深圳","sys":"","qty":200,"price":2980},{"no":87,"clinic":"深圳尔汇德邻口腔门诊部","region":"广州","sys":"","qty":150,"price":2980},{"no":88,"clinic":"深圳尔汇德邻口腔门诊部","region":"深圳","sys":"","qty":150,"price":2980},{"no":89,"clinic":"深圳鑫星口腔诊所","region":"广州","sys":"","qty":100,"price":2980},{"no":90,"clinic":"深圳鑫星口腔诊所","region":"深圳","sys":"","qty":100,"price":2980}],"brandTrend":{"months":["1月","2月","3月","4月","5月","6月","7月"],"series":[{"brand":"스트라우만","v":[7024,7024,7024,7024,7024,7024,7024]},{"brand":"오스템","v":[3336,3336,3336,3336,3336,3336,3336]},{"brand":"메가젠","v":[4639,4639,4639,4639,4639,4639,4639]},{"brand":"기타","v":[4396,4396,4396,4396,4396,4396,4396]},{"brand":"덴티움","v":[3858,3858,3858,3858,3858,3858,3858]}]}
 };
 var PRICE_PROD=['ST','AO','ARi','BD'];
 function PriceRadar(p){
@@ -3700,18 +3788,25 @@ function PriceTab(p){
   var _w=useState(null); var pw=_w[0], setPw=_w[1];
   var pkey=periodKey(py,pm,pw), ykey=periodKey(py);   // 기간 키(주>월>연) + 연 폴백 키
   // 기간별 스냅샷 구조(periods). legacy: root 최상위에 kpi/products…가 있으면 '2024' 로 간주.
-  function pData(){ var ps=root.periods; if(ps){ return ps[pkey]||ps[ykey]||ps['2024']||PRICE_SEED; } return root; }
+  function pData(){ var ps=root.periods; var d = ps? (ps[pkey]||ps[ykey]||ps['2024']||PRICE_SEED) : root;
+    // 옛 저장본에 새 항목(comp2·megaRank 등)이 없으면 시드에서 보충
+    return Object.assign({}, PRICE_SEED, d||{}); }
   var data=pData();
   var isSnap=!!(root.periods? root.periods[pkey] : (pkey==='2024'));
+  // 현재 기간 데이터를 대상 기간 키로 복사
+  function copyToKey(tkey){ setData(function(o){ var ps=o.periods? Object.assign({},o.periods) : {'2024':o}; var base=ps[pkey]||ps[ykey]||ps['2024']||PRICE_SEED; ps[tkey]=JSON.parse(JSON.stringify(base)); return {periods:ps}; }); }
+  function copyWeek(){ var nw=nextWeek(py,pw); copyToKey(periodKey(nw.y,nw.m,nw.w)); setPy(nw.y); setPm(nw.m); setPw(nw.w); }
+  function copyMonth(){ var nm=nextMonth(py,pm); copyToKey(periodKey(nm.y,nm.m,null)); setPy(nm.y); setPm(nm.m); setPw(null); }
   // ── ② 하위 탭 ──
-  var SUBS=[['ov',L('가격 개요','价格概览')],['brand',L('브랜드 가격','品牌价格')],['rank',L('랭킹·경쟁','排名·竞品')],['trend',L('추세·구매력','趋势·采购力')],['nego',L('협상','谈判')]];
+  var SUBS=[['ov',L('가격 개요','价格概览')],['brand',L('브랜드 가격','品牌价格')],['rank',L('경쟁현황','竞争现况')]];
   var _sb=useState('ov'); var sub=_sb[0], setSub=_sb[1];
   var _fp=useState(''); var fprod=_fp[0], setFprod=_fp[1];
   var _ps=useState({k:'k',d:1}); var psort=_ps[0], setPsort=_ps[1];
   var _hs=useState({k:'dso',d:1}); var hsort=_hs[0], setHsort=_hs[1];
   var _rs=useState({k:'no',d:1}); var rsort=_rs[0], setRsort=_rs[1];
   var _ns=useState({k:'no',d:1}); var nsort=_ns[0], setNsort=_ns[1];
-  var _bs=useState({k:'avg',d:-1}); var bsort=_bs[0], setBsort=_bs[1];
+  var _bs=useState({k:'qty',d:-1}); var bsort=_bs[0], setBsort=_bs[1];
+  var _mp=useState(1); var mrpage=_mp[0], setMrpage=_mp[1];   // ④ 치과별 메가젠 가격 페이지
   var K=data.kpi||{};
   function baseOf(o,ps){ return (o.periods? (ps[pkey]||ps[ykey]||ps['2024']||PRICE_SEED) : o); }
   function setPath(arr,i,k,v){ setData(function(o){
@@ -3730,6 +3825,15 @@ function PriceTab(p){
     else { base=o; ps={'2024':o}; }
     var cur=Object.assign({},base); var bt=base.brandTrend||{months:[],series:[]};
     cur.brandTrend={months:bt.months, series:(bt.series||[]).map(function(s,j){ if(j!==si) return s; var nv=(s.v||[]).slice(); nv[mi]=parseInt(String(v).replace(/[^0-9.\-]/g,''),10)||0; return {brand:s.brand, v:nv}; })};
+    ps[pkey]=cur;
+    return {periods:ps};
+  }); }
+  // ⑥ 전체 평균 추세(주간) 값 편집
+  function setTrendPt(i,v){ setData(function(o){
+    var ps, base;
+    if(o.periods){ ps=Object.assign({},o.periods); base=ps[pkey]||ps[ykey]||ps['2024']||PRICE_SEED; }
+    else { base=o; ps={'2024':o}; }
+    var cur=Object.assign({},base); var arr=(base.trend||[]).slice(); arr[i]=parseInt(String(v).replace(/[^0-9.\-]/g,''),10)||0; cur.trend=arr;
     ps[pkey]=cur;
     return {periods:ps};
   }); }
@@ -3805,11 +3909,55 @@ function PriceTab(p){
     h(Bars,{data:(data.region||[]).map(function(x){return {label:x.name,value:x.price,zh:1,sub:''};})}));
   var secHeat=h(Card,Object.assign({title:L('③ DSO별 제품 평균 판매가','③ 各DSO产品平均售价'),note:uRMB+L(' · 헤더 클릭 정렬 · 더블클릭 수정',' · 点表头排序·双击改'),wide:true},C('pr_heat')),
     h('div',{className:'big'}, heat));
-  var secRank=h(Card,Object.assign({title:L('④ 치과별 가격 Ranking','④ 各诊所价格排名'),note:uRMB+' · '+nf(rankF.length)+L('건 · 헤더 클릭 정렬','家 · 点表头排序')},C('pr_rank')),
-    h('div',{className:'big'}, h(Table,{cols:rcols,rows:rankF,onSort:onRSort,sortK:rsort.k,sortD:rsort.d})));
-  var secComp=h(Card,Object.assign({title:L('⑤ 경쟁사 가격 비교 (평균 판매가)','⑤ 竞品价格对比'),note:uRMB},C('pr_comp')), h(PriceRadar,{data:data.comp||[]}));
-  var secTrend=h(Card,Object.assign({title:L('⑥ 가격 변동 추세 (전체 평균 판매가)','⑥ 价格变动趋势'),note:uRMB+L(' · 1~6月',' · 1~6月')},C('pr_trend')),
-    h(PriceTrend,{data:data.trend||[]}));
+  // ④ 치과별 메가젠 가격 (전체 치과 · DSO 한정 아님)
+  var mrank=data.megaRank||[];
+  var mrIdx=function(r){ return mrank.indexOf(r); };
+  var mrankRows=mrank.slice().sort(function(a,b){ var k=rsort.k,d=rsort.d,xa=a[k],ya=b[k]; if(typeof xa==='string') return String(xa||'').localeCompare(String(ya||''),'zh')*d; return ((xa||0)-(ya||0))*d; });
+  var SYSOPT=['','AO','AR','ST','BD','ARi','BD/ARi'];
+  var mcols=[
+    {t:L('순위','排名'),k:'no',num:1,w:'46px',r:function(r){ return h('b',null,r.no); }},
+    {t:L('치과명','诊所名'),k:'clinic',w:'160px',r:function(r){ return h('b',{className:'zh'},r.clinic); }, edit:{type:'text',get:function(r){return r.clinic;},set:function(r,v){ setPath('megaRank',mrIdx(r),'clinic',v); }}},
+    {t:L('지역','地区'),k:'region',w:'70px',r:function(r){ return h('span',{className:'zh'},r.region); }, edit:{type:'text',get:function(r){return r.region;},set:function(r,v){ setPath('megaRank',mrIdx(r),'region',v); }}},
+    {t:L('시스템','系统'),k:'sys',w:'76px',r:function(r){ return r.sys? h('b',{className:'zh'},r.sys) : h('span',{className:'dim'},'-'); }, edit:{type:'sel',opts:SYSOPT,get:function(r){return r.sys||'';},set:function(r,v){ setPath('megaRank',mrIdx(r),'sys',v); }}},
+    {t:L('연수량','年用量'),k:'qty',num:1,r:function(r){ return nf(r.qty); }, edit:{type:'num',get:function(r){return r.qty;},set:function(r,v){ setPath('megaRank',mrIdx(r),'qty',v); }}},
+    {t:L('환자수가 (메가젠)','患者收费(美格真)'),k:'price',num:1,r:function(r){ return h('b',null,nf(r.price)); }, edit:{type:'num',get:function(r){return r.price;},set:function(r,v){ setPath('megaRank',mrIdx(r),'price',v); }}}
+  ];
+  // ④ 페이지네이션(30개씩)
+  var mrTotal=mrankRows.length, mrPages=Math.max(1,Math.ceil(mrTotal/30)), mrCur=Math.min(mrpage,mrPages);
+  var mrPageRows=mrankRows.slice((mrCur-1)*30, mrCur*30);
+  var mrPager=h('div',{className:'dv-pager'},
+    h('button',{className:'btn sm',disabled:mrCur<=1,onClick:function(){ setMrpage(mrCur-1); }},'‹'),
+    h('span',{className:'dv-pinfo'}, mrCur+' / '+mrPages+L(' 쪽',' 页')+' · '+nf((mrCur-1)*30+1)+'~'+nf(Math.min(mrCur*30,mrTotal))+' / '+nf(mrTotal)),
+    h('button',{className:'btn sm',disabled:mrCur>=mrPages,onClick:function(){ setMrpage(mrCur+1); }},'›'));
+  var secRank=h(Card,Object.assign({title:L('④ 치과별 메가젠 가격 (전체 치과)','④ 各诊所美格真价格(全部)'),note:uRMB+' · '+nf(mrTotal)+L('개 치과(30개씩) · 헤더 정렬 · 수정','家(每页30)·排序·可改'),wide:true},C('pr_rank')),
+    mrPager,
+    h('div',{className:'big'}, h(Table,{cols:mcols,rows:mrPageRows,onSort:onRSort,sortK:rsort.k,sortD:rsort.d})),
+    mrPager);
+  // ⑤ 경쟁사(메가젠 외 시스템) 가격 비교 — 표(그래프 없음)
+  var comp2=data.comp2||[];
+  var c2Idx=function(r){ return comp2.indexOf(r); };
+  var c2cols=[
+    {t:L('시스템(브랜드)','系统(品牌)'),k:'brand',w:'110px',r:function(r){ return h('b',{className:'zh'},r.brand); }, edit:{type:'text',get:function(r){return r.brand;},set:function(r,v){ setPath('comp2',c2Idx(r),'brand',v); }}},
+    {t:L('평균 수술비용','平均手术费'),k:'fee',num:1,r:function(r){ return h('b',null,nf(r.fee)); }, edit:{type:'num',get:function(r){return r.fee;},set:function(r,v){ setPath('comp2',c2Idx(r),'fee',v); }}},
+    {t:L('치과공급가(평균)','诊所供货价'),k:'supply',num:1,r:function(r){ return r.supply? h('b',null,nf(r.supply)) : h('span',{className:'dim'},'-'); }, edit:{type:'num',get:function(r){return r.supply||0;},set:function(r,v){ setPath('comp2',c2Idx(r),'supply',v); }}},
+    {t:L('연수량','年用量'),k:'qty',num:1,r:function(r){ return nf(r.qty); }, edit:{type:'num',get:function(r){return r.qty;},set:function(r,v){ setPath('comp2',c2Idx(r),'qty',v); }}},
+    {t:L('최저','最低'),k:'lo',num:1,r:function(r){ return nf(r.lo); }, edit:{type:'num',get:function(r){return r.lo;},set:function(r,v){ setPath('comp2',c2Idx(r),'lo',v); }}},
+    {t:L('최고','最高'),k:'hi',num:1,r:function(r){ return nf(r.hi); }, edit:{type:'num',get:function(r){return r.hi;},set:function(r,v){ setPath('comp2',c2Idx(r),'hi',v); }}},
+    {t:L('채택 치과수','采用诊所'),k:'clinics',num:1,r:function(r){ return nf(r.clinics); }, edit:{type:'num',get:function(r){return r.clinics;},set:function(r,v){ setPath('comp2',c2Idx(r),'clinics',v); }}}
+  ];
+  var comp2Rows=comp2.slice().sort(function(a,b){ var k=bsort.k,d=bsort.d,xa=a[k],ya=b[k]; if(k==='no'||k===undefined) return 0; if(typeof xa==='string') return String(xa||'').localeCompare(String(ya||''),'zh')*d; return ((xa||0)-(ya||0))*d; });
+  var secComp=h(Card,Object.assign({title:L('⑤ 경쟁사 가격 비교 (메가젠 외 시스템)','⑤ 竞品价格对比(美格真以外)'),note:uRMB+L(' · 헤더 클릭 정렬 · 수정 가능',' · 点表头排序·可修改'),wide:true},C('pr_comp')),
+    h('div',{className:'big'}, h(Table,{cols:c2cols,rows:comp2Rows,onSort:onBSort,sortK:bsort.k,sortD:bsort.d})));
+  var trendArr=data.trend||[];
+  var trGrid=h('div',{className:'tw',style:{marginTop:'8px'}}, h('table',{className:'tbl'},
+    h('thead',null,h('tr',null,h('th',null,L('주','周')), trendArr.map(function(_,i){ return h('th',{key:i,className:'num'},'W'+(i+1)); }))),
+    h('tbody',null,h('tr',null, h('td',null,h('b',null,L('평균가','均价'))),
+      trendArr.map(function(v,i){ return h('td',{key:i,className:'num'}, h(EdCell,{row:{},locked:!!p.locked,col:{r:function(){return nf(v);},edit:{type:'num',get:function(){return v;},set:function(_,val){ setTrendPt(i,val); }}}})); })))));
+  var secTrend=h(Card,Object.assign({title:L('⑥ 가격 변동 추세 (전체 평균)','⑥ 价格变动趋势(整体)'),note:uRMB+L(' · 매주 더블클릭 입력',' · 每周双击录入')},C('pr_trend')),
+    h(PriceTrend,{data:trendArr,unit:'주'}), trGrid,
+    p.locked?null:h('div',{style:{display:'flex',gap:'6px',marginTop:'6px'}},
+      h('button',{className:'btn sm',onClick:function(){ setTrendPt(trendArr.length, trendArr.length? trendArr[trendArr.length-1]:0); }}, L('+ 주 추가','+ 加周')),
+      trendArr.length>1? h('button',{className:'btn sm dg',onClick:function(){ setData(function(o){ var ps,base; if(o.periods){ps=Object.assign({},o.periods);base=ps[pkey]||ps[ykey]||ps['2024']||PRICE_SEED;}else{base=o;ps={'2024':o};} var cur=Object.assign({},base); cur.trend=(base.trend||[]).slice(0,-1); ps[pkey]=cur; return {periods:ps}; }); }}, L('− 주 삭제','− 删周')):null));
   var secBub=h(Card,Object.assign({title:L('⑦ DSO 구매력 분석 (버블)','⑦ DSO采购力分析'),note:L('버블 크기 = 연간 구매수량','气泡大小=年采购量')},C('pr_bub')), h(PriceBubble,{data:data.bubble||[]}));
   var secNego=h(Card,Object.assign({title:L('⑧ 가격 협상 우선순위','⑧ 价格谈判优先级'),note:uRMB+L(' · 헤더 클릭 정렬 · 수정 가능',' · 点表头排序·可修改'),wide:true},C('pr_nego')),
     h('div',{className:'big'}, h(Table,{cols:ncols,rows:negoRows,onSort:onNSort,sortK:nsort.k,sortD:nsort.d})));
@@ -3817,36 +3965,46 @@ function PriceTab(p){
   var bcmp=data.brandCmp||[];
   function onBSort(k){ setBsort(bsort.k===k?{k:k,d:-bsort.d}:{k:k,d:(k==='brand'?1:-1)}); }
   var bcmpRows=bcmp.slice().sort(function(a,b){ var k=bsort.k,d=bsort.d,xa=a[k],ya=b[k]; if(typeof xa==='string') return String(xa).localeCompare(String(ya),'zh')*d; return ((xa||0)-(ya||0))*d; });
+  bcmpRows.forEach(function(r){ r._hl = (r.brand==='메가젠'); });   // 메가젠 줄 강조
   var bIdx=function(r){ return bcmp.indexOf(r); };
   var bcols=[
     {t:L('브랜드','品牌'),k:'brand',w:'96px',r:function(r){ var me=r.brand==='메가젠'; return h('b',{className:'zh',style:me?{color:'#2456a6'}:null}, (me?'★ ':'')+r.brand); }, edit:{type:'text',get:function(r){return r.brand;},set:function(r,v){ setPath('brandCmp',bIdx(r),'brand',v); }}},
-    {t:L('평균 단가','平均单价'),k:'avg',num:1,r:function(r){ return h('b',null,nf(r.avg)); }, edit:{type:'num',get:function(r){return r.avg;},set:function(r,v){ setPath('brandCmp',bIdx(r),'avg',v); }}},
-    {t:L('최저','最低'),k:'lo',num:1,r:function(r){ return nf(r.lo); }, edit:{type:'num',get:function(r){return r.lo;},set:function(r,v){ setPath('brandCmp',bIdx(r),'lo',v); }}},
-    {t:L('최고','最高'),k:'hi',num:1,r:function(r){ return nf(r.hi); }, edit:{type:'num',get:function(r){return r.hi;},set:function(r,v){ setPath('brandCmp',bIdx(r),'hi',v); }}},
-    {t:L('채택 치과수','采用诊所'),k:'cust',num:1,r:function(r){ return nf(r.cust); }, edit:{type:'num',get:function(r){return r.cust;},set:function(r,v){ setPath('brandCmp',bIdx(r),'cust',v); }}},
-    {t:L('연간 수량','年用量'),k:'qty',num:1,r:function(r){ return nf(r.qty); }, edit:{type:'num',get:function(r){return r.qty;},set:function(r,v){ setPath('brandCmp',bIdx(r),'qty',v); }}}
+    {t:L('연수량','年用量'),k:'qty',num:1,r:function(r){ return h('b',null,nf(r.qty)); }, edit:{type:'num',get:function(r){return r.qty;},set:function(r,v){ setPath('brandCmp',bIdx(r),'qty',v); }}},
+    {t:L('수술비용(평균)','手术费(平均)'),k:'fee',num:1,r:function(r){ return h('b',null,nf(r.fee)); }, edit:{type:'num',get:function(r){return r.fee;},set:function(r,v){ setPath('brandCmp',bIdx(r),'fee',v); }}},
+    {t:L('치과공급가(평균)','诊所供货价'),k:'supply',num:1,r:function(r){ return r.supply? h('b',null,nf(r.supply)) : h('span',{className:'dim'},'-'); }, edit:{type:'num',get:function(r){return r.supply||0;},set:function(r,v){ setPath('brandCmp',bIdx(r),'supply',v); }}},
+    {t:L('채택 치과수','采用诊所'),k:'clinics',num:1,r:function(r){ return nf(r.clinics); }, edit:{type:'num',get:function(r){return r.clinics;},set:function(r,v){ setPath('brandCmp',bIdx(r),'clinics',v); }}}
   ];
-  var secBcmp=h(Card,Object.assign({title:L('브랜드별 평균 단가 (메가젠 vs 경쟁)','各品牌平均单价(美格真 vs 竞品)'),note:uRMB+L(' · 개발타겟 실데이터 기준',' · 基于开发目标实数据'),wide:true},C('pr_bcmp')),
-    h(Bars,{data:bcmpRows.map(function(x){return {label:x.brand,value:x.avg,zh:1};})}));
-  var secBtbl=h(Card,Object.assign({title:L('브랜드 단가 상세','品牌单价明细'),note:uRMB+L(' · 헤더 클릭 정렬 · 더블클릭 수정',' · 点表头排序·双击改'),wide:true},C('pr_btbl')),
+  var secQty=h(Card,Object.assign({title:L('브랜드별 연수량','各品牌 年用量'),note:L('개 · 막대(그라데이션)','个·柱(渐变)')},C('pr_bqty')),
+    h(Bars,{grad:true,data:bcmpRows.map(function(x){return {label:x.brand,value:x.qty,zh:1};})}));
+  var secFee=h(Card,Object.assign({title:L('브랜드별 수술비용 (평균)','各品牌 手术费(平均)'),note:uRMB+L(' · 막대(그라데이션)',' · 柱(渐变)')},C('pr_bfee')),
+    h(Bars,{grad:true,data:bcmpRows.map(function(x){return {label:x.brand,value:x.fee,zh:1};})}));
+  var secBtbl=h(Card,Object.assign({title:L('브랜드 상세 (수술비용·치과공급가)','品牌明细(手术费·供货价)'),note:uRMB+L(' · 메가젠 강조 · 헤더 정렬 · 더블클릭 수정',' · 美格真高亮·点表头排序·双击改')},C('pr_btbl')),
     h('div',{className:'big'}, h(Table,{cols:bcols,rows:bcmpRows,onSort:onBSort,sortK:bsort.k,sortD:bsort.d})));
+  // 메가젠 제품 단가 상세 (AO/AR/ST/BD/ARi)
+  var secMegaProd=h(Card,Object.assign({title:L('메가젠 제품 단가 상세','美格真产品单价明细'),note:uRMB+L(' · AO·AR·ST·BD·ARi · 헤더 클릭 정렬·수정',' · 点表头排序·可改')},C('pr_megaprod')),
+    h('div',{className:'big'}, h(Table,{cols:pcols,rows:prodRows,onSort:onPSort,sortK:psort.k,sortD:psort.d})));
+  // 브랜드 가격 추이 (월별) — 1~12月 고정, 없는 달 빈칸, 하단 합계 행
   var bt=data.brandTrend||{months:[],series:[]};
+  var MO12=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  var btChart={months:MO12, series:(bt.series||[]).map(function(s){ var nv=[]; for(var i=0;i<12;i++){ nv[i]=(s.v&&s.v[i]!=null&&s.v[i]!=='')?s.v[i]:null; } return {brand:s.brand, v:nv}; })};
+  var colSum=function(mi){ var t=0,any=false; (bt.series||[]).forEach(function(s){ var v=s.v&&s.v[mi]; if(v!=null&&v!==''){ t+=(+v||0); any=true; } }); return any?t:null; };
   var btGrid=h('div',{className:'tw',style:{marginTop:'10px'}}, h('table',{className:'tbl'},
-    h('thead',null,h('tr',null,h('th',null,L('브랜드 \\ 월','品牌 \\ 月')), (bt.months||[]).map(function(m,i){ return h('th',{key:i,className:'num'},m); }))),
+    h('thead',null,h('tr',null,h('th',null,L('브랜드 \\ 월','品牌 \\ 月')), MO12.map(function(m,i){ return h('th',{key:i,className:'num'},m); }))),
     h('tbody',null,(bt.series||[]).map(function(s,si){ return h('tr',{key:si},
       h('td',null,h('b',{className:'zh',style:{color:BRAND_COL[si%BRAND_COL.length]}},s.brand)),
-      (s.v||[]).map(function(v,mi){ return h('td',{key:mi,className:'num'}, h(EdCell,{row:{},locked:!!p.locked,col:{r:function(){return nf(v);},edit:{type:'num',get:function(){return v;},set:function(_,val){ setTrendV(si,mi,val); }}}})); })); }))));
-  var secBtrend=h(Card,Object.assign({title:L('브랜드 가격 추이 (월별)','品牌价格走势(月度)'),note:uRMB+L(' · 표 더블클릭으로 월별 실제가 입력',' · 表格双击录入各月实际价'),wide:true},C('pr_btrend')),
-    h(MultiTrend,{data:bt}), btGrid);
+      MO12.map(function(_,mi){ var v=(s.v&&s.v[mi]!=null)?s.v[mi]:''; return h('td',{key:mi,className:'num'}, h(EdCell,{row:{},locked:!!p.locked,col:{r:function(){return v===''||v==null? h('span',{className:'dv-blank'}) : nf(v);},edit:{type:'num',get:function(){return v||0;},set:function(_,val){ setTrendV(si,mi,val); }}}})); })); })
+      .concat([h('tr',{key:'sum',className:'etot'}, h('td',null,h('b',null,L('합계','合计'))),
+        MO12.map(function(_,mi){ var s=colSum(mi); return h('td',{key:mi,className:'num'}, s==null? h('span',{className:'dv-blank'}) : h('b',null,nf(s))); }))]))));
+  var secBtrend=h(Card,Object.assign({title:L('브랜드 가격 추이 (월별)','品牌价格走势(月度)'),note:uRMB+L(' · 1~12月 · 표 더블클릭 입력 · 합계행',' · 1~12月·双击录入·合计行'),wide:true},C('pr_btrend')),
+    h(BrandTrend,{data:btChart}), btGrid);
   var SUB_BODY={
     ov:  h('div',{className:'lay'}, secProd, secReg, secHeat),
-    brand:h('div',{className:'lay'}, secBcmp, secBtbl, secBtrend),
-    rank:h('div',{className:'lay'}, secRank, secComp),
-    trend:h('div',{className:'lay'}, secTrend, secBub),
-    nego:h('div',{className:'lay'}, secNego)
+    brand:h('div',{className:'lay'}, secQty, secFee, secTrend, secMegaProd, secBtrend),
+    rank:h('div',{className:'lay'}, secComp, secRank)
   };
   // ── ① 연/월/주 기간관리(맨 위) ──
   var pgBar=h(PgBar,{zh:zh,y:py,m:pm,w:pw,onY:function(v){ setPy(v); },onM:function(v){ setPm(v); setPw(null); },onW:function(v){ setPw(v); },
+    onCopyWeek:copyWeek, onCopyMonth:copyMonth,
     right:h('span',{className:'card-n'}, isSnap? L('저장본','已存') : L('상속','继承'))});
   // ── ② 하위 탭 ──
   var subBar=h('div',{className:'segs',style:{marginBottom:'10px'}},
@@ -3872,14 +4030,14 @@ function PriceTrend(p){
   return h('svg',{className:'mchart',viewBox:'0 0 '+W+' '+H,preserveAspectRatio:'xMidYMid meet'},
     [mn,(mn+mx)/2,mx].map(function(v,i){ var y=Y(v); return h('g',{key:i}, h('line',{x1:PL,y1:y,x2:W-PR,y2:y,className:'grid'}), h('text',{x:PL-6,y:y+3,className:'ax',textAnchor:'end'},Math.round(v))); }),
     h('path',{d:path,className:'rline'}),
-    d.map(function(v,i){ return h('g',{key:i}, h('circle',{cx:X(i),cy:Y(v),r:4,className:'rdot'}), h('text',{x:X(i),y:Y(v)-10,className:'mval',textAnchor:'middle'},''+v), h('text',{x:X(i),y:H-8,className:'ax',textAnchor:'middle'},(i+1)+'月')); }));
+    d.map(function(v,i){ return h('g',{key:i}, h('circle',{cx:X(i),cy:Y(v),r:4,className:'rdot'}), h('text',{x:X(i),y:Y(v)-10,className:'mval',textAnchor:'middle'},''+v), h('text',{x:X(i),y:H-8,className:'ax',textAnchor:'middle'},(p.unit||'月')==='주'?('W'+(i+1)):((i+1)+(p.unit||'月')))); }));
 }
 // 브랜드별 멀티라인 가격 추이
 var BRAND_COL=['#2456a6','#e0902f','#16a34a','#8156c8','#dc2626','#3bb0c9','#9333ea'];
-function MultiTrend(p){
+function BrandTrend(p){
   var months=(p.data&&p.data.months)||[], series=(p.data&&p.data.series)||[];
   var W=720,H=250,PL=52,PR=14,PT=16,PB=30;
-  var all=[]; series.forEach(function(s){ (s.v||[]).forEach(function(v){ if(v||v===0) all.push(v); }); });
+  var all=[]; series.forEach(function(s){ (s.v||[]).forEach(function(v){ if(v!=null&&v!=='') all.push(+v); }); });
   if(!all.length) all=[0,1];
   var mn=Math.min.apply(null,all), mx=Math.max.apply(null,all); var pad=(mx-mn)*0.12||10; mn=Math.max(0,mn-pad); mx=mx+pad;
   var X=function(i){ return PL+(months.length<=1?0:(i/(months.length-1))*(W-PL-PR)); };
@@ -3888,10 +4046,11 @@ function MultiTrend(p){
     [mn,(mn+mx)/2,mx].map(function(v,i){ var y=Y(v); return h('g',{key:'g'+i}, h('line',{x1:PL,y1:y,x2:W-PR,y2:y,className:'grid'}), h('text',{x:PL-6,y:y+3,className:'ax',textAnchor:'end'},nf(Math.round(v)))); }),
     months.map(function(m,i){ return h('text',{key:'m'+i,x:X(i),y:H-8,className:'ax',textAnchor:'middle'},m); }),
     series.map(function(s,si){ var col=BRAND_COL[si%BRAND_COL.length];
-      var path=(s.v||[]).map(function(v,i){ return (i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1); }).join(' ');
+      var path='', pen=false;
+      (s.v||[]).forEach(function(v,i){ if(v==null||v===''){ pen=false; return; } path+=(pen?'L':'M')+X(i).toFixed(1)+' '+Y(+v).toFixed(1)+' '; pen=true; });
       return h('g',{key:'s'+si},
         h('path',{d:path,fill:'none',stroke:col,strokeWidth:2}),
-        (s.v||[]).map(function(v,i){ return h('circle',{key:i,cx:X(i),cy:Y(v),r:3,fill:col}); })); }),
+        (s.v||[]).map(function(v,i){ return (v==null||v==='')?null:h('circle',{key:i,cx:X(i),cy:Y(+v),r:3,fill:col}); })); }),
     series.map(function(s,si){ var col=BRAND_COL[si%BRAND_COL.length]; return h('g',{key:'lg'+si},
       h('rect',{x:PL+2+si*116,y:0,width:9,height:9,rx:2,fill:col}),
       h('text',{x:PL+14+si*116,y:8,className:'ax zh',textAnchor:'start'},s.brand)); }));
@@ -4160,7 +4319,19 @@ function dsoGrade(t26, implants){
 }
 function DSOTab(p){
   var zh=(p.lang==='zh'); var L=function(ko,cn){ return zh?cn:ko; };
-  var data=p.data||[], setData=p.setData;
+  // ── 연/월/주 기간 관리(기간별 분리 저장 + 다음주/다음달 복사) ──
+  var store=p.data, setStore=p.setData;
+  var _y=useState(2026); var py=_y[0], setPy=_y[1];
+  var _m=useState(0); var pm=_m[0], setPm=_m[1];
+  var _w=useState(null); var pw=_w[0], setPw=_w[1];
+  var DBASE='2026', pkey=periodKey(py,pm,pw), ykey=periodKey(py);
+  function dResolve(o){ if(o&&o.periods){ return o.periods[pkey]||o.periods[ykey]||o.periods[DBASE]||[]; } return Array.isArray(o)?o:[]; }
+  var data=dResolve(store);
+  var isSnapD=!(store&&store.periods) || !!store.periods[pkey];
+  function setData(fn){ setStore(function(o){ var ps,base; if(o&&o.periods){ ps=Object.assign({},o.periods); base=ps[pkey]||ps[ykey]||ps[DBASE]||[]; } else { base=Array.isArray(o)?o:[]; ps={}; ps[DBASE]=base; } ps[pkey]=fn(base); return {periods:ps}; }); }
+  function dCopy(tkey){ setStore(function(o){ var ps,base; if(o&&o.periods){ ps=Object.assign({},o.periods); base=ps[pkey]||ps[ykey]||ps[DBASE]||[]; } else { base=Array.isArray(o)?o:[]; ps={}; ps[DBASE]=base; } ps[tkey]=JSON.parse(JSON.stringify(base)); return {periods:ps}; }); }
+  function dCopyWeek(){ if(!pw) return; var nk=nextWeek(py,pw); dCopy(periodKey(nk.y,nk.m,nk.w)); setPy(nk.y); setPm(nk.m); setPw(nk.w); }
+  function dCopyMonth(){ if(!pm) return; var nk=nextMonth(py,pm); dCopy(periodKey(nk.y,nk.m,null)); setPy(nk.y); setPm(nk.m); setPw(null); }
   // 집계 기준 차원: 기본 '본부(div)', 화남 전용이면 '大区(rb)'
   var GF=p.groupBy||'div';
   var GLAB=p.groupLabel||L('본부','本部');
@@ -4284,7 +4455,11 @@ function DSOTab(p){
       edit:{type:'text',get:function(r){return r.systems||'';},set:function(r,v){ edit(r.id,'systems',v); }}}
   ];
   var C=p.C;
+  var pgBar=h(PgBar,{zh:zh,y:py,m:pm,w:pw,onY:function(v){ setPy(v); },onM:function(v){ setPm(v); setPw(null); },onW:function(v){ setPw(v); },
+    onCopyWeek:dCopyWeek, onCopyMonth:dCopyMonth,
+    right:h('span',{className:'card-n'}, isSnapD? L('저장본','已存') : L('상속','继承'))});
   return h('div',{className:'dso-wrap'},
+    pgBar,
     kpis,
     h('div',{className:'dso-fbar'},
       p.hideDivFilter? null : h('span',{className:'plb'}, L('본부','本部')),
@@ -4927,9 +5102,9 @@ function App(){
   var devData=_dev[0], setDevData=_dev[1];
   useEffect(function(){ try{ localStorage.setItem('hncrm_dev_v2', JSON.stringify(devData)); }catch(e){} },[devData]);
   // ── 가격동향 (Price Dashboard) 자동 저장 ──
-  var _prc=useState(function(){ try{ var r=localStorage.getItem('hncrm_price_v1'); if(r) return JSON.parse(r); }catch(e){} return JSON.parse(JSON.stringify(PRICE_SEED)); });
+  var _prc=useState(function(){ try{ var r=localStorage.getItem('hncrm_price_v4'); if(r) return JSON.parse(r); }catch(e){} return JSON.parse(JSON.stringify(PRICE_SEED)); });
   var priceData=_prc[0], setPriceData=_prc[1];
-  useEffect(function(){ try{ localStorage.setItem('hncrm_price_v1', JSON.stringify(priceData)); }catch(e){} },[priceData]);
+  useEffect(function(){ try{ localStorage.setItem('hncrm_price_v4', JSON.stringify(priceData)); }catch(e){} },[priceData]);
   useEffect(function(){ semSave('edu', semEdu); },[semEdu]);
   useEffect(function(){ semSave('meet', semMeet); },[semMeet]);
   useEffect(function(){ semSave('fu', semFu); },[semFu]);
@@ -5509,7 +5684,7 @@ function App(){
     });
   }
 
-  var TABS=[['notice','공지'],['overview','월별현황'],['mgr','담당자'],['dealer','대리상'],['cust','고객'],['huanan','화남고객'],['sem','세미나 계획·실행'],['price','가격동향']];
+  var TABS=[['notice','공지'],['overview','월별현황'],['mgr','담당자'],['dealer','대리상'],['cust','고객'],['huanan','화남고객 전체'],['sem','세미나 계획·실행'],['price','가격동향']];
   var isInact = (tab==='inact') || (tab==='cust' && custView==='inact');  // 비활성화 = 고객 탭 하위
   var orgOnly = false;   // 조직도도 담당현황처럼 상단 기간바+KPI 보드 표기
   var orgView = (tab==='mgr' && mgrView==='org');   // 조직도: 고객 KPI 대신 조직 KPI 보드
@@ -5520,8 +5695,8 @@ function App(){
   var dsheet = (tab==='dealer' && dealView==='sheet');   // 대리상 계약현황: 상단 고객 KPI 보드 숨김(기간바는 유지)
   var dsoView = (tab==='cust' && custView==='dso');      // DSO 분석: 별도 데이터셋 → 상단 고객 KPI·기간바 숨김
   var lastS=snaps.length? snaps[snaps.length-1] : null;
-  var TITLE={notice:'공지',price:'가격동향',overview:'월별현황',weekly:'주간현황',mgr:'담당자별 실적',dealer:'대리상별 실적',cust:'고객 목록',huanan:'화남고객',inact:'비활성화 고객',sem:'세미나 계획·실행'};
-  var TAB_ZH={notice:'公告',price:'价格趋势',overview:'月度概况',weekly:'周概况',mgr:'负责人',dealer:'代理商',cust:'客户',huanan:'华南客户',inact:'停滞客户',sem:'研讨会计划·执行'};
+  var TITLE={notice:'공지',price:'가격동향',overview:'월별현황',weekly:'주간현황',mgr:'담당자별 실적',dealer:'대리상별 실적',cust:'고객 목록',huanan:'화남고객 전체',inact:'비활성화 고객',sem:'세미나 계획·실행'};
+  var TAB_ZH={notice:'公告',price:'价格趋势',overview:'月度概况',weekly:'周概况',mgr:'负责人',dealer:'代理商',cust:'客户',huanan:'华南客户 全部',inact:'停滞客户',sem:'研讨会计划·执行'};
   var TITLE_ZH={notice:'公告',price:'价格趋势(诊所·DSO·产品)',overview:'月度概况',weekly:'周概况',mgr:'负责人业绩',dealer:'代理商业绩',cust:'客户列表',inact:'停滞客户',sem:'研讨会计划·执行'};
   var zh=(lang==='zh');
   UI_LANG=lang;
