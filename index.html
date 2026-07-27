@@ -244,6 +244,38 @@ option,select,
 .mkpi-v{font-size:22px;font-weight:900;line-height:1.15;margin:2px 0 0}
 .mkpi-s{font-size:10.5px;color:#64748b;font-weight:600}
 .mkpi-t{font-size:10px;color:#94a3b8;font-weight:700;margin-top:3px;border-top:1px dashed var(--ln);padding-top:3px}
+/* ── 고객발굴 리드 문구 ── */
+.fu-lead{padding:11px 14px;background:linear-gradient(90deg,rgba(31,95,208,0.07),rgba(31,95,208,0.02));border-left:4px solid #1f5fd0;border-radius:6px}
+.fu-lead-t{display:block;color:#1f5fd0;font-weight:800;font-size:14.5px;line-height:1.5}
+.fu-lead-s{display:inline-block;margin-top:4px;color:#1f5fd0;font-weight:700;font-size:12.5px}
+/* ── 표 세로줄 · 배지 ── */
+.tbl.vline th, .tbl.vline td{ border-right:1px solid #ececec; }
+.tbl.vline th:last-child, .tbl.vline td:last-child{ border-right:0; }
+.prov-badge{ display:inline-block; padding:1px 8px; border-radius:10px; font-size:11.5px; font-weight:800; }
+.fu-nc{ display:inline-block; padding:2px 9px; border-radius:10px; font-size:11.5px; font-weight:800; white-space:nowrap; }
+.fu-nc.new{ color:#7a4fc0; background:rgba(122,79,192,0.13); }
+.fu-nc.old{ color:#12855c; background:rgba(27,175,122,0.13); }
+.nc-sel{ border:1.5px solid #cfd8e6; border-radius:6px; padding:3px 8px; font-size:12px; font-weight:800; cursor:pointer; background:#fff; }
+.nc-sel.new{ color:#7a4fc0; border-color:#c9b6e8; background:rgba(122,79,192,0.06); }
+.nc-sel.old{ color:#12855c; border-color:#a9dcc6; background:rgba(27,175,122,0.06); }
+.nc-memo{ white-space:normal; word-break:break-word; max-width:340px; line-height:1.5; font-size:12.5px; }
+.nc-tg{ border:1px solid var(--ln); background:#f4f7fb; color:#2a6fd6; font-weight:700; font-size:11.5px; border-radius:6px; padding:2px 9px; cursor:pointer; white-space:nowrap; }
+.nc-tg:hover{ background:#e9f1fb; }
+.nc-drow td{ background:#fafbfc; }
+.nc-dbox{ padding:6px 10px; line-height:1.6; font-size:12.5px; white-space:normal; word-break:break-word; }
+.nc-dl{ color:var(--dim); font-weight:800; }
+/* ── 방문 속도 ── */
+.spd-kpis{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.spd-k{flex:1 1 0;min-width:120px;border:1px solid var(--ln);border-radius:8px;padding:8px 12px;background:#fafbfc}
+.spd-l{font-size:11px;color:var(--dim);font-weight:700;letter-spacing:.03em}
+.spd-v{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px}
+.spd-u{font-size:12px;font-weight:600;color:var(--dim);margin-left:3px}
+.spd-bars{display:flex;flex-direction:column;gap:6px}
+.spd-bar{display:flex;align-items:center;gap:10px}
+.spd-bn{flex:none;width:74px;font-size:12px;font-weight:700;color:var(--ink2)}
+.spd-bt{flex:1;height:14px;background:#eef0f2;border-radius:7px;overflow:hidden}
+.spd-bf{display:block;height:100%;border-radius:7px;min-width:2px}
+.spd-bv{flex:none;width:52px;text-align:right;font-size:12.5px;font-variant-numeric:tabular-nums}
 /* ── 퍼널 ── */
 .funnel td{vertical-align:middle}
 .fn-lb{font-size:11px;color:#475569;font-weight:700;display:inline-flex;align-items:center;gap:4px}
@@ -4104,6 +4136,40 @@ function DSOMonth(p){
 }
 
 /* ================= 세미나 계획·실행 탭 (화남 하반기) ================= */
+/* ── CEO 명단 비고: 중국어→한국어 용어사전 변환(엑셀 임포트 자동 번역) ── */
+var CN_KO_PAIRS=[
+ ['已经跟','와(과) 이미'],['已经','이미'],['联系不上','연락이 닿지 않음'],['找到合适病例','적합한 케이스 발견'],['合适病例','적합 케이스'],
+ ['实操培训班','실습 교육반'],['实操班','실습반'],['培训班','교육반'],['科室会','과별 세미나'],['宣传物料','홍보물'],
+ ['种植体','임플란트'],['种植','식립'],['植体','임플란트'],['已下单','발주 완료'],['下单','발주'],['已引进','도입 완료'],['引进','도입'],
+ ['在实用','사용 중'],['已在实用','사용 중'],['实用','사용'],['试用','시험사용'],['试种','시험식립'],['在用','사용 중'],
+ ['工具盒','툴킷'],['配件','부품'],['代理商','대리상'],['经销商','대리상'],['运营情况不好','운영 상황 안 좋음'],['情况不好','상황 안 좋음'],
+ ['货款','물품대금'],['库存','재고'],['打包','패키지'],['有兴趣','관심 있음'],['感兴趣','관심'],['兴趣','관심'],['介绍','소개'],['产品','제품'],
+ ['邀请','초청'],['报名','등록'],['课程','과정'],['拜访','방문'],['沟通','논의'],['病例','케이스'],['医生','원장'],['主任','주임'],['院长','원장'],['老板','원장'],
+ ['门诊','병원'],['门店','의원'],['诊所','치과'],['微信','위챗'],['两颗','2개'],['三颗','3개'],['一颗','1개'],['颗','개'],['两支','2개'],
+ ['停止实用','사용 중단'],['停止','중단'],['折裂','파절'],['发生','발생'],['推荐','추천'],['中奖','당첨'],['盘点','재고조사'],['名额','정원'],['数量','수량'],
+ ['型号','모델'],['选择','선택'],['现场','현장'],['没时间','시간 없음'],['时间','시간'],['休假','휴가'],['下周','다음 주'],['前期','초기'],['熟悉','숙지'],
+ ['预约','예약'],['结束','종료'],['需求','수요'],['需要','필요'],['准备','준비'],['计划','계획'],['参加','참가'],['参与','참여'],['确定','확정'],['待确认','확인 대기'],['确认','확인'],
+ ['股东','주주'],['商量','상의'],['安排','배정'],['评价很高','평가 매우 우수'],['评价','평가'],['听课','청강'],['合作','협력'],['物料','자재'],['验收','검수'],
+ ['带小孩','아이 동반'],['出去了','외출'],['签约','계약'],['社康','보건소'],['牙椅','체어'],['图书馆','도서관'],['实地','현장'],['首购','첫 구매'],['开发','개발'],
+ ['目前','현재'],['最近','최근'],['可能性低','가능성 낮음'],['可能','가능'],['比较大','많은 편'],['比较','비교적'],['使用完','소진'],['决定','결정'],['过来参加','방문 참가'],['过来','방문'],
+ ['运营','운영'],['主管','책임자'],['植体评价','임플란트 평가'],['一场','한 차례'],['店里','병원'],['我们','자사'],['他们','그들'],['他要','그가'],['他有','그는'],['他对','그는'],['他','그'],
+ ['近期','조만간'],['先','우선'],['再','다시'],['还','아직'],['并','및'],['因','때문에'],['然','이후'],['跟','와'],['和','와'],['给','에게'],['过','함'],
+ ['要使用','사용해야'],['要做','해야'],['要','필요'],['会用','사용 예정'],['会','예정'],['已报名','등록 완료'],['已','이미'],['了',''],
+ ['美格真','메가젠'],['登腾','덴티움'],['士卓曼','스트라우만'],['奥齿泰','오스템'],['迪奥','디오'],['诺贝尔','노벨'],
+ ['刘总','류 대표'],['蔡院长','차이 원장'],['李院长','리 원장'],['缪健','먀오젠'],['总','대표'],
+ ['进行','진행'],['进入','진입'],['门店小','소형 병원'],['店里','병원'],['店','점'],['这边','이쪽'],['一下',''],
+ ['号','일'],['月','월'],['欠','미지급'],['才能','되어야'],['才',''],['拿两颗','2개 확보'],['拿','확보'],['两加','두 곳'],
+ ['她老公','남편'],['老公','남편'],['她','그녀'],['主要','주로'],['做种植','식립 진행'],['做','진행'],['很高','매우 우수'],['很','매우'],
+ ['可以','가능'],['能','가능'],['为','위해'],['让','하도록'],['说','언급'],['来','방문'],['想','희망'],['也','또한'],['都','모두'],['多','많음'],['大','많은 편'],
+ ['在南山','난산'],['在','에서 '],['的',''],['把',''],['被',''],['院','병원'],['科','과'],['无牙颇','무치악']
+];
+var CN_KO_SORTED=CN_KO_PAIRS.slice().sort(function(a,b){ return b[0].length-a[0].length; });
+function cnToKo(s){ s=String(s||''); if(!s.trim()) return '';
+  if(!/[一-鿿]/.test(s)) return s;
+  for(var i=0;i<CN_KO_SORTED.length;i++){ var k=CN_KO_SORTED[i][0]; if(s.indexOf(k)>=0) s=s.split(k).join(CN_KO_SORTED[i][1]); }
+  s=s.replace(/，/g,', ').replace(/。/g,'. ').replace(/（/g,' (').replace(/）/g,') ').replace(/、/g,', ').replace(/；/g,'; ').replace(/：/g,': ').replace(/\s+/g,' ').trim();
+  return s;
+}
 function SeminarTab(p){
   var edu=p.edu||[], meet=p.meet||[];
   var setEdu=p.setEdu, setMeet=p.setMeet;
@@ -4118,8 +4184,14 @@ function SeminarTab(p){
   var fuKeys=Object.keys(fuMap).sort();
   var curWK = wk? (wk.year+'-W'+wk.week) : null;
   var activeWK = curWK ? curWK : (fuKeys.length? fuKeys[fuKeys.length-1] : FU_SEED_WEEK);
-  var fu = fuMap[activeWK] || [];
-  function setFu(u){ var k=activeWK; setFuMap(function(m){ var cur=m[k]||[]; var nx=(typeof u==='function')? u(cur):u; var nm=Object.assign({},m); nm[k]=nx; return nm; }); }
+  // 가장 최근에 명단이 있는 주차(비어있지 않은) 탐색
+  function fuLastFilled(){ for(var i=fuKeys.length-1;i>=0;i--){ if((fuMap[fuKeys[i]]||[]).length) return fuKeys[i]; } return null; }
+  // 표시 데이터: 선택 주차가 비어 있으면 직전(가장 최근) 명단을 이어서 표시 — "명단 없음/초기화" 방지(carry-forward)
+  var fuSrcWK = (fuMap[activeWK] && fuMap[activeWK].length)? activeWK : (fuLastFilled() || FU_SEED_WEEK);
+  var fuCarried = (fuSrcWK !== activeWK);
+  var fu = (fuMap[fuSrcWK] && fuMap[fuSrcWK].length)? fuMap[fuSrcWK] : (fuMap[FU_SEED_WEEK]||[]);
+  // 편집 시: 현재 주차가 비어 있으면 직전 명단을 이어받아(복사) 저장 — 이후 그 주차에 독립 저장
+  function setFu(u){ var k=activeWK; setFuMap(function(m){ var cur=(m[k]&&m[k].length)? m[k] : fu.slice(); var nx=(typeof u==='function')? u(cur):u; var nm=Object.assign({},m); nm[k]=nx; return nm; }); }
   var _x=useState({});        var exp=_x[0], setExp=_x[1];
   var _sel=useState(null);    var sel=_sel[0], setSel=_sel[1];   // 세미나 상세: 선택 세미나 id
   var _o=useState({k:null,d:'asc'}); var so=_o[0], setSo=_o[1];
@@ -4129,11 +4201,15 @@ function SeminarTab(p){
   var ceoUpd=_cu[0], setCeoUpd=_cu[1];
   useEffect(function(){ try{ localStorage.setItem('hncrm_ceo_upd', ceoUpd); }catch(e){} },[ceoUpd]);
   // ── CEO 사롱 인원관리 퍼널: 초청/RSVP 실측 + 단계별 목표(주차별 저장) ──
+  var _ncx=useState({}); var ncExp=_ncx[0], setNcExp=_ncx[1];
+  function ncToggle(id){ setNcExp(function(o){ var n=Object.assign({},o); n[id]=!n[id]; return n; }); }
   var _fn=useState(function(){ try{ return JSON.parse(localStorage.getItem('hncrm_sem_funnel_v1')||'{}')||{}; }catch(e){ return {}; } });
   var funMap=_fn[0], setFunMap=_fn[1];
   useEffect(function(){ try{ localStorage.setItem('hncrm_sem_funnel_v1', JSON.stringify(funMap)); }catch(e){} },[funMap]);
-  var funCfg = funMap[activeWK] || {};
-  function setFunCfg(field,val){ var k=activeWK; setFunMap(function(m){ var nm=Object.assign({},m); var cur=Object.assign({},nm[k]||{}); cur[field]=val; nm[k]=cur; return nm; }); }
+  // 목표 설정도 주차가 비어 있으면 직전 설정을 이어서 표시(carry-forward) — 주차 바뀌어도 목표 유지
+  function funLastCfg(){ var ks=Object.keys(funMap).sort(); for(var i=ks.length-1;i>=0;i--){ if(funMap[ks[i]] && Object.keys(funMap[ks[i]]).length) return funMap[ks[i]]; } return null; }
+  var funCfg = (funMap[activeWK] && Object.keys(funMap[activeWK]).length)? funMap[activeWK] : (funLastCfg() || {});
+  function setFunCfg(field,val){ var k=activeWK; var base=funCfg; setFunMap(function(m){ var nm=Object.assign({},m); var cur=Object.assign({}, (m[k]&&Object.keys(m[k]).length)? m[k] : base); cur[field]=val; nm[k]=cur; return nm; }); }
   function funT(key,def){ var t=funCfg['t_'+key]; return (t==null||t==='')? def : (parseInt(t,10)||0); }
   // ── AI 분석: 서버(/api/analyze)에서 OpenAI 호출. 프론트엔드는 CRM JSON만 전송(키 미보유) ──
   var AI_ENDPOINT='/api/analyze';
@@ -4677,7 +4753,7 @@ function SeminarTab(p){
       function vdate(s){ s=String(s||'').trim(); var m=s.match(/(\d{4})-(\d{1,2})-(\d{1,2})/); if(m) return (+m[2])+'/'+(+m[3]); var m2=s.match(/(\d{1,2})[月\/](\d{1,2})/); return m2? ((+m2[1])+'/'+(+m2[2])) : ((s && s!=='无' && !/^\d{4,}$/.test(s))? s : ''); }
       var nr=[];
       for(var r=hi+1;r<aoa.length;r++){ var row=aoa[r]||[]; var name=gg(row,'name'), no=gg(row,'no'); if(!name && !no) continue; var signin=gg(row,'signin');
-        nr.push({ id:'fu_'+(no||('r'+r)), no:no, name:name, region:gg(row,'region'), clinic:gg(row,'clinic'), mgr:gg(row,'mgr'), follow:gg(row,'follow'), signin:signin, att:(signin==='扫码未签到'?0:1), visit:vdate(gg(row,'visit')), status:gg(row,'status'), qty:'', visits:'', result:gg(row,'result'), result_ko:'' }); }
+        var _res=gg(row,'result'); nr.push({ id:'fu_'+(no||('r'+r)), no:no, name:name, region:gg(row,'region'), clinic:gg(row,'clinic'), mgr:gg(row,'mgr'), follow:gg(row,'follow'), signin:signin, att:(signin==='扫码未签到'?0:1), visit:vdate(gg(row,'visit')), status:gg(row,'status'), qty:'', visits:'', result:_res, result_ko:cnToKo(_res) }); }
       if(!nr.length){ alert('데이터 행을 찾지 못했습니다.'); return; }
       var tgtWK = curWK || (new Date().getFullYear()+'-W'+isoWeek(new Date()));
       setFuMap(function(m){ var nm=Object.assign({},m); nm[tgtWK]=nr; return nm; });
@@ -4737,28 +4813,32 @@ function SeminarTab(p){
       var hasVisit=String(r.visit||'').trim()!==''; var hasRes=String(r.result||'').trim()!=='';
       if(hasVisit) bm[m].vis++; if(hasRes) bm[m].res++;
       if(+r.att===1 && !hasRes && !isEnt(r)) bm[m].gap++; });
-    var mgrRows=Object.keys(bm).map(function(k){return bm[k];}).sort(function(a,b){return b.n-a.n;});
+    var bkUn=function(m){ return m.indexOf('미지정')>=0||m.indexOf('未指定')>=0; };
+    var maxEntBk=Math.max.apply(null,[0].concat(Object.keys(bm).map(function(k){return bm[k].ent;})));
+    var mgrRows=Object.keys(bm).map(function(k){return bm[k];}).sort(function(a,b){ var am=bkUn(a.mgr), bmm=bkUn(b.mgr); if(am&&!bmm)return 1; if(bmm&&!am)return -1; return b.n-a.n; });
     var mgrMax=Math.max.apply(null,[1].concat(mgrRows.map(function(x){return x.n;})));
+    var bkBest=null; mgrRows.forEach(function(g){ if(maxEntBk>0 && g.ent===maxEntBk && !bkUn(g.mgr) && !bkBest) bkBest=g.mgr; });
     var breakdown=h('div',{className:'card wide'},
-      h('div',{className:'card-h'}, h('h3',null,L('담당(负责人)별 방문·성과 정리','负责人别拜访·成果')), h('span',{className:'card-n'},L('방문 수·진입(성과)·결과 미정리까지','拜访数·进入·未整理'))),
-      h('div',{className:'tw'}, h('table',{className:'tbl'},
+      h('div',{className:'card-h'}, h('h3',null,L('담당(负责人)별 방문·성과 정리','负责人别拜访·成果')), h('span',{className:'card-n'},L('명단 순 · 초록=진입 최다(우수) · 진도=진입율','按名单 · 绿=进入最多 · 进度=进入率'))),
+      h('div',{className:'tw'}, h('table',{className:'tbl vline'},
         h('thead',null,h('tr',null,
-          h('th',null,L('담당','负责人')), h('th',{className:'num'},L('명단','名单')), h('th',{className:'num'},L('참가','签到')),
+          h('th',{className:'num'},'#'), h('th',null,L('담당','负责人')), h('th',{className:'num'},L('명단','名单')), h('th',{className:'num'},L('참가','签到')),
           h('th',{className:'num'},L('F/U대상','F/U对象')), h('th',{className:'num'},L('방문','拜访')),
-          h('th',{className:'num'},L('진입(성과)','进入(成果)')), h('th',{className:'num'},L('달성율','达成率')), h('th',{className:'num'},L('미팅기입','会谈记录')),
+          h('th',{className:'num'},L('진입(성과)','进入(成果)')), h('th',{style:{width:'16%'}},L('진입 진도','进入进度')), h('th',{className:'num'},L('미팅기입','会谈记录')),
           h('th',{className:'num'},L('미팅미기입','会谈未记录')), h('th',null,L('방문율','拜访率')), h('th',{className:'num'},L('효율','效率')))),
-        h('tbody',null, mgrRows.map(function(g,i){ var eff=g.att? Math.round(g.res/g.att*100):null; return h('tr',{key:i},
+        h('tbody',null, mgrRows.map(function(g,i){ var eff=g.att? Math.round(g.res/g.att*100):null; var entr=g.n?Math.round(g.ent/g.n*100):0; return h('tr',{key:i,className:(g.mgr===bkBest?'hl':(bkUn(g.mgr)?'fu-unrow':''))},
+          h('td',{className:'num'}, h('span',{className:'dim'},i+1)),
           h('td',null,h('b',{className:'zh'},g.mgr)),
           h('td',{className:'num'},nf(g.n)), h('td',{className:'num'},nf(g.att)),
           h('td',{className:'num'},nf(g.fol)), h('td',{className:'num'},nf(g.vis)),
           h('td',{className:'num'},h('b',{className:g.ent?'':'dim'},nf(g.ent))),
-          h('td',{className:'num'},h('b',{className:g.ent?'':'dim'},pf(g.n?g.ent/g.n*100:0))),
+          h('td',null, h('div',{className:'inbar'}, h('b',null,entr+'%'), h('div',{className:'inbar-t'}, h('div',{className:'inbar-f',style:{width:entr+'%',background:'#12855c'}})))),
           h('td',{className:'num'},nf(g.res)),
           h('td',{className:'num'},g.gap? h('b',{style:{color:'var(--red)'}},nf(g.gap)) : h('span',{className:'dim'},'0')),
-          h('td',null, h('div',{className:'inbar'}, h('b',null,pf(g.att?g.vis/g.att*100:0)), h('div',{className:'inbar-t'}, h('div',{className:'inbar-f',style:{width:(g.n/mgrMax*100)+'%'}})))),
+          h('td',null, h('div',{className:'inbar'}, h('b',null,pf(g.att?g.vis/g.att*100:0)), h('div',{className:'inbar-t'}, h('div',{className:'inbar-f',style:{width:(g.att?g.vis/g.att*100:0)+'%'}})))),
           h('td',{className:'num'}, eff===null? h('span',{className:'dim'},'-') : h('b',{style:{color:eff>=50?'var(--grn)':(eff<25?'var(--red)':'var(--ink)')}}, eff+'%'))); }),
           h('tr',{key:'tot',style:{borderTop:'2px solid var(--ln)',fontWeight:800}},
-            h('td',null,h('b',null,L('합계','合计'))),
+            h('td',null,''), h('td',null,h('b',null,L('합계','合计'))),
             h('td',{className:'num'},nf(fu.length)), h('td',{className:'num'},nf(attN)),
             h('td',{className:'num'},nf(followN)), h('td',{className:'num'},nf(visitedN)),
             h('td',{className:'num'},nf(entN)),
@@ -4787,21 +4867,24 @@ function SeminarTab(p){
     var wkm={}; fu.forEach(function(r){ var s=String(r.visit||''); var m=s.match(/(\d{1,2})[\/\.](\d{1,2})/); if(!m) return; var dt=new Date(YEAR,(+m[1])-1,+m[2]); if(isNaN(dt.getTime())) return; var w=isoWeek(dt); if(w==null||isNaN(w)) return; wkm[w]=(wkm[w]||0)+1; });
     var wks=Object.keys(wkm).map(Number).sort(function(a,b){return a-b;});
     var cum=0; var wpts=wks.map(function(w){ cum+=wkm[w]; return {label:'W'+w, add:wkm[w], cum:cum}; });
-    var visRows=Object.keys(bm).map(function(k){return bm[k];}).filter(function(g){return g.vis>0||g.ent>0;}).sort(function(a,b){return b.vis-a.vis||b.ent-a.ent;});
+    var wkUn=function(m){ return m.indexOf('미지정')>=0||m.indexOf('未指定')>=0; };
+    var visRows=Object.keys(bm).map(function(k){return bm[k];}).filter(function(g){return g.vis>0||g.ent>0;}).sort(function(a,b){ var am=wkUn(a.mgr), bmm=wkUn(b.mgr); if(am&&!bmm)return 1; if(bmm&&!am)return -1; return b.vis-a.vis||b.ent-a.ent; });
     var visMax=Math.max.apply(null,[1].concat(visRows.map(function(x){return x.vis;})));
+    var wkBest=(visRows.length&&!wkUn(visRows[0].mgr))? visRows[0].mgr : null;
     var weekly=h('div',{className:'card'},
-      h('div',{className:'card-h'}, h('h3',null,L('담당자별 방문·성공율','负责人拜访·成功率')), h('span',{className:'card-n'},L('방문수 순 · 성공율=진입/방문','按拜访数·成功率=进入/拜访'))),
-      visRows.length? h('div',{className:'tw'}, h('table',{className:'tbl'},
-        h('thead',null,h('tr',null, h('th',null,L('담당','负责人')), h('th',{className:'num'},L('방문수','拜访数')), h('th',{style:{width:'34%'}},''), h('th',{className:'num'},L('진입','进入')), h('th',{className:'num'},L('성공율','成功率')))),
+      h('div',{className:'card-h'}, h('h3',null,L('담당자별 방문·성공율','负责人拜访·成功率')), h('span',{className:'card-n'},L('방문수 순 · 초록=우수 · 성공율=진입/방문','按拜访数·绿=优 · 成功率=进入/拜访'))),
+      visRows.length? h('div',{className:'tw'}, h('table',{className:'tbl vline'},
+        h('thead',null,h('tr',null, h('th',{className:'num'},'#'), h('th',null,L('담당','负责人')), h('th',{className:'num'},L('방문수','拜访数')), h('th',{style:{width:'30%'}},''), h('th',{className:'num'},L('진입','进入')), h('th',{className:'num'},L('성공율','成功率')))),
         h('tbody',null, visRows.map(function(g,i){ var sr=g.vis? Math.round(g.ent/g.vis*100):0;
-          return h('tr',{key:i, className:i===0?'hl':''},
+          return h('tr',{key:i, className:(g.mgr===wkBest?'hl':(wkUn(g.mgr)?'fu-unrow':''))},
+            h('td',{className:'num'}, h('span',{className:'dim'},i+1)),
             h('td',null,h('b',{className:'zh'},g.mgr)),
             h('td',{className:'num'},h('b',null,nf(g.vis))),
             h('td',null,h('div',{className:'inbar-t'},h('div',{className:'inbar-f',style:{width:(g.vis/visMax*100)+'%'}}))),
             h('td',{className:'num'},h('b',{className:g.ent?'':'dim'},nf(g.ent))),
             h('td',{className:'num'},h('b',{style:{color:sr>=30?'var(--grn)':(sr>0?'var(--amb)':'var(--dim)')}}, sr+'%'))); }),
           h('tr',{style:{borderTop:'2px solid var(--ln)',fontWeight:800}},
-            h('td',null,h('b',null,L('합계','合计'))),
+            h('td',null,''), h('td',null,h('b',null,L('합계','合计'))),
             h('td',{className:'num'},nf(visitedN)), h('td',null),
             h('td',{className:'num'},nf(entN)),
             h('td',{className:'num'},pf(visitedN?entN/visitedN*100:0)))))) : h('div',{className:'empty'},L('방문 데이터가 없습니다.','暂无拜访数据。')));
@@ -4875,7 +4958,7 @@ function SeminarTab(p){
             r:function(rr){ var v=String(rr[c[0]]||'').trim(); if(v==='是'||yes(v)) return h('span',{style:{color:'var(--grn)',fontWeight:800}},'O'); if(v==='否'||no(v)) return h('span',{style:{color:'var(--red)',fontWeight:800}},'X'); return v||h('span',{className:'dim'},'—'); },
             edit:{type:'text',get:function(rr){return rr[c[0]]||'';},set:function(rr,val){ updFu(rr.id,c[0],val); }} }})); }
           if(c[3]==='wide'){ return h('td',{key:c[0],className:'tde',style:{minWidth:'220px'}}, h(EdCell,{row:r,locked:false,col:{
-            r:function(rr){ var v = zh? (rr.result||'') : (rr.result_ko||rr.result||''); if(v==='') return ' '; return h('span',{className:zh?'zh':''},v); },
+            r:function(rr){ var v = zh? (rr.result||'') : (rr.result_ko||cnToKo(rr.result)||''); if(v==='') return ' '; return h('span',{className:zh?'zh':''},v); },
             edit:{type:'text',multi:true,get:function(rr){ return zh? (rr.result||'') : (rr.result_ko||rr.result||''); },set:function(rr,val){ updFu(rr.id, zh?'result':'result_ko', val); }} }})); }
           return h('td',{key:c[0],className:(c[3]==='num'?'num':'')+' tde'},
             h(EdCell,{row:r,locked:false,col:{
@@ -4895,6 +4978,16 @@ function SeminarTab(p){
     var followN=fu.filter(function(r){return String(r.follow||'').trim()==='是';}).length;
     var visitedN=fu.filter(function(r){return String(r.visit||'').trim()!=='';}).length;
     var resN=fu.filter(function(r){return String(r.result||'').trim()!=='';}).length;
+    var doneN=fu.filter(function(r){return String(r.visit||'').trim()!=='' && String(r.result||'').trim()!=='';}).length; // 방문 완료 = 방문일+결과 모두
+    // 날짜 기준: 방문일이 오늘 이전=방문 완료, 오늘 이후=방문 예정 (후속관리 대상 기준)
+    var vNow=new Date(); vNow.setHours(0,0,0,0);
+    function vDate(r){ var m=String(r.visit||'').match(/(\d{1,2})[\/\.](\d{1,2})/); if(!m) return null; var d=new Date(2026,(+m[1])-1,+m[2]); return isNaN(d.getTime())?null:d; }
+    var isFollow=function(r){ return String(r.follow||'').trim()==='是'; };
+    var fuSchedSet=fu.filter(function(r){ return isFollow(r) && String(r.visit||'').trim()!==''; }); // 후속 대상 중 방문일 지정
+    var fuSchedN=fuSchedSet.length;                 // 방문 일정 지정 (19)
+    var fuNoSchedN=followN-fuSchedN;                // 방문 미지정 (17) — 문제
+    var visitDoneN=fuSchedSet.filter(function(r){ var d=vDate(r); return d && d<vNow; }).length;  // 방문 완료(방문일 지남)
+    var visitUpN=fuSchedSet.filter(function(r){ var d=vDate(r); return d && d>=vNow; }).length;   // 방문 예정(미방문)
     var entN=fu.filter(isEnt).length, pendN=fu.filter(isPend).length;
     var consultN=entN+pendN;
     var contactN=fu.filter(function(r){ return String(r.visit||'').trim()!=='' || String(r.result||'').trim()!==''; }).length;
@@ -4914,33 +5007,27 @@ function SeminarTab(p){
         h('div',{className:'mkpi-t'}, L('목표 ','目标 ')+(dir==='down'?'≤':'≥')+tgt+'% ', h('span',{style:{color:col,fontWeight:800}}, pass?'●':'○')));
     }
     var mkpis=h('div',{className:'mkpi-row'},
-      (invite>0? mk('초청 완료율','邀请完成率',pr(tot,invite),100,'up', tot+'/'+invite+L('명 등록','人登记')) : null),
       mk('참석률','签到率',pr(attN,tot),95,'up', attN+'/'+tot+L('명 참석','人签到')),
       mk('No-show율','爽约率',pr(noShow,tot),5,'down', noShow+L('명 불참','人未到')),
-      mk('후속 착수율','跟进启动率',pr(followContact,followN),100,'up', followContact+'/'+followN+L('명 접촉','人已联系')),
-      mk('방문 완료율','拜访完成率',pr(visitedN,followN),80,'up', visitedN+'/'+followN+L('명 방문','人拜访')),
-      mk('첫 구매(진입)율','首购(进入)率',pr(entN,attN),20,'up', entN+'/'+attN+L('개소 진입','家进入')));
+      mk('후속 착수율','跟进启动率',pr(followN,tot),50,'up', followN+'/'+tot+L('명 착수','人跟进')),
+      mk('방문 일정 지정율','已排期率',pr(fuSchedN,followN),80,'up', fuSchedN+'/'+followN+L('명 지정','人排期')),
+      mk('신규 고객(진입)율','新客(进入)率',pr(entN,attN),20,'up', entN+'/'+attN+L('개소 진입','家进入')));
 
     /* ── 퍼널 (초청 → 구매) ── */
     var stages=[];
-    if(invite>0) stages.push(['invite',L('초청 대상','邀请对象'),invite,250]);
-    if(rsvp>0)   stages.push(['rsvp',L('참석 확정(RSVP)','确认参加'),rsvp,180]);
     stages.push(['reg',L('등록 명단','登记名单'),tot,180]);
     stages.push(['attend',L('당일 참석','当日签到'),attN,150]);
     stages.push(['follow',L('후속관리 대상','跟进对象'),followN,100]);
-    stages.push(['visit',L('방문 완료','拜访完成'),visitedN,70]);
-    stages.push(['consult',L('구매 상담(진입 포함)','洽谈(含进入)'),consultN,30]);
-    stages.push(['buy',L('첫 구매(已进入)','首购(已进入)'),entN,15]);
+    stages.push(['sched',L('방문 일정 지정','已排期拜访'),fuSchedN,60]);
+    stages.push(['visitDone',L('방문 완료(방문일 경과)','拜访完成(已过期)'),visitDoneN,45]);
+    if(visitUpN>0) stages.push(['visitUp',L('방문 예정(미방문)','待拜访'),visitUpN,20]);
+    stages.push(['consult',L('구매 상담','洽谈'),consultN,30]);
+    stages.push(['buy',L('신규 고객(已进入)','新客(已进入)'),entN,15]);
     var barBase=Math.max.apply(null,[1].concat(stages.map(function(s){return s[2];})));
     var funnel=h('div',{className:'card wide'},
       h('div',{className:'card-h'},
-        h('h3',null,L('인원관리 퍼널 (초청 → 구매)','人员管理漏斗 (邀请→购买)')),
-        h('span',{className:'card-n'},L('단계별 이탈 지점 확인 · 목표는 직접 입력','各阶段流失点 · 目标可编辑')),
-        h('div',{style:{marginLeft:'auto',display:'flex',gap:'10px',alignItems:'center'}},
-          h('label',{className:'fn-lb'}, L('초청','邀请'),
-            h('input',{className:'fn-in',type:'number',value:funCfg.invite==null?'':funCfg.invite,placeholder:'-',onChange:function(e){ setFunCfg('invite',e.target.value); }})),
-          h('label',{className:'fn-lb'}, 'RSVP',
-            h('input',{className:'fn-in',type:'number',value:funCfg.rsvp==null?'':funCfg.rsvp,placeholder:'-',onChange:function(e){ setFunCfg('rsvp',e.target.value); }})))),
+        h('h3',null,L('인원관리 퍼널 (등록 → 구매)','人员管理漏斗 (登记→购买)')),
+        h('span',{className:'card-n'},L('단계별 이탈 지점 확인 · 목표는 직접 입력','各阶段流失点 · 目标可编辑'))),
       h('div',{className:'tw'}, h('table',{className:'tbl funnel'},
         h('thead',null,h('tr',null,
           h('th',null,L('단계','阶段')), h('th',{className:'num'},L('목표','目标')), h('th',{className:'num'},L('실제','实际')),
@@ -4948,7 +5035,9 @@ function SeminarTab(p){
         h('tbody',null, stages.map(function(s,i){
           var key=s[0], act=s[2], tgt=funT(key,s[3]);
           var achv = tgt>0? Math.round(act/tgt*100):null;
-          var conv = i>0? (stages[i-1][2]>0? Math.round(act/stages[i-1][2]*100):0) : null;
+          var conv;
+          if(s[4]){ var baseAct=0; for(var z=0;z<stages.length;z++){ if(stages[z][0]===s[4]){ baseAct=stages[z][2]; break; } } conv = baseAct>0? Math.round(act/baseAct*100):null; }
+          else conv = i>0? (stages[i-1][2]>0? Math.round(act/stages[i-1][2]*100):0) : null;
           var achvCol = achv==null?'var(--dim)':(achv>=100?'var(--grn)':(achv>=70?'var(--amb)':'var(--red)'));
           var convCol = conv==null?'var(--dim)':(conv>=80?'var(--grn)':(conv>=50?'var(--amb)':'var(--red)'));
           return h('tr',{key:key},
@@ -4959,47 +5048,55 @@ function SeminarTab(p){
             h('td',{className:'num'}, achv==null? h('span',{className:'dim'},'-') : h('b',{style:{color:achvCol}}, achv+'%')),
             h('td',{className:'num'}, conv==null? h('span',{className:'dim'},'—') : h('b',{style:{color:convCol}}, conv+'%')));
         })))),
-      h('p',{className:'ed-n',style:{marginTop:'8px'}}, L('* 전환율 = 직전 단계 대비. 낮은 단계가 병목입니다 (예: 참석률↓=초청 문제, 구매율↓=영업 팔로우업 문제). 초청·RSVP·단계별 목표는 직접 입력하면 저장됩니다.','* 转化率=对上一阶段。最低处即瓶颈。邀请·RSVP·目标可编辑并保存。')));
+      h('p',{className:'ed-n',style:{marginTop:'8px'}}, L('* 전환율 = 직전 단계 대비. 방문 일정 지정 = 후속관리 대상 중 방문일을 잡은 인원(후속인데 방문 미지정 '+fuNoSchedN+'명이 이탈 지점). 방문 완료 = 방문일이 오늘 이전으로 지난 인원. 신규 고객 = 세미나(7/14) 후 진입(已进入)한 고객입니다. 단계별 목표는 직접 입력하면 저장됩니다.','* 转化率=对上一阶段。已排期拜访=跟进对象中已定拜访日的人数(跟进却未排期'+fuNoSchedN+'人为流失点)。拜访完成=拜访日已过今日的人数。新客=研讨会(7/14)后进入(已进入)客户。目标可编辑并保存。')));
 
     /* ── 담당자 순위 ── */
-    var bm={}; fu.forEach(function(r){ var m=(r.mgr&&String(r.mgr).trim())||L('(미배정)','(未分配)'); if(!bm[m]) bm[m]={mgr:m,n:0,att:0,vis:0,ent:0,res:0}; bm[m].n++; if(+r.att===1) bm[m].att++; if(String(r.visit||'').trim()!=='') bm[m].vis++; if(isEnt(r)) bm[m].ent++; if(String(r.result||'').trim()!=='') bm[m].res++; });
-    var mgrRows=Object.keys(bm).map(function(k){return bm[k];}).sort(function(a,b){ return b.att-a.att || b.ent-a.ent || b.n-a.n; });
-    var mgrScored=mgrRows.filter(function(g){return g.mgr.indexOf('미배정')<0 && g.mgr.indexOf('未分配')<0 && g.n>=3;}).map(function(g){return {m:g.mgr,r:g.n?g.att/g.n:0};}).sort(function(a,b){return b.r-a.r;});
-    var mBest=mgrScored.length?mgrScored[0].m:null, mWorst=mgrScored.length>1?mgrScored[mgrScored.length-1].m:null;
+    var bm={}; fu.forEach(function(r){ var m=(r.mgr&&String(r.mgr).trim())||L('(미배정)','(未分配)'); if(!bm[m]) bm[m]={mgr:m,n:0,att:0,fol:0,vis:0,ent:0,res:0}; bm[m].n++; if(+r.att===1) bm[m].att++; if(String(r.follow||'').trim()==='是') bm[m].fol++; if(String(r.visit||'').trim()!=='') bm[m].vis++; if(isEnt(r)) bm[m].ent++; if(String(r.result||'').trim()!=='') bm[m].res++; });
+    var rkUn=function(m){ return m.indexOf('미배정')>=0||m.indexOf('未分配')>=0; };
+    var mgrRows=Object.keys(bm).map(function(k){return bm[k];}).sort(function(a,b){ var am=rkUn(a.mgr), bmm=rkUn(b.mgr); if(am&&!bmm)return 1; if(bmm&&!am)return -1; return b.att-a.att || b.ent-a.ent || b.n-a.n; });
+    // 우수(초록)=전환 최다(동률 시 방문 많은 순), 저조(빨강)=방문·전환 모두 0(후속 방치)
+    var maxEnt=Math.max.apply(null,[0].concat(mgrRows.map(function(x){return x.ent;})));
+    var mBest=null,_bv=-1; mgrRows.forEach(function(g){ if(g.mgr.indexOf('미배정')<0 && g.mgr.indexOf('未分配')<0 && maxEnt>0 && g.ent===maxEnt && g.vis>_bv){ mBest=g.mgr; _bv=g.vis; } });
+    function mgrBad(g){ return g.att>0 && g.vis===0 && g.ent===0; }
     var attMax=Math.max.apply(null,[1].concat(mgrRows.map(function(x){return x.att;})));
     var mgrRank=h('div',{className:'card'},
-      h('div',{className:'card-h'}, h('h3',null,L('담당자 순위','负责人排名')), h('span',{className:'card-n'},L('참석 순 · 초록=우수 참석률, 빨강=저조','按签到 · 绿=优, 红=差'))),
-      h('div',{className:'tw'}, h('table',{className:'tbl'},
+      h('div',{className:'card-h'}, h('h3',null,L('담당자 순위','负责人排名')), h('span',{className:'card-n'},L('바=전환율(신규전환/방문) · 초록=우수, 빨강=방문·전환 0(방치)','条=转化率(新客/拜访) · 绿=优, 红=0拜访0转化'))),
+      h('div',{className:'tw'}, h('table',{className:'tbl vline'},
         h('thead',null,h('tr',null,
           h('th',{className:'num'},'#'), h('th',null,L('담당','负责人')), h('th',{className:'num'},L('명단','名单')),
-          h('th',{className:'num'},L('참석','签到')), h('th',{style:{width:'20%'}},''), h('th',{className:'num'},L('참석률','签到率')),
-          h('th',{className:'num'},L('방문','拜访')), h('th',{className:'num'},L('전환','转化')))),
-        h('tbody',null, mgrRows.map(function(g,i){ var ar=pr(g.att,g.n);
-          var hl = g.mgr===mBest?'hl':(g.mgr===mWorst?'hl-bad':'');
+          h('th',{className:'num'},L('후속관리','跟进')), h('th',{className:'num'},L('방문','拜访')),
+          h('th',{className:'num'},L('신규전환','新客转化')), h('th',{style:{width:'26%'}},L('전환율(신규/방문)','转化率(新客/拜访)')))),
+        h('tbody',null, mgrRows.map(function(g,i){ var cr=pr(g.ent,g.vis);
+          var hl = g.mgr===mBest?'hl':(mgrBad(g)?'hl-bad':'');
           return h('tr',{key:i,className:hl},
             h('td',{className:'num'}, h('span',{className:'dim'}, i+1)),
             h('td',null,h('b',{className:'zh'},g.mgr)),
             h('td',{className:'num'},nf(g.n)),
-            h('td',{className:'num'},h('b',null,nf(g.att))),
-            h('td',null,h('div',{className:'inbar-t'},h('div',{className:'inbar-f',style:{width:(g.att/attMax*100)+'%'}}))),
-            h('td',{className:'num'}, h('b',{style:{color:ar>=90?'var(--grn)':(ar>=60?'var(--amb)':'var(--red)')}}, ar+'%')),
+            h('td',{className:'num'},h('b',null,nf(g.fol))),
             h('td',{className:'num'},nf(g.vis)),
-            h('td',{className:'num'}, h('b',{className:g.ent?'':'dim'},nf(g.ent)))); })))));
+            h('td',{className:'num'}, h('b',{className:g.ent?'':'dim'},nf(g.ent))),
+            h('td',null, h('div',{className:'inbar'}, h('b',null, cr+'%'), h('div',{className:'inbar-t'},h('div',{className:'inbar-f',style:{width:cr+'%',background:cr>=30?'#12855c':(cr>0?'#e0902f':'#d9d9d9')}}))))); })))));
 
     /* ── 지역별 순위 ── */
-    var rg={}; fu.forEach(function(r){ var g=(r.region&&String(r.region).trim())||L('(미기재)','(未填)'); if(!rg[g]) rg[g]={reg:g,n:0,att:0,vis:0,ent:0}; rg[g].n++; if(+r.att===1) rg[g].att++; if(String(r.visit||'').trim()!=='') rg[g].vis++; if(isEnt(r)) rg[g].ent++; });
-    var regRows=Object.keys(rg).map(function(k){return rg[k];}).sort(function(a,b){ return b.n-a.n || b.att-a.att; });
+    function provOf(reg){ reg=String(reg||''); if(!reg.trim()||reg.indexOf('미기재')>=0||reg.indexOf('未填')>=0) return '';
+      if(/广西|南宁|梧州|柳州|桂林|北海|钦州|玉林|贵港/.test(reg)) return L('광서','广西');
+      if(/海南|海口|三亚|琼|儋州/.test(reg)) return L('해남','海南');
+      return L('광동','广东'); }
+    var provCol={ '광동':'#2a6fd6','广东':'#2a6fd6','광서':'#1f9d8f','广西':'#1f9d8f','해남':'#b47800','海南':'#b47800' };
+    var rg={}; fu.forEach(function(r){ var g=(r.region&&String(r.region).trim())||L('(미기재)','(未填)'); if(!rg[g]) rg[g]={reg:g,prov:provOf(r.region),n:0,att:0,vis:0,ent:0}; rg[g].n++; if(+r.att===1) rg[g].att++; if(String(r.visit||'').trim()!=='') rg[g].vis++; if(isEnt(r)) rg[g].ent++; });
+    var regRows=Object.keys(rg).map(function(k){return rg[k];}).sort(function(a,b){ var am=(a.reg.indexOf('미기재')>=0||a.reg.indexOf('未填')>=0), bm=(b.reg.indexOf('미기재')>=0||b.reg.indexOf('未填')>=0); if(am&&!bm)return 1; if(bm&&!am)return -1; return b.n-a.n || b.att-a.att; });
     var regMax=Math.max.apply(null,[1].concat(regRows.map(function(x){return x.n;})));
     var regRank=h('div',{className:'card'},
-      h('div',{className:'card-h'}, h('h3',null,L('지역별 순위','地区排名')), h('span',{className:'card-n'},L('명단 규모 순 · 약한 지역 확인','按名单规模 · 识别薄弱地区'))),
-      h('div',{className:'tw'}, h('table',{className:'tbl'},
+      h('div',{className:'card-h'}, h('h3',null,L('지역별 순위','地区排名')), h('span',{className:'card-n'},L('명단 규모 순 · 구역(성)별 구분','按名单规模 · 分省份'))),
+      h('div',{className:'tw'}, h('table',{className:'tbl vline'},
         h('thead',null,h('tr',null,
-          h('th',{className:'num'},'#'), h('th',null,L('지역','地区')), h('th',{className:'num'},L('명단','名单')),
-          h('th',{style:{width:'24%'}},''), h('th',{className:'num'},L('참석','签到')), h('th',{className:'num'},L('참석률','签到率')),
+          h('th',{className:'num'},'#'), h('th',null,L('구역','省份')), h('th',null,L('지역','地区')), h('th',{className:'num'},L('명단','名单')),
+          h('th',{style:{width:'22%'}},''), h('th',{className:'num'},L('참석','签到')), h('th',{className:'num'},L('참석률','签到率')),
           h('th',{className:'num'},L('방문','拜访')), h('th',{className:'num'},L('진입','进入')))),
-        h('tbody',null, regRows.map(function(g,i){ var ar=pr(g.att,g.n);
+        h('tbody',null, regRows.map(function(g,i){ var ar=pr(g.att,g.n); var pc=provCol[g.prov]||'#9a9a9a';
           return h('tr',{key:i},
             h('td',{className:'num'}, h('span',{className:'dim'}, i+1)),
+            h('td',null, g.prov? h('span',{className:'prov-badge',style:{color:pc,background:pc+'1f'}}, g.prov) : h('span',{className:'dim'},'—')),
             h('td',null,h('b',{className:'zh'},g.reg)),
             h('td',{className:'num'},nf(g.n)),
             h('td',null,h('div',{className:'inbar-t'},h('div',{className:'inbar-f',style:{width:(g.n/regMax*100)+'%'}}))),
@@ -5013,7 +5110,7 @@ function SeminarTab(p){
     function daysSince(vs){ var m=String(vs||'').match(/(\d{1,2})[\/\.](\d{1,2})/); if(!m) return null; var dt=new Date(YEAR,(+m[1])-1,+m[2]); if(isNaN(dt.getTime())) return null; return Math.floor((today-dt)/86400000); }
     var listA=fu.filter(function(r){ return +r.att===1 && String(r.follow||'').trim()!=='是'; });                                   // 참가 후 F/U 미지정
     var listB=fu.filter(function(r){ return String(r.follow||'').trim()==='是' && String(r.visit||'').trim()===''; });               // F/U 대상 · 방문 미완료
-    var listC=fu.filter(function(r){ return String(r.visit||'').trim()!=='' && !isEnt(r) && !isPend(r); });                          // 방문 완료 · 미전환
+    var listC=fu.filter(function(r){ var d=vDate(r); return d && d<vNow && !isEnt(r) && !isPend(r); });                              // 방문 완료(방문일 경과) · 구매상담 없음
     function alertCard(title,zh,rows,tone,note,showDays){
       return h('div',{className:'alert-card '+tone},
         h('div',{className:'alert-h'}, h('b',null,L(title,zh)), h('span',{className:'alert-n'}, nf(rows.length)+L('명','人'))),
@@ -5031,9 +5128,63 @@ function SeminarTab(p){
       h('div',{className:'alert-grid'},
         alertCard('① 참가 후 F/U 미지정','① 签到后未指定跟进',listA,'a',L('참석했으나 후속 대상 미확정 — 지금 연락 필요','已签到但未定跟进 — 需立即联系'),false),
         alertCard('② F/U 대상 · 방문 미완료(지연)','② 跟进对象·未拜访(延迟)',listB,'b',L('후속 확정했으나 방문 미완료 — 7일↑ 지연 관리','已定跟进但未拜访 — 7天+延迟'),false),
-        alertCard('③ 방문 완료 · 미전환','③ 已拜访·未转化',listC,'c',L('방문했으나 진입 없음 — 영업 클로징 필요(30일↑ 주의)','已拜访未进入 — 需营业推进(30天+)'),true)));
+        alertCard('③ 방문 완료 · 구매상담 없음','③ 已拜访·无洽谈',listC,'c',L('방문일은 지났으나 구매 상담(진입/대기) 없음 — 영업 클로징 필요(30일↑ 주의)','拜访日已过但无洽谈(进入/待定) — 需营业推进(30天+)'),true)));
 
-    return {mkpis:mkpis, funnel:funnel, mgrRank:mgrRank, regRank:regRank, alerts:alerts,
+    /* ── 방문 속도(세미나 → 방문): 후속관리 대상 기준 · 3주 이내 목표 ── */
+    var SEM_DATE=new Date(2026,6,14);   // 2026-07-14 (화)
+    var lead=[]; fuSchedSet.forEach(function(r){ var d=vDate(r); if(!d) return; var dd=Math.round((d-SEM_DATE)/86400000); if(dd>=-3&&dd<=180) lead.push(dd); });
+    var ldN=lead.length, ldSum=lead.reduce(function(a,b){return a+b;},0);
+    var ldAvg=ldN? Math.round(ldSum/ldN*10)/10 : null;
+    var w1=lead.filter(function(x){return x<=7;}).length, w2=lead.filter(function(x){return x>7&&x<=14;}).length, w3=lead.filter(function(x){return x>14&&x<=21;}).length, wOver=lead.filter(function(x){return x>21;}).length;
+    var within21=ldN-wOver, ldMin=ldN?Math.min.apply(null,lead):null, ldMax=ldN?Math.max.apply(null,lead):null;
+    var base36=followN||1;
+    var sPct=function(a){ return Math.round(a/base36*100); };  // 후속관리 대상 기준
+    var speed=h('div',{className:'card wide'},
+      h('div',{className:'card-h'}, h('h3',null,L('방문 속도 (세미나 → 방문)','拜访速度 (研讨会→拜访)')),
+        h('span',{className:'card-n'}, L('기준: 후속관리 대상 '+followN+'명 · 세미나 2026-07-14 · 목표 3주(21일) 이내','基准: 跟进对象'+followN+'人 · 研讨会2026-07-14 · 目标3周内'))),
+      followN? h('div',null,
+        h('div',{className:'spd-kpis'},
+          h('div',{className:'spd-k'}, h('div',{className:'spd-l'},L('평균 방문 소요','平均用时')), h('div',{className:'spd-v'}, ldAvg==null?'-':ldAvg, h('span',{className:'spd-u'},L('일','天')))),
+          h('div',{className:'spd-k'}, h('div',{className:'spd-l'},L('3주 이내 방문','3周内拜访')), h('div',{className:'spd-v',style:{color:'var(--grn)'}}, within21, h('span',{className:'spd-u'},'/'+followN+L('명 (','人 (')+sPct(within21)+'%)'))),
+          h('div',{className:'spd-k'}, h('div',{className:'spd-l'},L('방문 미지정 (문제)','未排期(问题)')), h('div',{className:'spd-v',style:{color:fuNoSchedN>0?'var(--red)':'var(--grn)'}}, fuNoSchedN, h('span',{className:'spd-u'},'/'+followN+L('명','人')))),
+          h('div',{className:'spd-k'}, h('div',{className:'spd-l'},L('최속 / 최장','最快/最慢')), h('div',{className:'spd-v'}, ldN?((ldMin<0?0:ldMin)+' / '+ldMax):'-', h('span',{className:'spd-u'},L('일','天'))))),
+        h('div',{className:'spd-bars'},
+          [[L('1주 이내','1周内'),w1,'#12855c'],[L('2주 이내','2周内'),w2,'#2a78d6'],[L('3주 이내','3周内'),w3,'#b47800'],[L('3주 초과','超3周'),wOver,'#e0902f'],[L('방문 미지정','未排期'),fuNoSchedN,'#c0392b']].map(function(s,i){
+            return h('div',{className:'spd-bar',key:i},
+              h('span',{className:'spd-bn'}, s[0]),
+              h('span',{className:'spd-bt'}, h('span',{className:'spd-bf',style:{width:sPct(s[1])+'%',background:s[2]}})),
+              h('b',{className:'spd-bv'}, s[1]+L('명','人'))); }))) :
+        h('div',{className:'empty',style:{padding:'14px'}}, L('방문일이 입력된 명단이 없습니다.','暂无已排期名单。')),
+      h('p',{className:'ed-n',style:{marginTop:'6px'}}, L('* CEO沙龙(7/14)부터 각 고객 방문계획일까지 경과일입니다. "3주 이내 방문 완료" 목표 달성 여부를 속도로 보여줍니다. 방문일(visit)이 입력된 '+ldN+'명 기준.','* 从CEO沙龙(7/14)到各客户拜访计划日的天数。反映"3周内完成拜访"目标达成速度。基于已填拜访日的'+ldN+'人。')));
+    /* ── 신규 고객 명단 (진입/예정 · 시스템·수량) ── */
+    function nSys(r){ if(String(r.sys||'').trim()) return r.sys; var t=String(r.result||''); var o=[]; if(t.indexOf('ARi')>=0)o.push('ARi'); if(/AR(?!i)/.test(t))o.push('AR'); if(t.indexOf('BD')>=0)o.push('BD'); if(t.indexOf('ST')>=0)o.push('ST'); if(t.indexOf('AO')>=0)o.push('AO'); return o.join(', '); }
+    function nQty(r){ if(String(r.qty||'').trim()) return r.qty; var t=String(r.result||''); if(/两颗|2颗|两支|2支/.test(t))return '2'; if(/三颗|3颗/.test(t))return '3'; return ''; }
+    function nNewc(r){ var v=String(r.newc||'').trim(); if(v) return v; var t=String(r.result||''); return (/已在实用|在实用|已在用|已有|已引进/.test(t))?'기존':'신규'; }
+    var newRows=fu.filter(function(r){ return isEnt(r)||isPend(r); }).sort(function(a,b){ return (isEnt(b)?1:0)-(isEnt(a)?1:0); });
+    var newCust=h('div',{className:'card wide'},
+      h('div',{className:'card-h'}, h('h3',null,L('신규 고객 명단','新客名单')),
+        h('span',{className:'card-n'}, L('진입 '+entN+' · 예정 '+pendN+' · 세미나(7/14) 이후 발주=신규','进入'+entN+' · 待定'+pendN+' · 7/14后下单=新客'))),
+      newRows.length? h('div',{className:'tw'}, h('table',{className:'tbl vline'},
+        h('thead',null,h('tr',null,
+          h('th',{className:'num'},'#'), h('th',null,L('구분','区分')), h('th',null,L('상태','状态')), h('th',null,L('단위(치과)','单位')),
+          h('th',null,L('고객','联系人')), h('th',null,L('담당','负责人')), h('th',null,L('지역','地区')),
+          h('th',null,L('시스템','系统')), h('th',{className:'num'},L('수량','数量')), h('th',null,L('비고','备注')))),
+        h('tbody',null, newRows.map(function(r,i){ var ent=isEnt(r); var memo=(zh? (r.result||'') : (r.result_ko||cnToKo(r.result)||'')); var op=!!ncExp[r.id];
+          return [ h('tr',{key:r.id},
+            h('td',{className:'num'}, i+1),
+            h('td',null, h('select',{className:'nc-sel '+(nNewc(r)==='기존'?'old':'new'),value:nNewc(r),onChange:function(e){ updFu(r.id,'newc',e.target.value); }}, ['신규','기존'].map(function(o){ return h('option',{key:o,value:o}, L(o, o==='신규'?'新客':'旧客')); }))),
+            h('td',null, h('span',{className:'fu-st '+(ent?'ent':'pend')}, ent?'已进入':'待进入')),
+            h('td',null, h('b',{className:'zh'}, r.clinic||'—')),
+            h('td',null, h('span',{className:'zh'}, r.name||'—')),
+            h('td',null, h('span',{className:'zh'}, r.mgr||'—')),
+            h('td',null, h('span',{className:'zh'}, r.region||'—')),
+            h('td',{className:'tde'}, h(EdCell,{row:r,locked:false,col:{ r:function(rr){ var v=nSys(rr); return v? h('span',null,v):' '; }, edit:{type:'text',get:function(rr){return nSys(rr);},set:function(rr,val){ updFu(rr.id,'sys',val); }} }})),
+            h('td',{className:'num tde'}, h(EdCell,{row:r,locked:false,col:{ r:function(rr){ var v=nQty(rr); return v? h('b',null,v):' '; }, edit:{type:'text',get:function(rr){return nQty(rr);},set:function(rr,val){ updFu(rr.id,'qty',String(val).replace(/[^0-9]/g,'')); }} }})),
+            h('td',null, memo? h('button',{className:'nc-tg',onClick:function(){ ncToggle(r.id); }}, op?L('▼ 닫기','▼ 收起'):L('▸ 비고','▸ 备注')) : h('span',{className:'dim'},'—'))),
+            (op&&memo)? h('tr',{key:r.id+'_d',className:'nc-drow'}, h('td',{colSpan:10}, h('div',{className:'nc-dbox'}, h('b',{className:'nc-dl'},L('비고: ','备注: ')), h('span',{className:'zh'}, memo)))) : null ]; }))))
+        : h('div',{className:'empty'}, L('신규 고객이 없습니다.','暂无新客。')),
+      h('p',{className:'ed-n',style:{marginTop:'6px'}}, L('* 진입(已进入)·예정(待进入) 고객입니다. 세미나(7/14) 이후 발주=신규, 이전부터 메가젠 사용 중이면 기존으로 기본 분류했습니다(구분·시스템·수량은 셀 더블클릭으로 수정). 「▸ 비고」를 누르면 상세 내용이 펼쳐집니다. 시스템·수량은 비고에서 자동 추출한 기본값이라 실제와 다르면 바로 고쳐 주세요.','* 进入·待进入客户。7/14后下单=新客，此前已用美格真=旧客(区分·系统·数量双击可改)。点「▸ 备注」展开详情。系统·数量为备注自动提取默认值，如有出入请直接修改。')));
+    return {mkpis:mkpis, funnel:funnel, speed:speed, mgrRank:mgrRank, regRank:regRank, newCust:newCust, alerts:alerts,
       stat:{tot:tot,attN:attN,followN:followN,visitedN:visitedN,entN:entN}};
   }
   function renderCustList(){
@@ -5042,24 +5193,27 @@ function SeminarTab(p){
     return h('div',{className:'sem-wrap'},
       h('div',{className:'card wide'},
         h('div',{className:'card-h'},
-          h('h3',null,L('CEO 사롱 — 인원관리 CRM','CEO沙龙 — 人员管理CRM')),
-          h('span',{className:'card-n',style:{marginLeft:'auto'}}, L('표시 주차: ','显示周: ')+activeWK+(fu.length?'':L(' (명단 없음)',' (无名单)'))+L(' · 업데이트: ',' · 更新: ')+ceoUpd),
+          h('h3',null,L('CEO 사롱 26/07/14','CEO沙龙 26/07/14')),
+          h('span',{className:'card-n',style:{marginLeft:'auto'}}, L('표시 주차: ','显示周: ')+activeWK+(fuCarried?L(' ('+fuSrcWK+' 이어받음)',' (沿用'+fuSrcWK+')'):(fu.length?'':L(' (명단 없음)',' (无名单)')))+L(' · 업데이트: ',' · 更新: ')+ceoUpd),
           h('label',{className:'btn pri sm',style:{marginLeft:'10px',cursor:'pointer',position:'relative',overflow:'hidden'}}, L('CEO 엑셀 불러오기','导入CEO Excel'),
             h('input',{type:'file',accept:'.xlsx,.xls',style:{position:'absolute',inset:0,opacity:0,cursor:'pointer'},onChange:function(e){ ceoImport(e.target.files[0]); e.target.value=''; }}))),
-        h('p',{className:'ed-n',style:{margin:'0 0 10px'}}, L('세미나 참석 결과를 넘어, 초청→참석→후속→방문→구매 전 과정을 관리하는 CRM 화면입니다.','超越签到结果，管理邀请→签到→跟进→拜访→购买全流程的CRM。')),
+        h('p',{className:'fu-lead',style:{margin:'0 0 10px'}},
+          h('b',{className:'fu-lead-t'}, L('세미나 참석 결과를 넘어, 초청→참석→후속→방문→구매 전 과정을 관리하는 화면입니다.','超越签到结果，管理邀请→签到→跟进→拜访→购买全过程的画面。')),
+          h('span',{className:'fu-lead-s'}, L('세미나 완료 후 후속관리 대상은 3주 이내 방문 완료 목표입니다.','研讨会结束后，跟进对象目标为3周内完成拜访。'))),
         c.mkpis),
       h('div',{style:{marginTop:'12px'}}, c.funnel),
-      h('div',{className:'lay',style:{marginTop:'12px'}}, c.mgrRank, c.regRank),
-      h('div',{style:{marginTop:'12px'}}, c.alerts),
-      h('div',{className:'lay',style:{marginTop:'12px'}}, k.entered, k.weekly),
-      h('div',{style:{marginTop:'12px'}}, k.breakdown),
+      h('div',{style:{marginTop:'12px'}}, c.speed),
       h('div',{style:{marginTop:'12px'}}, k.evalCard),
+      h('div',{style:{marginTop:'12px'}}, c.newCust),
+      h('div',{style:{marginTop:'12px'}}, c.regRank),
+      h('div',{style:{marginTop:'12px'}}, k.breakdown),
       h('div',{className:'card wide',style:{marginTop:'12px'}},
         h('div',{className:'card-h'},
           h('h3',null,L('참석자 명단','参加名单')),
           h('button',{className:'btn pri sm',style:{marginLeft:'auto'},onClick:addFu},L('+ 고객 추가','+ 添加客户'))),
         k.table,
-        h('p',{className:'ed-n',style:{marginTop:'8px'}}, L('* 2026-07-17 《美格真签到-深圳站》 명단 반영. 참가자 먼저(엑셀 순). 셀 더블클릭 수정·즉시 저장.','* 已反映2026-07-17《美格真签到-深圳站》名单。签到者优先。双击修改即时保存。'))));
+        h('p',{className:'ed-n',style:{marginTop:'8px'}}, L('* 2026-07-17 《美格真签到-深圳站》 명단 반영. 참가자 먼저(엑셀 순). 셀 더블클릭 수정·즉시 저장.','* 已反映2026-07-17《美格真签到-深圳站》名单。签到者优先。双击修改即时保存。'))),
+      h('div',{style:{marginTop:'12px'}}, c.alerts));
   }
   function fuDetailCard(){
     var k=fuKit();
